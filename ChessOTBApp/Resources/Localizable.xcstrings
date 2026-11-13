@@ -1,0 +1,91 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Cancel Meeting" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Meeting"
+          }
+        }
+      }
+    },
+    "ChessOTB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ChessOTB"
+          }
+        }
+      }
+    },
+    "Choose my search area" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose my search area"
+          }
+        }
+      }
+    },
+    "Enter area manually" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter area manually"
+          }
+        }
+      }
+    },
+    "Find the player across the board." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find the player across the board."
+          }
+        }
+      }
+    },
+    "Location access is off. Manual search works just as well." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location access is off. Manual search works just as well."
+          }
+        }
+      }
+    },
+    "Meet nearby chess players, talk first, then agree on a time and place together." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meet nearby chess players, talk first, then agree on a time and place together."
+          }
+        }
+      }
+    },
+    "Not now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

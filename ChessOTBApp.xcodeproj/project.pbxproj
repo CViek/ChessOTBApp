@@ -6,8 +6,27 @@
 	objectVersion = 90;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		A80000000000000000000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000100000000;
+			remoteInfo = ChessOTBApp;
+		};
+		B80000000000000000000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000100000000;
+			remoteInfo = ChessOTBApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* ChessOTBApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChessOTBApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000001 /* ChessOTBAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ChessOTBAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B10000000000000000000001 /* ChessOTBAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = ChessOTBAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +35,30 @@
 			path = ChessOTBApp;
 			sourceTree = "<group>";
 		};
+		A20000000000000000000001 /* ChessOTBAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ChessOTBAppTests;
+			sourceTree = "<group>";
+		};
+		B20000000000000000000001 /* ChessOTBAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ChessOTBAppUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		000000000000000130000000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A60000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		B60000000000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 			);
@@ -31,6 +70,8 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000010 /* ChessOTBApp */,
+				A20000000000000000000001 /* ChessOTBAppTests */,
+				B20000000000000000000001 /* ChessOTBAppUITests */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,6 +80,8 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000120 /* ChessOTBApp.app */,
+				A10000000000000000000001 /* ChessOTBAppTests.xctest */,
+				B10000000000000000000001 /* ChessOTBAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -63,6 +106,48 @@
 			productName = MyApp;
 			productReference = 000000000000000000000120 /* ChessOTBApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A30000000000000000000001 /* ChessOTBAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A40000000000000000000001 /* Build configuration list for PBXNativeTarget "ChessOTBAppTests" */;
+			buildPhases = (
+				A50000000000000000000001 /* Sources */,
+				A60000000000000000000001 /* Frameworks */,
+				A70000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A80000000000000000000001 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A20000000000000000000001 /* ChessOTBAppTests */,
+			);
+			name = ChessOTBAppTests;
+			productName = ChessOTBAppTests;
+			productReference = A10000000000000000000001 /* ChessOTBAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B30000000000000000000001 /* ChessOTBAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B40000000000000000000001 /* Build configuration list for PBXNativeTarget "ChessOTBAppUITests" */;
+			buildPhases = (
+				B50000000000000000000001 /* Sources */,
+				B60000000000000000000001 /* Frameworks */,
+				B70000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B80000000000000000000001 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B20000000000000000000001 /* ChessOTBAppUITests */,
+			);
+			name = ChessOTBAppUITests;
+			productName = ChessOTBAppUITests;
+			productReference = B10000000000000000000001 /* ChessOTBAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -94,12 +179,24 @@
 			projectRoot = "";
 			targets = (
 				000000000000000100000000 /* ChessOTBApp */,
+				A30000000000000000000001 /* ChessOTBAppTests */,
+				B30000000000000000000001 /* ChessOTBAppUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		000000000000000140000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		A70000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		B70000000000000000000001 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -112,7 +209,30 @@
 			files = (
 			);
 		};
+		A50000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		B50000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A80000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000100000000 /* ChessOTBApp */;
+			targetProxy = A80000000000000000000002 /* PBXContainerItemProxy */;
+		};
+		B80000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000100000000 /* ChessOTBApp */;
+			targetProxy = B80000000000000000000002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		000000000000000011000000 /* Debug configuration for PBXProject "ChessOTBApp" */ = {
@@ -256,6 +376,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Config/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -272,15 +393,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "devplaceholder.$(PROJECT_UNIQUE_VALUE:identifier).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
+				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -293,6 +415,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Config/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -309,15 +432,82 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "devplaceholder.$(PROJECT_UNIQUE_VALUE:identifier).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
+				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A90000000000000000000001 /* Debug configuration for PBXNativeTarget "ChessOTBAppTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.chessotb.ChessOTBAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChessOTBApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ChessOTBApp";
+			};
+			name = Debug;
+		};
+		A90000000000000000000002 /* Release configuration for PBXNativeTarget "ChessOTBAppTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.chessotb.ChessOTBAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChessOTBApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ChessOTBApp";
+			};
+			name = Release;
+		};
+		B90000000000000000000001 /* Debug configuration for PBXNativeTarget "ChessOTBAppUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.chessotb.ChessOTBAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ChessOTBApp;
+			};
+			name = Debug;
+		};
+		B90000000000000000000002 /* Release configuration for PBXNativeTarget "ChessOTBAppUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.chessotb.ChessOTBAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ChessOTBApp;
 			};
 			name = Release;
 		};
@@ -337,6 +527,22 @@
 			buildConfigurations = (
 				000000000000000111000000 /* Debug configuration for PBXNativeTarget "ChessOTBApp" */,
 				000000000000000112000000 /* Release configuration for PBXNativeTarget "ChessOTBApp" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A40000000000000000000001 /* Build configuration list for PBXNativeTarget "ChessOTBAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90000000000000000000001 /* Debug configuration for PBXNativeTarget "ChessOTBAppTests" */,
+				A90000000000000000000002 /* Release configuration for PBXNativeTarget "ChessOTBAppTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		B40000000000000000000001 /* Build configuration list for PBXNativeTarget "ChessOTBAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B90000000000000000000001 /* Debug configuration for PBXNativeTarget "ChessOTBAppUITests" */,
+				B90000000000000000000002 /* Release configuration for PBXNativeTarget "ChessOTBAppUITests" */,
 			);
 			defaultConfigurationName = Release;
 		};
