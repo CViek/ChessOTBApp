@@ -1,42 +1,47 @@
 import SwiftUI
 
-/// Phase 1 exposes only the verified brand introduction.
-/// Account setup and feature destinations are added in their owning phases.
 struct RootView: View {
+    @Environment(SessionViewModel.self) private var session
+    let profiles: any ProfileServiceProtocol
+    @State private var retryRequest = 0
+    @State private var signOutRequest = 0
+
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DesignTokens.Spacing.medium) {
-                    BoardMark()
-                        .padding(.top, DesignTokens.Spacing.large + DesignTokens.Spacing.small)
-                        .padding(.bottom, DesignTokens.Spacing.medium)
-                    Text("ChessOTB")
-                        .font(DesignTokens.Typography.eyebrow)
-                        .foregroundStyle(DesignTokens.Colors.oxblood)
-                    Text("Find the player across the board.")
-                        .font(DesignTokens.Typography.setupTitle)
-                        .tracking(-1.3)
-                        .accessibilityAddTraits(.isHeader)
-                        .accessibilityIdentifier("foundation.title")
-                    Text("Meet nearby chess players, talk first, then agree on a time and place together.")
-                        .font(DesignTokens.Typography.body)
-                        .foregroundStyle(DesignTokens.Colors.muted)
-                        .padding(.top, DesignTokens.Spacing.small)
+        Group {
+            switch session.state {
+            case .restoring:
+                ProgressView("Restoring your session…").frame(maxWidth: .infinity, maxHeight: .infinity)
+            case .signedOut:
+                VStack(spacing: 0) {
+                    if let notice = session.notice { AccountFeedback(message: notice).padding(.horizontal) }
+                    AccountEntryView(session: session)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(DesignTokens.Spacing.setupInset)
+            case .signedIn(let user):
+                ProfileWorkspaceView(service: profiles).id(user.id)
+            case .restoreFailed(let message):
+                restoreFailure(message)
             }
-            .background(DesignTokens.Colors.paper)
-            .foregroundStyle(DesignTokens.Colors.ink)
-            .toolbar(.hidden, for: .navigationBar)
         }
+        .foregroundStyle(DesignTokens.Colors.ink)
+        .background(DesignTokens.Colors.paper)
+        .task(id: retryRequest) { await session.restore() }
+        .task(id: signOutRequest) { if signOutRequest > 0 { await session.signOut() } }
+    }
+
+    private func restoreFailure(_ message: String) -> some View {
+        VStack(spacing: DesignTokens.Spacing.regular) {
+            AccountFeedback(message: message, isError: true)
+            PrimaryButton(title: "Retry") { retryRequest += 1 }
+            PrimaryButton(title: "Sign out on this device", kind: .quiet) { signOutRequest += 1 }
+        }.padding().frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-#Preview("Introduction · Light") {
-    RootView().preferredColorScheme(.light)
+#if DEBUG
+#Preview("Account entry") {
+    RootView(profiles: PreviewAccountService())
+        .environment(SessionViewModel(auth: PreviewAccountService()))
+        .environment(AppearanceSettings())
 }
 
-#Preview("Introduction · Dark, large text") {
-    RootView().preferredColorScheme(.dark).dynamicTypeSize(.accessibility3)
-}
+#endif

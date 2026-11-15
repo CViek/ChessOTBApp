@@ -3,3 +3,11 @@ build/
 DerivedData/
 xcuserdata/
 *.xcuserstate
+
+# Local backend tools and environment configuration
+node_modules/
+Config/Local.xcconfig
+Config/Production.xcconfig
+.supabase/
+supabase/.temp/
+supabase/.branches/

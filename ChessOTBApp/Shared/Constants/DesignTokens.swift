@@ -29,6 +29,7 @@ enum DesignTokens {
         static let sectionTitle = Font.custom("NewsreaderRoman-SemiBold", size: 24, relativeTo: .title2)
         static let statusTitle = Font.custom("NewsreaderRoman-SemiBold", size: 25, relativeTo: .title2)
         static let body = Font.custom("DMSans-9ptRegular_Regular", size: 17, relativeTo: .body)
+        static let field = Font.custom("DMSans-9ptRegular_Regular", size: 16, relativeTo: .body)
         static let control = Font.custom("DMSans-9ptRegular_Bold", size: 16, relativeTo: .body)
         static let eyebrow = Font.custom("DMSans-9ptRegular_Bold", size: 15, relativeTo: .subheadline)
         static let notice = Font.custom("DMSans-9ptRegular_Regular", size: 14, relativeTo: .subheadline)

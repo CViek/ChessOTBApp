@@ -6,10 +6,10 @@ final class FoundationLaunchTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         XCTAssertTrue(app.staticTexts["foundation.title"].waitForExistence(timeout: 10))
-        XCTAssertEqual(app.buttons.count, 0)
+        XCTAssertTrue(app.buttons["account.submit"].exists)
         XCTAssertEqual(app.tabBars.count, 0)
         let screenshot = XCTAttachment(screenshot: app.screenshot())
-        screenshot.name = "Phase 1 foundation"
+        screenshot.name = "Account entry"
         screenshot.lifetime = .keepAlways
         add(screenshot)
         app.terminate()
@@ -17,7 +17,7 @@ final class FoundationLaunchTests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.staticTexts["foundation.title"].waitForExistence(timeout: 10))
         let largeText = XCTAttachment(screenshot: app.screenshot())
-        largeText.name = "Phase 1 accessibility text"
+        largeText.name = "Account entry accessibility text"
         largeText.lifetime = .keepAlways
         add(largeText)
     }

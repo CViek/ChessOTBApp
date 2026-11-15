@@ -1,0 +1,5 @@
+// Configure a hosted HTTPS project before distribution.
+SUPABASE_URL =
+SUPABASE_PUBLISHABLE_KEY =
+CHESSOTB_LOCAL_TESTS = NO
+#include? "Production.xcconfig"

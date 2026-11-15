@@ -127,7 +127,7 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 
 | ID | Open question and proposed direction | Resolve before |
 | --- | --- | --- |
-| Q1 | Which backend/project owner, region and authentication method should be used? Recommended planning baseline: managed Supabase/PostgreSQL plus native Sign in with Apple, recoverable sessions and sign-out. Confirm bundle ID, Apple team, service provisioning and the missing authentication/account-management layouts. | Phase 2 |
+| Q1 | Which backend/project owner, region and authentication method should be used? Confirmed for Phase 2: Supabase/PostgreSQL plus Supabase email/password authentication, recoverable sessions and sign-out. User has no Apple Developer membership, so Sign in with Apple is excluded. Hosted provisioning remains to be supplied; local isolated development may proceed. Retain the current simulator bundle ID. No Apple team is needed for local simulator development. User approved necessary native account layouts; hosted project ownership, region and provisioning remain deployment decisions. | Phase 2 |
 | Q2 | Can Figma provide the untruncated Review Proposal/Meeting Detail source or corresponding Design frames, plus missing error, loading and destructive-action states? Also confirm how native navigation, 44-point targets and dark notation contrast should reconcile with the prototype. | Phase 1 visual baseline; each affected UI phase, especially 5 |
 | Q3 | How coarse is public location; does editing search area also change the discoverable profile area; how does a user become open to contact? Proposed: explicitly saved approximate profile area, independently adjustable search center, no uploaded exact GPS, and distances computed from approximate areas. Define geocoding ambiguity, distance rounding and supported launch region. | Phase 3 |
 | Q4 | When may past pending proposals be answered, how are they placed in History, and how are simultaneous/repeated revisions handled? Proposed: future-time validation; no implicit expiry state; one outstanding replacement; reject stale actions; cancelling a meeting also invalidates its replacement. The Figma text supports keeping the original confirmed until replacement acceptance. Confirm this policy and pending-cancellation placement. | Phase 5 initial/past rules; Phase 6 replacement rules |
@@ -135,7 +135,7 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 | Q6 | Who supplies and maintains group listings and contact identities? How does a genuine introduction/profile link reach the group screen? Recommended minimal listing model: operator-maintained verified listings, no in-app administration; absent introductions show no fabricated sample card. Confirm that conditional layout in Figma. | Phase 9 |
 | Q7 | Which notifications and update latency are required while foregrounded, backgrounded and terminated? Proposed first release: foreground refresh plus pull-to-refresh, no push guarantee. If background push is required, define APNs/server delivery and notification routing within Phase 10 before release. | Phase 4 latency contract; Phase 10 delivery scope |
 | Q8 | What are launch privacy/contact controls, blocking/reporting, moderation ownership, account deletion and retention rules? Confirm required scope and Figma flows; the description lists these as unresolved, not preapproved functionality. | Before external user testing; implement chosen launch requirements in Phase 10 |
-| Q9 | Should users edit the displayed bio, choose avatar tone, and use system appearance or a persistent override? Proposed: generated initials/tone, no photo upload, no invented bio editor, persistent Figma dark toggle. Confirm provenance for real profile notes and approved removal of the attachment affordance. | Phase 2 profile basics; Phase 4 conversation UI |
+| Q9 | Should users edit the displayed bio, choose avatar tone, and use system appearance or a persistent override? Phase 2 confirmed: generated initials, no photo upload or bio editor, and the persistent Figma dark toggle. Use the existing sage avatar treatment for now. Confirm provenance for real profile notes and approved removal of the attachment affordance. | Phase 2 profile basics; Phase 4 conversation UI |
 | Q10 | What is the launch area, distribution target, operating budget/owner, final app icon and font licensing source? No revenue features are planned. | Phase 1 font assets; Phase 10 distribution |
 
 ## Technical approach
@@ -144,7 +144,7 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 
 **Approaches considered:**
 
-1. **Recommended baseline — native SwiftUI plus a managed relational backend.** It keeps shared conversations and transactional meeting agreement authoritative while limiting infrastructure work. Supabase is a concrete candidate because its documentation covers [row-level access rules](https://supabase.com/docs/guides/database/postgres/row-level-security), [database functions](https://supabase.com/docs/guides/database/functions), and [native Apple authentication](https://supabase.com/docs/guides/auth/social-sign-in/auth-apple). This is a recommendation, not a user selection.
+1. **Recommended baseline — native SwiftUI plus a managed relational backend.** It keeps shared conversations and transactional meeting agreement authoritative while limiting infrastructure work. Supabase is a concrete candidate because its documentation covers [row-level access rules](https://supabase.com/docs/guides/database/postgres/row-level-security), [database functions](https://supabase.com/docs/guides/database/functions), and [native Apple authentication](https://supabase.com/docs/guides/auth/social-sign-in/auth-apple). The user selected Supabase for Phase 2, including its email/password authentication instead of Sign in with Apple.
 2. **Alternative — native SwiftUI plus a dedicated custom API and PostgreSQL.** It offers more server implementation control but introduces a separate server application, deployment and operations. Choose it if an existing service/team requires it; update backend paths and verification commands before Phase 2.
 
 The phase paths below use the recommended Supabase baseline to make the work concrete. Do not build both backends. An entirely local app cannot satisfy communication and shared agreement between two real users.
@@ -238,14 +238,14 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Scope and main files:** `Features/Account/{Views/AccountSetupView,ViewModels/AccountSetupViewModel,Services/AuthService}.swift`; `Features/Profile/{Views/ProfileView,Views/EditProfileView,ViewModels/ProfileViewModel,Models/PlayerProfile,Services/ProfileService}.swift`; `App/SessionViewModel.swift`; `Core/{Networking/APIClient,Networking/APIError,Security/KeychainStore}.swift`; environment `.xcconfig` files; `supabase/migrations/001_profiles.sql`; account/profile tests. Basic profile editing includes display name; area completion belongs to Phase 3 and ratings to Phase 7.
 
-**Figma references:** F01, F14, basic fields of F15; auth entry/recovery must use the additional approved Figma reference, not an imagined form.
+**Figma references:** F01, F14, basic fields of F15; User explicitly approved adding the necessary native account screens in the established visual style. Use email/password entry, email confirmation/recovery codes, and sign-out; preserve F01/F14/F15 layouts for the evidenced profile elements.
 
 **Sequential work:**
 
-- [ ] Establish the chosen backend's isolated development environment, authentication configuration and profile migration with owner-only writes and restricted public reads.
-- [ ] Test restore/sign-out, invalid display name, failed save, unauthorized profile update and nonprivileged configuration before implementing service/ViewModel behavior.
-- [ ] Implement authenticated session lifecycle, Keychain storage, basic profile save/load and appearance preference. Keep onboarding incomplete until an area is saved in Phase 3.
-- [ ] Connect the approved native screens; persist only successful changes, preserve edits on failure, and verify with two independent accounts.
+- [x] Establish the chosen backend's isolated development environment, authentication configuration and profile migration with owner-only writes and restricted public reads.
+- [x] Test restore/sign-out, invalid display name, failed save, unauthorized profile update and nonprivileged configuration before implementing service/ViewModel behavior.
+- [x] Implement authenticated session lifecycle, Keychain storage, basic profile save/load and appearance preference. Keep onboarding incomplete until an area is saved in Phase 3.
+- [x] Connect the approved native screens; persist only successful changes, preserve edits on failure, and verify with two independent accounts.
 
 **Definition of Done:** Relaunch restores the correct account/profile; another account cannot edit it; sign-out clears credentials and account state. Public profile responses contain only intended public fields. Network failures never masquerade as a completed save. No disposable anonymous identity is presented as a finished account strategy.
 

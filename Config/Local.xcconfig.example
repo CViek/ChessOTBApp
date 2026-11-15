@@ -1,0 +1,4 @@
+// Copy to Local.xcconfig for a hosted development project, or run start-local.sh.
+SUPABASE_URL = https:/$()/YOUR_PROJECT.supabase.co
+SUPABASE_PUBLISHABLE_KEY = sb_publishable_YOUR_KEY
+CHESSOTB_LOCAL_TESTS = NO

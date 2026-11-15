@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict>
- <key>UIAppFonts</key><array><string>Newsreader.ttf</string><string>DMSans.ttf</string></array>
- <key>CFBundleDisplayName</key><string>ChessOTB</string>
-</dict></plist>
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>ChessOTB</string>
+	<key>ChessOTBSupabasePublishableKey</key>
+	<string>$(SUPABASE_PUBLISHABLE_KEY)</string>
+	<key>ChessOTBSupabaseURL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Newsreader.ttf</string>
+		<string>DMSans.ttf</string>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,6 @@
+{
+  "name": "chessotb-backend-tools",
+  "private": true,
+  "description": "Pinned development CLI only; the iOS app has no JavaScript runtime",
+  "devDependencies": { "supabase": "3.1.0" }
+}

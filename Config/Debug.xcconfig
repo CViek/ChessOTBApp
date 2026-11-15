@@ -1,0 +1,5 @@
+// Developer-specific values belong in the ignored Local.xcconfig.
+SUPABASE_URL =
+SUPABASE_PUBLISHABLE_KEY =
+CHESSOTB_LOCAL_TESTS = NO
+#include? "Local.xcconfig"
