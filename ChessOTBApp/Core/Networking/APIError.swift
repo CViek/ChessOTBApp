@@ -2,7 +2,7 @@ import Foundation
 
 nonisolated enum APIError: LocalizedError, Equatable {
     case invalidConfiguration, invalidResponse, unauthorized, sessionExpired
-    case invalidCredentials, emailNotConfirmed, rateLimited, rejected, unavailable, network
+    case invalidCredentials, emailNotConfirmed, rateLimited, rejected, unavailable, network, conflict
 
     var errorDescription: String? {
         switch self {
@@ -14,6 +14,7 @@ nonisolated enum APIError: LocalizedError, Equatable {
         case .rateLimited: String(localized: "Too many attempts. Please wait and try again.")
         case .rejected: String(localized: "This request could not be completed. Check your details and try again.")
         case .network: String(localized: "Could not connect. Check your connection and try again.")
+        case .conflict: String(localized: "These details have changed. Refresh before trying again.")
         }
     }
 }
