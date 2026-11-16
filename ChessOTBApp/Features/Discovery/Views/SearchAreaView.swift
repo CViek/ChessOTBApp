@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SearchAreaView: View {
     @StateObject private var model: AreaSelectionViewModel
+    @StateObject private var radiusInput: RadiusInputViewModel
     @Environment(\.dismiss) private var dismiss
     @Environment(SessionViewModel.self) private var session
     @State private var manual: Bool
@@ -15,6 +16,7 @@ struct SearchAreaView: View {
          profiles: any ProfileServiceProtocol, discovery: any DiscoveryServiceProtocol,
          settings: DiscoverySettings? = nil, onSaved: @escaping (PlayerProfile?, DiscoverySettings?) -> Void) {
         _model = StateObject(wrappedValue: AreaSelectionViewModel(purpose: purpose, areas: areas, profiles: profiles, discovery: discovery, settings: settings))
+        _radiusInput = StateObject(wrappedValue: RadiusInputViewModel(radius: settings?.radius ?? .five))
         _manual = State(initialValue: purpose != .initialProfile)
         self.onSaved = onSaved
     }
@@ -41,11 +43,12 @@ struct SearchAreaView: View {
                 if let error = model.errorMessage { AccountFeedback(message: error, isError: true) }
                 if !model.candidates.isEmpty { candidates }
                 if manual {
-                    if model.purpose != .profile { RadiusPicker(selection: $model.radius) }
+                    if model.purpose != .profile { RadiusPicker(input: radiusInput) }
                     if model.isSaving { ProgressView("Saving…") }
                     PrimaryButton(title: model.purpose == .initialProfile ? "Find nearby players" : "Save area") {
-                        queryFocused = false; saveRequest += 1
-                    }.disabled(model.selected == nil || model.isResolving).accessibilityIdentifier("area.save")
+                        queryFocused = false
+                        if let radius = radiusInput.radius { model.radius = radius; saveRequest += 1 }
+                    }.disabled(model.selected == nil || model.isResolving || radiusInput.radius == nil).accessibilityIdentifier("area.save")
                 }
                 Text("Current-location lookup uses Apple Maps to resolve a named area. Only that area's approximate center is saved.")
                     .font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
@@ -108,15 +111,33 @@ struct SearchAreaView: View {
 }
 
 struct RadiusPicker: View {
-    @Binding var selection: SearchRadius
+    @ObservedObject var input: RadiusInputViewModel
+    @FocusState private var editingMiles: Bool
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Search distance").font(DesignTokens.Typography.eyebrow)
-            Picker("Search distance", selection: $selection) {
-                ForEach(SearchRadius.allCases, id: \.self) { radius in
-                    Text("\(radius.rawValue) miles").tag(radius)
+            Slider(value: Binding(get: { input.sliderValue }, set: { input.sliderValue = $0 }),
+                   in: Double(SearchRadius.allowedRange.lowerBound)...Double(SearchRadius.allowedRange.upperBound), step: 1)
+                .accessibilityLabel("Search distance").accessibilityValue(input.sliderLabel).accessibilityIdentifier("discovery.radius")
+            HStack(spacing: 12) {
+                TextField("Miles", text: $input.text)
+                    .keyboardType(.numberPad).autocorrectionDisabled().focused($editingMiles)
+                    .font(DesignTokens.Typography.field).padding(12).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(DesignTokens.Colors.surface, in: .rect(cornerRadius: 10))
+                    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(DesignTokens.Colors.line))
+                    .accessibilityLabel("Distance in miles").accessibilityIdentifier("discovery.radiusMiles")
+                Text("miles").font(DesignTokens.Typography.notice)
+            }
+            Text("1–100 miles").font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
+            if let error = input.errorMessage { AccountFeedback(message: error, isError: true) }
+        }
+        .toolbar {
+            if editingMiles {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { editingMiles = false }.accessibilityIdentifier("discovery.radiusDone")
                 }
-            }.pickerStyle(.segmented).accessibilityIdentifier("discovery.radius")
+            }
         }
     }
 }

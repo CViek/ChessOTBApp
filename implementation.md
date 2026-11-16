@@ -129,7 +129,7 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 | --- | --- | --- |
 | Q1 | Which backend/project owner, region and authentication method should be used? Confirmed for Phase 2: Supabase/PostgreSQL plus Supabase email/password authentication, recoverable sessions and sign-out. User has no Apple Developer membership, so Sign in with Apple is excluded. Hosted provisioning remains to be supplied; local isolated development may proceed. Retain the current simulator bundle ID. No Apple team is needed for local simulator development. User approved necessary native account layouts; hosted project ownership, region and provisioning remain deployment decisions. | Phase 2 |
 | Q2 | Can Figma provide the untruncated Review Proposal/Meeting Detail source or corresponding Design frames, plus missing error, loading and destructive-action states? Also confirm how native navigation, 44-point targets and dark notation contrast should reconcile with the prototype. | Phase 1 visual baseline; each affected UI phase, especially 5 |
-| Q3 | How coarse is public location; does editing search area also change the discoverable profile area; how does a user become open to contact? Confirmed for Phase 3: US locations only; explicitly saved city/neighborhood profile areas opt into discovery; independently adjustable search area; no raw GPS stored in Supabase or shown to players; distances computed from approximate centers and displayed as rounded whole miles or less than 1 mile. Default radius 5 miles; choices 3/5/10. On-demand location permission, Apple area lookup, manual fallback and explicit ambiguous-area selection. First area save initializes profile and search; later search changes do not alter the profile area. | Phase 3 |
+| Q3 | How coarse is public location; does editing search area also change the discoverable profile area; how does a user become open to contact? Confirmed for Phase 3: US locations only; explicitly saved city/neighborhood profile areas opt into discovery; independently adjustable search area; no raw GPS stored in Supabase or shown to players; distances computed from approximate centers and displayed as rounded whole miles or less than 1 mile. Default radius 5 miles. User-approved correction: slider and editable whole-mile value from 1 to 100. On-demand location permission, Apple area lookup, manual fallback and explicit ambiguous-area selection. First area save initializes profile and search; later search changes do not alter the profile area. | Phase 3 |
 | Q4 | When may past pending proposals be answered, how are they placed in History, and how are simultaneous/repeated revisions handled? Proposed: future-time validation; no implicit expiry state; one outstanding replacement; reject stale actions; cancelling a meeting also invalidates its replacement. The Figma text supports keeping the original confirmed until replacement acceptance. Confirm this policy and pending-cancellation placement. | Phase 5 initial/past rules; Phase 6 replacement rules |
 | Q5 | Which rating sources and formats/time controls are comparable, what values are valid, and is a custom source required? Figma's three choices cannot by themselves distinguish Chess.com rapid from blitz. Use one optional entry and an exact comparison key; add a format control only after Figma coverage exists. | Phase 7 |
 | Q6 | Who supplies and maintains group listings and contact identities? How does a genuine introduction/profile link reach the group screen? Recommended minimal listing model: operator-maintained verified listings, no in-app administration; absent introductions show no fabricated sample card. Confirm that conditional layout in Figma. | Phase 9 |
@@ -265,12 +265,16 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 - [x] Test permission denial, manual resolution/ambiguity, radius boundaries, stale response cancellation and privacy projection. Define approximate-area storage/search using the resolved Q3 policy.
 - [x] Implement manual area entry and optional device-location lookup; request location only when tapped. Save the user's explicitly chosen profile area and search settings without exposing raw GPS.
-- [x] Implement paginated distance search, deterministic ordering, self exclusion, 3/5/10-mile controls, actual applied chips, loading/failure/empty recovery and public profile navigation.
+- [x] Implement paginated distance search, deterministic ordering, self exclusion, 1–100-mile slider/numeric controls, actual applied chips, loading/failure/empty recovery and public profile navigation.
 - [x] Wire the discovery area button and empty recovery to real settings changes. Complete onboarding only after a valid area/profile save.
 
 **Definition of Done:** Two accounts in the chosen radius can discover each other; out-of-range/self profiles do not appear; changing area/radius changes results. Denial still permits full manual discovery. Empty results remain empty until a real query produces matches. Profiles never claim immediate availability.
 
 **Verification:** `AreaServiceTests`, `DiscoveryViewModelTests`, geospatial boundary and public-column access database tests. UI flow: name → decline location → manual area → browse → profile → back. Manually check denied/restricted location, offline lookup, ambiguous input, rapid area changes, loading, zero results and wider-distance recovery. Run baseline checks.
+
+### Approved distance correction after Phase 3
+
+The user replaced the original 3/5/10 presets with a slider and editable whole-mile radius from 1 to 100, retaining the 5-mile default. Migration `003_dynamic_distance.sql` preserves existing data and expands server validation and pagination. Subsequent, unimplemented migration filenames advance by one; Phase 4 uses `004_messaging.sql`.
 
 ## Phase 4 — Persistent inbox and direct conversations
 
@@ -278,7 +282,7 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Dependencies / entrance decisions:** Phase 3; Q7 foreground update contract; Q9 attachment disposition and any bio-source decision; missing messaging failure states through Q2.
 
-**Scope and main files:** `Features/Messaging/{Views/InboxView,Views/ConversationView,ViewModels/InboxViewModel,ViewModels/ConversationViewModel,Models/Conversation,Models/Message,Services/ConversationService}.swift`; `Core/Persistence/{AccountCache,MessageDraftStore}.swift`; `supabase/migrations/003_messaging.sql`; messaging/access tests. No proposal sending yet; add the proposal strip's action in Phase 5.
+**Scope and main files:** `Features/Messaging/{Views/InboxView,Views/ConversationView,ViewModels/InboxViewModel,ViewModels/ConversationViewModel,Models/Conversation,Models/Message,Services/ConversationService}.swift`; `Core/Persistence/{AccountCache,MessageDraftStore}.swift`; `supabase/migrations/004_messaging.sql`; messaging/access tests. No proposal sending yet; add the proposal strip's action in Phase 5.
 
 **Figma references:** F07/F08, F05 Message action, `Avatar`, `.bubble`, `.composer`, unread indicators and empty Inbox. Preserve a profile route through the existing conversation header identity.
 
@@ -299,7 +303,7 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Dependencies / entrance decisions:** Phase 4; recover complete F10/F11 source/render under Q2; Q4 date/past-pending rules. Do not guess missing Review Proposal layout.
 
-**Scope and main files:** `Features/Meetings/{Views/MeetingProposalView,Views/ReviewProposalView,Views/MeetingDetailView,Views/MyMeetingsView,ViewModels/ProposalViewModel,ViewModels/MeetingDetailViewModel,ViewModels/MyMeetingsViewModel,Models/Meeting,Models/MeetingRevision,Models/MeetingDraft,Services/MeetingService}.swift`; Messaging proposal-event rendering; `supabase/migrations/004_meetings.sql`; meeting tests.
+**Scope and main files:** `Features/Meetings/{Views/MeetingProposalView,Views/ReviewProposalView,Views/MeetingDetailView,Views/MyMeetingsView,ViewModels/ProposalViewModel,ViewModels/MeetingDetailViewModel,ViewModels/MyMeetingsViewModel,Models/Meeting,Models/MeetingRevision,Models/MeetingDraft,Services/MeetingService}.swift`; Messaging proposal-event rendering; `supabase/migrations/005_meetings.sql`; meeting tests.
 
 **Figma references:** F09–F12; F08 proposal slip; `.notation-card`, `.status-banner`, `.meeting-facts`, `.meeting-card`, date stamp and initial recipient actions.
 
@@ -320,7 +324,7 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Dependencies / entrance decisions:** Phase 5; Q4 replacement/concurrency policy and Figma placement for pending cancellation. Both participants must be able to propose changes, not only the original sender.
 
-**Scope and main files:** extend meeting models/service/ViewModels and F09/F11/F12 views; `Features/Messaging/Models/ConversationEvent.swift`; `supabase/migrations/005_meeting_revisions.sql`; `ChessOTBTests/Features/Meetings/MeetingTransitionTests.swift`; `ChessOTBUITests/MVP1JourneyTests.swift`.
+**Scope and main files:** extend meeting models/service/ViewModels and F09/F11/F12 views; `Features/Messaging/Models/ConversationEvent.swift`; `supabase/migrations/006_meeting_revisions.sql`; `ChessOTBTests/Features/Meetings/MeetingTransitionTests.swift`; `ChessOTBUITests/MVP1JourneyTests.swift`.
 
 **Figma references:** F11 change-awaiting-agreement, `.previous-details`, proposed replacement facts, Accept New Details/Decline Change, Cancel Meeting; F08 stateful slips; F12 History.
 
@@ -341,7 +345,7 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Dependencies / entrance decisions:** Phase 6; Q5 canonical sources/formats, validation limits and Figma additions if needed.
 
-**Scope and main files:** `Features/Profile/Models/RatingEntry.swift`; profile editor/service/model extensions; `Features/Discovery/Models/RatingCriteria.swift`; filter ViewModel/view and search service/query extensions; rated player rows/profile block; `supabase/migrations/006_ratings.sql`; rating/filter tests.
+**Scope and main files:** `Features/Profile/Models/RatingEntry.swift`; profile editor/service/model extensions; `Features/Discovery/Models/RatingCriteria.swift`; filter ViewModel/view and search service/query extensions; rated player rows/profile block; `supabase/migrations/007_ratings.sql`; rating/filter tests.
 
 **Figma references:** F15 optional-rating controls/removal, F06 source/range/clear, F03 applied chips and rated/unrated rows, F05 rating detail, self-report notices.
 
@@ -362,7 +366,7 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Dependencies / entrance decisions:** Phase 7; retain the description's mutual-request model unless explicitly changed; obtain Figma coverage for removal and missing request/empty states under Q2.
 
-**Scope and main files:** `Features/Friends/{Views/FriendsView,Views/FriendRequestCard,ViewModels/FriendsViewModel,Models/Friendship,Services/FriendshipService}.swift`; Player Profile friendship action and shared navigation; `supabase/migrations/007_friendships.sql`; friends tests. Use the existing message/proposal services.
+**Scope and main files:** `Features/Friends/{Views/FriendsView,Views/FriendRequestCard,ViewModels/FriendsViewModel,Models/Friendship,Services/FriendshipService}.swift`; Player Profile friendship action and shared navigation; `supabase/migrations/008_friendships.sql`; friends tests. Use the existing message/proposal services.
 
 **Figma references:** F13 Friends with embedded request cards; F05 Add Friend/Request Sent/Friends states; F08/F09/F10 existing repeat-game path. The description's conversation entry point is optional wording; the already designed Profile action supplies the required request entry.
 
@@ -383,7 +387,7 @@ Expected evidence: the app/test schemes are listed, build exits successfully wit
 
 **Dependencies / entrance decisions:** Phase 8; Q6 listing owner/maintenance/contact/introduction model and conditional introduction layout. A designated contact must correspond to an actual account.
 
-**Scope and main files:** `Features/Groups/{Views/NearbyGroupsView,Views/GroupDetailView,ViewModels/GroupsViewModel,Models/GroupListing,Services/GroupService}.swift`; Discover segment routing and shared area/distance query; `supabase/migrations/008_groups.sql`; private operator listing-import procedure and group tests. Do not add in-app group administration, membership, group chat or events.
+**Scope and main files:** `Features/Groups/{Views/NearbyGroupsView,Views/GroupDetailView,ViewModels/GroupsViewModel,Models/GroupListing,Services/GroupService}.swift`; Discover segment routing and shared area/distance query; `supabase/migrations/009_groups.sql`; private operator listing-import procedure and group tests. Do not add in-app group administration, membership, group chat or events.
 
 **Figma references:** F04 group segment/results/loading/empty, F16 contact and introduction cards, F05/F08 reuse; `.group-glyph`, `.contact-card`, `.introduction-card`.
 

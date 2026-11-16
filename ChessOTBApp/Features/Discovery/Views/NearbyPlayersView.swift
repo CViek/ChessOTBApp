@@ -123,9 +123,9 @@ struct NearbyPlayersView: View {
             Text("No players in this area yet").accessibilityIdentifier("discovery.empty").font(DesignTokens.Typography.statusTitle).multilineTextAlignment(.center)
             Text("Try a wider distance or choose another area. New players will appear here when they save a nearby profile area.")
                 .font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted).multilineTextAlignment(.center)
-            if let radius = model.settings?.radius, radius != .ten {
+            if let radius = model.settings?.radius.widened {
                 PrimaryButton(title: "Widen search distance") {
-                    pendingAction = .radius(UUID(), radius == .three ? .five : .ten)
+                    pendingAction = .radius(UUID(), radius)
                 }.disabled(model.isSaving)
                     .accessibilityIdentifier("discovery.widen")
             }

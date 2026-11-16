@@ -2,30 +2,30 @@ import SwiftUI
 
 struct SearchFiltersView: View {
     @ObservedObject var model: DiscoveryViewModel
-    @State private var radius: SearchRadius
+    @StateObject private var radiusInput: RadiusInputViewModel
     @State private var applyRequest = 0
     @Environment(\.dismiss) private var dismiss
     init(model: DiscoveryViewModel) {
         self.model = model
-        _radius = State(initialValue: model.settings?.radius ?? .five)
+        _radiusInput = StateObject(wrappedValue: RadiusInputViewModel(radius: model.settings?.radius ?? .five))
     }
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
-                    RadiusPicker(selection: $radius)
+                    RadiusPicker(input: radiusInput)
                     Text("Distances are approximate and measured between named area centers.")
                         .font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted)
                     if let error = model.errorMessage { AccountFeedback(message: error, isError: true) }
-                    PrimaryButton(title: "Apply distance") { applyRequest += 1 }.accessibilityIdentifier("discovery.applyRadius")
-                    PrimaryButton(title: "Reset to 5 miles", kind: .quiet) { radius = .five }
+                    PrimaryButton(title: "Apply distance") { applyRequest += 1 }.disabled(radiusInput.radius == nil).accessibilityIdentifier("discovery.applyRadius")
+                    PrimaryButton(title: "Reset to 5 miles", kind: .quiet) { radiusInput.reset() }
                     if model.isSaving { ProgressView("Saving…") }
                 }.padding(22)
             }.background(DesignTokens.Colors.paper)
                 .navigationTitle("Search filters").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } } }
                 .disabled(model.isSaving).interactiveDismissDisabled(model.isSaving)
-                .task(id: applyRequest) { if applyRequest > 0, await model.setRadius(radius) { dismiss() } }
+                .task(id: applyRequest) { if applyRequest > 0, let radius = radiusInput.radius, await model.setRadius(radius) { dismiss() } }
         }
     }
 }

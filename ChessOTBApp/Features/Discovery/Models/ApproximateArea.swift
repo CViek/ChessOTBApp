@@ -19,8 +19,34 @@ nonisolated struct ApproximateArea: Codable, Hashable, Identifiable, Sendable {
     }
 }
 
-nonisolated enum SearchRadius: Int, Codable, CaseIterable, Sendable {
-    case three = 3, five = 5, ten = 10
+/// A whole-mile radius; old saved numeric values remain compatible.
+nonisolated struct SearchRadius: RawRepresentable, Codable, Hashable, Sendable {
+    static let allowedRange = 1...100
+    let rawValue: Int
+    init?(rawValue: Int) {
+        guard Self.allowedRange.contains(rawValue) else { return nil }
+        self.rawValue = rawValue
+    }
+    private init(knownValue: Int) { rawValue = knownValue }
+    static let three = Self(knownValue: 3)
+    static let five = Self(knownValue: 5)
+    static let ten = Self(knownValue: 10)
+    var widened: SearchRadius? {
+        guard rawValue < Self.allowedRange.upperBound else { return nil }
+        return Self(rawValue: min(Self.allowedRange.upperBound, rawValue * 2))
+    }
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(Int.self)
+        guard let radius = Self(rawValue: value) else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Distance must be 1–100 whole miles")
+        }
+        self = radius
+    }
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
 }
 
 nonisolated struct DiscoverySettings: Codable, Hashable, Sendable {

@@ -33,3 +33,12 @@ request('/rest/v1/rpc/save_own_profile_area',area('Changed Kansas area',37.77,-1
 assert request('/rest/v1/rpc/get_discovery_settings',{},a)['area']['name']=='Boston, MA'
 assert request('/rest/v1/rpc/get_discovery_settings',{},b)['area']['name']=='Nearby Kansas area'
 print('PASS: real nearby discovery, self exclusion, coarse storage, public privacy, and independent account settings')
+
+for radius in (1, 7, 37, 100):
+    request('/rest/v1/rpc/save_search_area', area('Boston, MA',42.36,-71.06,radius),a)
+    assert request('/rest/v1/rpc/get_discovery_settings',{},a)['radius']==radius
+    request('/rest/v1/rpc/search_players',dict(p_latitude=42.36,p_longitude=-71.06,p_radius_miles=radius),a)
+for radius in (0, 101):
+    request('/rest/v1/rpc/save_search_area',area('Boston, MA',42.36,-71.06,radius),a,expected=400)
+assert request('/rest/v1/rpc/get_discovery_settings',{},a)['radius']==100
+print('PASS: dynamic 1–100-mile distances, nonpreset saves/searches, and rejected out-of-range writes')

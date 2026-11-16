@@ -147,7 +147,7 @@ final class AccountJourneyTests: XCTestCase {
         capture("Public player profile", app: app)
         app.navigationBars.buttons.firstMatch.tap()
         tap(app.buttons["discovery.filters"], in: app)
-        tap(app.segmentedControls.buttons["10 miles"], in: app)
+        selectDistance(10, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
         XCTAssertTrue(app.buttons["discovery.distanceChip"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.buttons["discovery.distanceChip"].label.contains("10"))
@@ -160,17 +160,19 @@ final class AccountJourneyTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["No players in this area yet"].waitForExistence(timeout: 15))
         capture("Empty discovery with recovery", app: app)
         tap(app.buttons["discovery.filters"], in: app)
-        tap(app.segmentedControls.buttons["3 miles"], in: app)
+        selectDistance(3, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
         tap(app.buttons["discovery.widen"], in: app)
-        let fiveMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "5")).firstMatch
-        XCTAssertTrue(fiveMiles.waitForExistence(timeout: 15))
+        let sixMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "6")).firstMatch
+        XCTAssertTrue(sixMiles.waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["No players in this area yet"].exists)
         app.tabBars.buttons["Profile"].tap(); app.tabBars.buttons["Discover"].tap()
         let tenMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
-        XCTAssertFalse(tenMiles.waitForExistence(timeout: 2), "Returning to Discover must not replay widening")
+        let replayedWidening = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "12")).firstMatch
+        XCTAssertFalse(replayedWidening.waitForExistence(timeout: 2), "Returning to Discover must not replay widening")
+        XCTAssertTrue(sixMiles.exists, "The selected 6-mile radius must remain unchanged")
         tap(app.buttons["discovery.area"], in: app)
-        tap(app.segmentedControls.buttons["10 miles"], in: app)
+        selectDistance(10, in: app)
         tap(app.buttons["area.save"], in: app)
         XCTAssertTrue(tenMiles.waitForExistence(timeout: 15), "A repeated saved area/radius must refresh the displayed search")
         assertProfile("Area explorer", in: app)
@@ -220,16 +222,69 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.buttons["discovery.area"], in: app)
         tap(app.buttons["area.save"], in: app)
         tap(app.buttons["discovery.filters"], in: app)
-        tap(app.segmentedControls.buttons["5 miles"], in: app)
+        selectDistance(5, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
         let five = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "5")).firstMatch
         XCTAssertTrue(five.waitForExistence(timeout: 15))
         tap(app.buttons["discovery.area"], in: app)
-        tap(app.segmentedControls.buttons["10 miles"], in: app)
+        selectDistance(10, in: app)
         tap(app.buttons["area.save"], in: app)
         let ten = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
         XCTAssertTrue(ten.waitForExistence(timeout: 15), "Resaving earlier settings must refresh the visible search")
         app.tabBars.buttons["Profile"].tap(); signOut(app)
+    }
+
+    func testDynamicRadiusCustomValuesBoundsAndPersistence() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let email = "ui-radius-" + UUID().uuidString.lowercased() + "@example.com"
+        let token = try await createConfirmedAccount(email: email)
+        _ = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Custom distance check"], token: token)
+        _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: token)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: email, password: password)
+        tap(app.buttons["discovery.filters"], in: app)
+        selectDistance(37, in: app)
+        capture("Dynamic distance controls", app: app)
+        tap(app.buttons["discovery.applyRadius"], in: app)
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "37")).firstMatch.waitForExistence(timeout: 15))
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "37")).firstMatch.waitForExistence(timeout: 15))
+        tap(app.buttons["discovery.filters"], in: app)
+        selectDistance(101, in: app)
+        XCTAssertFalse(app.buttons["discovery.applyRadius"].isEnabled)
+        let slider = app.sliders["discovery.radius"]
+        slider.adjust(toNormalizedSliderPosition: 0)
+        XCTAssertEqual(app.textFields["discovery.radiusMiles"].value as? String, "1")
+        slider.adjust(toNormalizedSliderPosition: 1)
+        // XCTest documents slider positioning as best effort; exact values use the numeric field.
+        let upperValue = try XCTUnwrap(Int(app.textFields["discovery.radiusMiles"].value as? String ?? ""))
+        XCTAssertTrue((99...100).contains(upperValue))
+        selectDistance(100, in: app)
+        tap(app.buttons["discovery.applyRadius"], in: app)
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "100")).firstMatch.waitForExistence(timeout: 15))
+        let saved = try await post("/rest/v1/rpc/get_discovery_settings", body: [:], token: token)
+        XCTAssertEqual((try JSONSerialization.jsonObject(with: saved) as? [String: Any])?["radius"] as? Int, 100)
+        app.terminate()
+        app.launchArguments = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        tap(app.buttons["discovery.filters"], in: app)
+        XCTAssertEqual(app.textFields["discovery.radiusMiles"].value as? String, "100")
+        capture("Dynamic distance accessibility text", app: app)
+        tap(app.buttons["Cancel"], in: app)
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+    }
+
+    private func selectDistance(_ miles: Int, in app: XCUIApplication) {
+        fill(app.textFields["discovery.radiusMiles"], with: String(miles), in: app)
+        let done = app.buttons["discovery.radiusDone"]
+        XCTAssertTrue(done.waitForExistence(timeout: 5))
+        done.tap()
     }
 
     private func seedAreaForAccount(email: String, app: XCUIApplication) async throws {
