@@ -299,6 +299,12 @@ The user replaced the original 3/5/10 presets with a slider and editable whole-m
 
 ## Phase 5 — Reviewed proposals and initial explicit agreement
 
+**Implementation status (November 16, 2026):** Core database/RPCs, Swift meeting
+service/records and event-link decoding are implemented and verified. Full Phase
+5 remains incomplete: review/detail design recovery, Q4 policy, messaging UI,
+owned draft/ViewModels and meeting screens/navigation are pending. See
+[Phase 5 implementation record](docs/phase-5.md) for evidence and exact limits.
+
 **Goal:** Send a real proposal, let only its recipient accept/decline it, and show the same initial arrangement to both participants.
 
 **Dependencies / entrance decisions:** Phase 4; recover complete F10/F11 source/render under Q2; Q4 date/past-pending rules. Do not guess missing Review Proposal layout.

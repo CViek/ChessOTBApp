@@ -63,6 +63,7 @@ nonisolated struct APIClient: Sendable {
         }
         switch status {
         case 401, 403: return .unauthorized
+        case 409: return .conflict
         case 429: return .rateLimited
         case 500...599: return .unavailable
         default: return .rejected

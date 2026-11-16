@@ -8,9 +8,28 @@ nonisolated struct Message: Codable, Equatable, Identifiable, Sendable {
     let sequence: Int64
     let body: String
     let createdAt: String
+    let meetingID: UUID?
+    let meetingVersion: Int?
+    let eventKind: String?
+
+    init(id: UUID, conversationID: UUID, senderID: UUID, clientID: UUID, sequence: Int64,
+         body: String, createdAt: String, meetingID: UUID? = nil, meetingVersion: Int? = nil,
+         eventKind: String? = nil) {
+        self.id = id
+        self.conversationID = conversationID
+        self.senderID = senderID
+        self.clientID = clientID
+        self.sequence = sequence
+        self.body = body
+        self.createdAt = createdAt
+        self.meetingID = meetingID
+        self.meetingVersion = meetingVersion
+        self.eventKind = eventKind
+    }
 
     enum CodingKeys: String, CodingKey {
         case id, conversationID = "conversationId", senderID = "senderId", clientID = "clientId", sequence, body, createdAt
+        case meetingID = "meetingId", meetingVersion, eventKind
     }
 }
 
