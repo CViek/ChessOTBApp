@@ -38,6 +38,7 @@ final class AccountJourneyTests: XCTestCase {
         let secondEmail = "ui-second-" + UUID().uuidString.lowercased() + "@example.com"
         let app = XCUIApplication()
         app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
         if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
         tap(app.buttons["account.create"], in: app)
         fill(app.textFields["account.email"], with: firstEmail, in: app)
@@ -51,6 +52,7 @@ final class AccountJourneyTests: XCTestCase {
         XCTAssertFalse(app.buttons["profile.save"].isEnabled)
         fill(app.textFields["profile.name"], with: "First player", in: app)
         tap(app.buttons["profile.save"], in: app)
+        try await seedAreaForAccount(email: firstEmail, app: app)
         assertProfile("First player", in: app)
         tap(app.buttons["profile.edit"], in: app)
         fill(app.textFields["profile.name"], with: "First player updated", in: app)
@@ -70,6 +72,7 @@ final class AccountJourneyTests: XCTestCase {
         XCTAssertTrue(app.textFields["profile.name"].waitForExistence(timeout: 15))
         fill(app.textFields["profile.name"], with: "Second player", in: app)
         tap(app.buttons["profile.save"], in: app)
+        try await seedAreaForAccount(email: secondEmail, app: app)
         assertProfile("Second player", in: app)
         XCTAssertFalse(app.staticTexts["First player updated"].exists)
         signOut(app)
@@ -96,6 +99,147 @@ final class AccountJourneyTests: XCTestCase {
         signOut(app)
     }
 
+    func testAreaDenialManualDiscoveryProfileFiltersAndPersistence() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let otherEmail = "ui-neighbor-" + UUID().uuidString.lowercased() + "@example.com"
+        let otherToken = try await createConfirmedAccount(email: otherEmail)
+        let otherName = "Neighbor " + String(UUID().uuidString.prefix(6))
+        let otherData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": otherName], token: otherToken)
+        let otherID = try XCTUnwrap((JSONSerialization.jsonObject(with: otherData) as? [[String: Any]])?.first?["id"] as? String)
+        _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: otherToken)
+        let email = "ui-discovery-" + UUID().uuidString.lowercased() + "@example.com"
+        try await createConfirmedAccount(email: email)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: email, password: password)
+        fill(app.textFields["profile.name"], with: "Area explorer", in: app)
+        tap(app.buttons["profile.save"], in: app)
+        tap(app.buttons["area.currentLocation"], in: app)
+        let deny = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@ OR label CONTAINS[c] %@", "Don't Allow", "Don’t Allow")).firstMatch
+        if deny.waitForExistence(timeout: 5) { deny.tap() }
+        XCTAssertTrue(app.staticTexts["account.error"].waitForExistence(timeout: 25))
+        XCTAssertTrue(app.staticTexts["account.error"].label.contains("Location access is off"))
+        fill(app.textFields["area.query"], with: "New York, NY", in: app)
+        tap(app.buttons["area.search"], in: app)
+        let candidate = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "area.candidate.")).firstMatch
+        XCTAssertTrue(candidate.waitForExistence(timeout: 30))
+        capture("Resolved manual area choices", app: app)
+        tap(candidate, in: app)
+        tap(app.buttons["area.save"], in: app)
+        let neighbor = app.buttons["discovery.player." + otherID.lowercased()]
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "discovery.player.")).firstMatch.waitForExistence(timeout: 20))
+        for _ in 0..<100 {
+            if neighbor.exists { break }
+            app.swipeUp()
+            let more = app.buttons["Load more players"]
+            if more.exists, more.isHittable { more.tap() }
+        }
+        XCTAssertTrue(neighbor.exists)
+        capture("Real nearby players", app: app)
+        tap(neighbor, in: app)
+        XCTAssertTrue(app.staticTexts["player.displayName"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["player.displayName"].label, otherName)
+        capture("Public player profile", app: app)
+        app.navigationBars.buttons.firstMatch.tap()
+        tap(app.buttons["discovery.filters"], in: app)
+        tap(app.segmentedControls.buttons["10 miles"], in: app)
+        tap(app.buttons["discovery.applyRadius"], in: app)
+        XCTAssertTrue(app.buttons["discovery.distanceChip"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["discovery.distanceChip"].label.contains("10"))
+        tap(app.buttons["discovery.area"], in: app)
+        fill(app.textFields["area.query"], with: "Juneau, AK", in: app)
+        tap(app.buttons["area.search"], in: app)
+        let remoteCandidate = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label CONTAINS[c] %@", "area.candidate.", "Juneau")).firstMatch
+        XCTAssertTrue(remoteCandidate.waitForExistence(timeout: 30)); tap(remoteCandidate, in: app)
+        tap(app.buttons["area.save"], in: app)
+        XCTAssertTrue(app.staticTexts["No players in this area yet"].waitForExistence(timeout: 15))
+        capture("Empty discovery with recovery", app: app)
+        tap(app.buttons["discovery.filters"], in: app)
+        tap(app.segmentedControls.buttons["3 miles"], in: app)
+        tap(app.buttons["discovery.applyRadius"], in: app)
+        tap(app.buttons["discovery.widen"], in: app)
+        let fiveMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "5")).firstMatch
+        XCTAssertTrue(fiveMiles.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["No players in this area yet"].exists)
+        app.tabBars.buttons["Profile"].tap(); app.tabBars.buttons["Discover"].tap()
+        let tenMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
+        XCTAssertFalse(tenMiles.waitForExistence(timeout: 2), "Returning to Discover must not replay widening")
+        tap(app.buttons["discovery.area"], in: app)
+        tap(app.segmentedControls.buttons["10 miles"], in: app)
+        tap(app.buttons["area.save"], in: app)
+        XCTAssertTrue(tenMiles.waitForExistence(timeout: 15), "A repeated saved area/radius must refresh the displayed search")
+        assertProfile("Area explorer", in: app)
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "New York")).firstMatch.exists)
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons["discovery.area"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["discovery.area"].label.contains("Juneau"))
+        assertProfile("Area explorer", in: app)
+        tap(app.buttons["profile.edit"], in: app)
+        fill(app.textFields["profile.name"], with: "Area explorer revised", in: app)
+        tap(app.buttons["profile.editArea"], in: app)
+        fill(app.textFields["area.query"], with: "Boston, MA", in: app)
+        tap(app.buttons["area.search"], in: app)
+        let profileCandidate = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND label CONTAINS[c] %@", "area.candidate.", "Boston")).firstMatch
+        XCTAssertTrue(profileCandidate.waitForExistence(timeout: 30)); tap(profileCandidate, in: app)
+        tap(app.buttons["area.save"], in: app)
+        XCTAssertEqual(app.textFields["profile.name"].value as? String, "Area explorer revised")
+        tap(app.buttons["profile.save"], in: app)
+        assertProfile("Area explorer revised", in: app)
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Boston")).firstMatch.exists)
+        app.tabBars.buttons["Discover"].tap()
+        XCTAssertTrue(app.buttons["discovery.area"].label.contains("Juneau"))
+        app.terminate()
+        app.launchArguments = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        XCTAssertTrue(app.buttons["discovery.area"].waitForExistence(timeout: 15))
+        capture("Discovery accessibility text", app: app)
+        assertProfile("Area explorer revised", in: app)
+        signOut(app)
+    }
+
+    func testRepeatedSavedAreaRefreshesDistance() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let email = "ui-repeat-" + UUID().uuidString.lowercased() + "@example.com"
+        let token = try await createConfirmedAccount(email: email)
+        _ = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Repeated area check"], token: token)
+        _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 10], token: token)
+        _ = try await post("/rest/v1/rpc/save_search_area", body: ["p_name": "Honolulu, HI", "p_latitude": 21.31, "p_longitude": -157.86, "p_country_code": "US", "p_radius_miles": 10], token: token)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: email, password: password)
+        tap(app.buttons["discovery.area"], in: app)
+        tap(app.buttons["area.save"], in: app)
+        tap(app.buttons["discovery.filters"], in: app)
+        tap(app.segmentedControls.buttons["5 miles"], in: app)
+        tap(app.buttons["discovery.applyRadius"], in: app)
+        let five = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "5")).firstMatch
+        XCTAssertTrue(five.waitForExistence(timeout: 15))
+        tap(app.buttons["discovery.area"], in: app)
+        tap(app.segmentedControls.buttons["10 miles"], in: app)
+        tap(app.buttons["area.save"], in: app)
+        let ten = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
+        XCTAssertTrue(ten.waitForExistence(timeout: 15), "Resaving earlier settings must refresh the visible search")
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+    }
+
+    private func seedAreaForAccount(email: String, app: XCUIApplication) async throws {
+        XCTAssertTrue(app.buttons["area.manual"].waitForExistence(timeout: 15))
+        let data = try await post("/auth/v1/token?grant_type=password", body: ["email": email, "password": password])
+        let token = try XCTUnwrap((JSONSerialization.jsonObject(with: data) as? [String: Any])?["access_token"] as? String)
+        _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: token)
+        app.terminate(); app.launch()
+    }
+
     private func signIn(_ app: XCUIApplication, email: String, password: String) {
         fill(app.textFields["account.email"], with: email, in: app)
         fill(app.secureTextFields["account.password"], with: password, in: app)
@@ -111,6 +255,8 @@ final class AccountJourneyTests: XCTestCase {
     }
 
     private func assertProfile(_ name: String, in app: XCUIApplication) {
+        XCTAssertTrue(app.tabBars.buttons["Profile"].waitForExistence(timeout: 15))
+        app.tabBars.buttons["Profile"].tap()
         let label = app.staticTexts["profile.displayName"]
         XCTAssertTrue(label.waitForExistence(timeout: 15))
         XCTAssertEqual(label.label, name)
@@ -118,13 +264,18 @@ final class AccountJourneyTests: XCTestCase {
 
     private func tap(_ element: XCUIElement, in app: XCUIApplication) {
         XCTAssertTrue(element.waitForExistence(timeout: 10))
+        if element.identifier == "area.search", app.keyboards.buttons["Search"].exists {
+            app.keyboards.buttons["Search"].tap()
+            return
+        }
         if app.keyboards.firstMatch.exists,
            element.frame.maxY >= app.keyboards.firstMatch.frame.minY - 50 {
             app.scrollViews.firstMatch.swipeUp()
         }
         for _ in 0..<5 {
             if element.isHittable { break }
-            app.swipeUp()
+            if element.frame.maxY < app.frame.midY { app.swipeDown() }
+            else { app.swipeUp() }
         }
         element.tap()
     }
@@ -140,18 +291,23 @@ final class AccountJourneyTests: XCTestCase {
             element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: element.elementType == .secureTextField ? 128 : current.count))
         }
         element.typeText(value)
+        if element.elementType == .textField {
+            XCTAssertEqual(element.value as? String, value, "The test must enter the intended text before submitting")
+        }
     }
 
-    private func createConfirmedAccount(email: String) async throws {
+    @discardableResult private func createConfirmedAccount(email: String) async throws -> String {
         _ = try await post("/auth/v1/signup", body: ["email": email, "password": password])
         let code = try await emailCode(for: email, subject: "Confirm")
-        _ = try await post("/auth/v1/verify", body: ["email": email, "token": code, "type": "signup"])
+        let data = try await post("/auth/v1/verify", body: ["email": email, "token": code, "type": "signup"])
+        return try XCTUnwrap((JSONSerialization.jsonObject(with: data) as? [String: Any])?["access_token"] as? String)
     }
 
-    private func post(_ path: String, body: [String: String]) async throws -> Data {
+    private func post(_ path: String, body: [String: Any], token: String? = nil) async throws -> Data {
         var request = URLRequest(url: URL(string: baseURL + path)!)
         request.httpMethod = "POST"
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        if let token { request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization") }
         request.setValue(publishableKey, forHTTPHeaderField: "apikey")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let (data, response) = try await URLSession.shared.data(for: request)

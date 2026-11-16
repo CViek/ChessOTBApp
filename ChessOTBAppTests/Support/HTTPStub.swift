@@ -15,6 +15,20 @@ final class HTTPStub: URLProtocol, @unchecked Sendable {
         return APIClient(configuration: backend, session: URLSession(configuration: configuration))
     }
 
+    static func body(_ request: URLRequest) throws -> Data {
+        if let data = request.httpBody { return data }
+        guard let stream = request.httpBodyStream else { throw APIError.invalidResponse }
+        stream.open(); defer { stream.close() }
+        var result = Data()
+        var buffer = [UInt8](repeating: 0, count: 4096)
+        while true {
+            let count = stream.read(&buffer, maxLength: buffer.count)
+            if count == 0 { return result }
+            if count < 0 { throw stream.streamError ?? APIError.invalidResponse }
+            result.append(contentsOf: buffer.prefix(count))
+        }
+    }
+
     override class func canInit(with request: URLRequest) -> Bool { true }
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
     override func startLoading() {

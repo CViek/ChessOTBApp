@@ -63,7 +63,7 @@ one_profile = request('/rest/v1/rpc/save_own_profile', {'p_display_name': 'First
 two_profile = request('/rest/v1/rpc/save_own_profile', {'p_display_name': 'Second player'}, b)[0]
 assert one_profile['id'] != one['user']['id']
 assert one_profile['id'] != two_profile['id']
-assert set(one_profile) == {'id', 'display_name'}
+assert set(one_profile) == {'id', 'display_name', 'area_name'}
 public = request('/rest/v1/rpc/get_player_profile', {'p_profile_id': one_profile['id']}, b)[0]
 assert public == one_profile
 request('/rest/v1/rpc/get_own_profile', {}, expected=401)

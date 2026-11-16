@@ -7,7 +7,7 @@ struct ProfileViewModelTests {
         let service = ProfileDouble()
         let model = ProfileViewModel(service: service)
         await model.load()
-        await service.setFailure(.network)
+        service.setFailure(.network)
         #expect(await model.save(displayName: "Changed") == false)
         #expect(model.profile?.displayName == "Original")
         #expect(model.errorMessage != nil)

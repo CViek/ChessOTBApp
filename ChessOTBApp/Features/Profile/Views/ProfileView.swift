@@ -5,12 +5,13 @@ struct ProfileView: View {
     @Environment(AppearanceSettings.self) private var appearance
     @Environment(\.colorScheme) private var colorScheme
     let profile: PlayerProfile
+    var editArea: () -> Void = {}
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignTokens.Spacing.pageInset) {
                 identity
-                StateNotice(message: "Your profile is saved. A search area is required before you can find players.")
+                StateNotice(message: "Your chosen profile area makes you discoverable. It doesn’t mean you’re available to play right now.")
                 settings
                 Text("Your display name appears on your public profile. Your email stays private.")
                     .font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
@@ -19,7 +20,7 @@ struct ProfileView: View {
         .background(DesignTokens.Colors.paper)
         .navigationTitle("Profile")
         .navigationDestination(for: AppRoute.self) { route in
-            switch route { case .editProfile: EditProfileView(model: model) }
+            switch route { case .editProfile: EditProfileView(model: model, editArea: editArea) }
         }
     }
 
@@ -29,7 +30,7 @@ struct ProfileView: View {
             VStack(alignment: .leading, spacing: DesignTokens.Spacing.extraSmall) {
                 Text(profile.displayName).font(DesignTokens.Typography.statusTitle)
                     .accessibilityIdentifier("profile.displayName")
-                Text("Search area not set").font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted)
+                Text(profile.areaName ?? String(localized: "Profile area not set")).font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

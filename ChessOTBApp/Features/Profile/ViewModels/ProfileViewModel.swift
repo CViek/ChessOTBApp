@@ -16,6 +16,8 @@ final class ProfileViewModel: ObservableObject {
 
     var canSave: Bool { !displayNameDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isSaving }
 
+    func acceptAreaProfile(_ profile: PlayerProfile) { self.profile = profile }
+
     func prepareDraft() {
         displayNameDraft = profile?.displayName ?? ""
         errorMessage = nil

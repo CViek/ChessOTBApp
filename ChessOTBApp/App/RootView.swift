@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(SessionViewModel.self) private var session
-    let profiles: any ProfileServiceProtocol
+    let dependencies: AppDependencies
     @State private var retryRequest = 0
     @State private var signOutRequest = 0
 
@@ -17,7 +17,7 @@ struct RootView: View {
                     AccountEntryView(session: session)
                 }
             case .signedIn(let user):
-                ProfileWorkspaceView(service: profiles).id(user.id)
+                ProfileWorkspaceView(dependencies: dependencies).id(user.id)
             case .restoreFailed(let message):
                 restoreFailure(message)
             }
@@ -39,7 +39,7 @@ struct RootView: View {
 
 #if DEBUG
 #Preview("Account entry") {
-    RootView(profiles: PreviewAccountService())
+    RootView(dependencies: .preview)
         .environment(SessionViewModel(auth: PreviewAccountService()))
         .environment(AppearanceSettings())
 }

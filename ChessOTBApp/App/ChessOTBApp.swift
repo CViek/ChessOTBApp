@@ -14,7 +14,7 @@ struct ChessOTBApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(profiles: dependencies.profiles)
+            RootView(dependencies: dependencies)
                 .environment(session)
                 .environment(appearance)
                 .tint(DesignTokens.Colors.forest)

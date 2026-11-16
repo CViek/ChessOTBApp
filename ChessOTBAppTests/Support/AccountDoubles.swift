@@ -31,19 +31,27 @@ actor AuthDouble: AuthServiceProtocol {
     func signOut() throws { session = nil; if let failure { throw failure } }
 }
 
-actor ProfileDouble: ProfileServiceProtocol {
-    var profile: PlayerProfile? = PlayerProfile(id: AccountFixtures.profileID, displayName: "Original")
+@MainActor final class ProfileDouble: ProfileServiceProtocol {
+    var profile: PlayerProfile?
+    init() { profile = PlayerProfile(id: AccountFixtures.profileID, displayName: "Original") }
     var failure: APIError?
     func setFailure(_ error: APIError) { failure = error }
-    func loadOwnProfile() throws -> PlayerProfile? {
+    @MainActor func loadOwnProfile() async throws -> PlayerProfile? {
         if let failure { throw failure }
         return profile
     }
-    func saveDisplayName(_ name: String) throws -> PlayerProfile {
+    @MainActor func saveDisplayName(_ name: String) async throws -> PlayerProfile {
         if let failure { throw failure }
         let result = PlayerProfile(id: AccountFixtures.profileID, displayName: name)
         profile = result
         return result
     }
-    func publicProfile(id: UUID) -> PlayerProfile? { profile }
+    @MainActor func loadArea() async throws -> ApproximateArea? { nil }
+    @MainActor func saveArea(_ area: ApproximateArea, radius: SearchRadius) async throws -> PlayerProfile {
+        if let failure { throw failure }
+        let result = PlayerProfile(id: AccountFixtures.profileID, displayName: profile?.displayName ?? "Original", areaName: area.name)
+        profile = result
+        return result
+    }
+    @MainActor func publicProfile(id: UUID) async throws -> PlayerProfile? { profile }
 }

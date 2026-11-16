@@ -18,5 +18,7 @@
 		<string>Newsreader.ttf</string>
 		<string>DMSans.ttf</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Find your city or neighborhood to search for nearby chess players. You can also enter an area manually.</string>
 </dict>
 </plist>

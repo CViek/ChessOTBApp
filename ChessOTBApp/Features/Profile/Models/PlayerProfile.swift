@@ -4,6 +4,7 @@ import Foundation
 nonisolated struct PlayerProfile: Codable, Equatable, Identifiable, Sendable {
     let id: UUID
     let displayName: String
+    var areaName: String? = nil
 
     static func validatedName(_ value: String) throws -> String {
         let name = value.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -21,4 +22,6 @@ nonisolated protocol ProfileServiceProtocol: Sendable {
     func loadOwnProfile() async throws -> PlayerProfile?
     func saveDisplayName(_ name: String) async throws -> PlayerProfile
     func publicProfile(id: UUID) async throws -> PlayerProfile?
+    func loadArea() async throws -> ApproximateArea?
+    func saveArea(_ area: ApproximateArea, radius: SearchRadius) async throws -> PlayerProfile
 }
