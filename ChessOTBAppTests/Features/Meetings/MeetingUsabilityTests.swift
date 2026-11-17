@@ -115,6 +115,37 @@ import Testing
         #expect(service.requests.isEmpty)
         #expect(draft.sentMeeting?.status == .pending)
     }
+    @Test func meetingFiltersSeparatePendingConfirmedAndHistoryAndSelectedDay() async throws {
+        let service = MeetingDouble()
+        let model = MyMeetingsViewModel(service: service, cache: try AccountCache(accountID: UUID(), inMemory: true))
+        let now = Date.now
+        service.value = MeetingDouble.meeting(startsAt: now.addingTimeInterval(86400))
+        await model.refresh()
+        #expect(model.visible(section: .awaiting, at: now).count == 1)
+        #expect(model.visible(section: .confirmed, at: now).isEmpty)
+        #expect(model.visible(section: .awaiting, at: now, on: now).isEmpty)
+        #expect(model.visible(section: .awaiting, at: now, on: service.value.revision.startsAt).count == 1)
+        service.value = MeetingDouble.meeting(status: .confirmed, startsAt: now.addingTimeInterval(86400))
+        await model.refresh()
+        #expect(model.visible(section: .awaiting, at: now).isEmpty)
+        #expect(model.visible(section: .confirmed, at: now).count == 1)
+        #expect(model.visible(section: .history, at: now).isEmpty)
+    }
+    @Test func calendarHighlightsBothStatusesAndRoutesEveryMeetingOnADay() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
+        calendar.firstWeekday = 2
+        let date = try MeetingTimestamp.decode("2026-11-19T16:00:00Z")
+        let awaiting = MeetingDouble.meeting(startsAt: date)
+        let confirmed = MeetingDouble.meeting(status: .confirmed, startsAt: date.addingTimeInterval(3600))
+        let cancelled = MeetingDouble.meeting(status: .cancelled, startsAt: date)
+        let month = MeetingCalendarMonth(date: date, meetings: [awaiting, confirmed, cancelled], now: date.addingTimeInterval(-86400), calendar: calendar)
+        let day = try #require(month.days.first { $0.date.map { calendar.isDate($0, inSameDayAs: date) } ?? false })
+        #expect(day.hasAwaiting && day.hasConfirmed)
+        #expect(day.meetings.map(\.id) == [awaiting.id, confirmed.id])
+        #expect(month.days.filter { $0.date != nil }.count == 30)
+        #expect(month.days.prefix(6).allSatisfy { $0.date == nil })
+    }
     @Test func staleAddressResultsCannotReplaceANewerQuery() async {
         let lookup = DelayedMeetingLookup()
         let model = MeetingPlaceSearchViewModel(service: lookup)
