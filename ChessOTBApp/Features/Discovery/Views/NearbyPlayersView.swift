@@ -154,7 +154,7 @@ struct NearbyPlayersView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(player.displayName).font(DesignTokens.Typography.control)
                             Text(player.areaName).font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
-                            RatingSummaryView(rating: player.rating)
+                            RatingSummaryView(ratings: player.ratings ?? player.rating.map { [$0] } ?? [])
                             Text(player.distanceDescription).font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         Image("IconChevron").accessibilityHidden(true)
