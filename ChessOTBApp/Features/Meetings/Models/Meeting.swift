@@ -1,7 +1,7 @@
 import Foundation
 
 nonisolated enum MeetingStatus: String, Codable, Sendable {
-    case pending, confirmed, declined
+    case pending, confirmed, declined, cancelled
 }
 
 nonisolated enum MeetingDecision: String, Codable, Sendable {
