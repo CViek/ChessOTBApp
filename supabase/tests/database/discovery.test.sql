@@ -44,7 +44,7 @@ select is(public.search_players(40.71,-74.01,5,public.search_players(40.71,-74.0
 select is(jsonb_array_length(public.search_players(10,10,10,null,20)->'players'),0,'empty query returns no fabricated players');
 select throws_ok($$select public.search_players(40.71,-74.01,101,null,20)$$,'22023','Invalid search','unsupported radius rejected');
 select throws_ok($$select public.search_players(40.71,-74.01,5,'invalid',20)$$,'22023','Invalid cursor','malformed cursor rejected');
-select is((select array_agg(key order by key) from jsonb_object_keys((public.search_players(40.71,-74.01,3,null,20)->'players'->0)) as key),array['area_name','display_name','distance_miles','id','rating'],'discovery exposes only approved public fields including optional rating');
+select is((select array_agg(key order by key) from jsonb_object_keys((public.search_players(40.71,-74.01,3,null,20)->'players'->0)) as key),array['area_name','display_name','distance_miles','id','rating','ratings'],'discovery exposes only approved public fields including optional ratings');
 select public.save_search_area('Boston, MA',42.36,-71.06,'US',10);
 select is((select area_name from public.get_own_profile()),'New York, NY','search edit preserves public profile area');
 select public.save_own_profile_area('Changed profile, NY',40.73,-74.01,'US',5);

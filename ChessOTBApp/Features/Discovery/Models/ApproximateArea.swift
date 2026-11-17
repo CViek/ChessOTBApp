@@ -61,6 +61,7 @@ nonisolated struct NearbyPlayer: Codable, Hashable, Identifiable, Sendable {
     let areaName: String
     let distanceMiles: Int
     var rating: RatingEntry? = nil
+    var ratings: [RatingEntry]? = nil
 
     var distanceDescription: String {
         if distanceMiles < 1 { return String(localized: "Less than 1 mile") }

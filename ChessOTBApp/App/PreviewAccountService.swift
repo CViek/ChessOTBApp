@@ -21,14 +21,19 @@ actor PreviewAccountService: AuthServiceProtocol, ProfileServiceProtocol, AreaSe
     func validSession() throws -> AuthSession { throw APIError.unauthorized }
     func signOut() {}
     func loadOwnProfile() -> PlayerProfile? { profile }
+    func saveProfile(displayName: String, ratings: [RatingEntry]) throws -> PlayerProfile {
+        let result = PlayerProfile(id: profile?.id ?? Self.exampleProfile.id, displayName: try PlayerProfile.validatedName(displayName), areaName: profile?.areaName, ratings: ratings)
+        profile = result
+        return result
+    }
     func saveDisplayName(_ name: String) -> PlayerProfile {
-        let result = PlayerProfile(id: Self.exampleProfile.id, displayName: name)
+        let result = PlayerProfile(id: profile?.id ?? Self.exampleProfile.id, displayName: name, areaName: profile?.areaName, ratings: profile?.ratings ?? [])
         profile = result
         return result
     }
     func loadArea() -> ApproximateArea? { nil }
     func saveArea(_ area: ApproximateArea, radius: SearchRadius) -> PlayerProfile {
-        let result = PlayerProfile(id: Self.exampleProfile.id, displayName: profile?.displayName ?? "Alex Morgan", areaName: area.name)
+        let result = PlayerProfile(id: profile?.id ?? Self.exampleProfile.id, displayName: profile?.displayName ?? "Alex Morgan", areaName: area.name, ratings: profile?.ratings ?? [])
         profile = result
         return result
     }

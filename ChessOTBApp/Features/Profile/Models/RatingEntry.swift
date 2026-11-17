@@ -30,10 +30,16 @@ nonisolated struct RatingEntry: Codable, Hashable, Sendable {
     }
     var summary: String { String(localized: "\(value) · \(kind.title) · self-reported") }
 }
+nonisolated struct RatingDraft: Identifiable {
+    let id = UUID()
+    var kind: RatingKind
+    var value: String
+}
 nonisolated enum RatingError: LocalizedError, Equatable {
-    case invalidValue, invalidCriteria
+    case invalidValue, invalidCriteria, duplicateKind
     var errorDescription: String? {
         switch self {
+        case .duplicateKind: String(localized: "Add only one rating for each source and format.")
         case .invalidValue: String(localized: "Enter a whole-number rating from 1 to 4,000, or leave it blank.")
         case .invalidCriteria: String(localized: "Choose a rating source and format. Bounds must be 1–4,000, with minimum no greater than maximum.")
         }
