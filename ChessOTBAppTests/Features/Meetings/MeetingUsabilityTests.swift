@@ -100,6 +100,21 @@ import Testing
         let model = ProposalViewModel(conversationID: meeting.conversationID, meeting: meeting, service: MeetingDouble(), cache: try AccountCache(accountID: UUID(), inMemory: true))
         #expect(model.startsAt == meeting.revision.startsAt)
     }
+    @Test func onlySenderCanEditAnUnansweredInvitation() async throws {
+        let service = MeetingDouble(), meeting = MeetingDouble.meeting()
+        service.value = meeting
+        let sender = MeetingDetailViewModel(id: meeting.id, ownProfileID: meeting.proposerID, service: service, cache: try AccountCache(accountID: UUID(), inMemory: true))
+        let recipient = MeetingDetailViewModel(id: meeting.id, ownProfileID: meeting.recipientID, service: service, cache: try AccountCache(accountID: UUID(), inMemory: true))
+        await sender.refresh(); await recipient.refresh()
+        #expect(sender.canEditInvitation)
+        #expect(!recipient.canEditInvitation)
+        let draft = ProposalViewModel(conversationID: meeting.conversationID, meeting: meeting, service: service, cache: try AccountCache(accountID: UUID(), inMemory: true))
+        draft.selectPlace(Self.place); draft.note = "Meet by the entrance"; draft.review()
+        await draft.send()
+        #expect(service.invitationEdits.count == 1)
+        #expect(service.requests.isEmpty)
+        #expect(draft.sentMeeting?.status == .pending)
+    }
     @Test func staleAddressResultsCannotReplaceANewerQuery() async {
         let lookup = DelayedMeetingLookup()
         let model = MeetingPlaceSearchViewModel(service: lookup)

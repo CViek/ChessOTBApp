@@ -77,7 +77,9 @@ nonisolated struct ReviewedProposal: Codable, Equatable, Sendable {
             try save() // A durable request ID must exist before any network side effect.
             let result: Meeting
             if let meeting = sourceMeeting {
-                if meeting.pendingRevision != nil {
+                if meeting.status == .pending {
+                    result = try await service.editInvitation(id: meeting.id, requestID: reviewed.requestID, expectedVersion: meeting.version, proposal: reviewed.proposal)
+                } else if meeting.pendingRevision != nil {
                     result = try await service.editChange(id: meeting.id, requestID: reviewed.requestID, expectedVersion: meeting.version, proposal: reviewed.proposal)
                 } else {
                     result = try await service.proposeChange(id: meeting.id, requestID: reviewed.requestID, expectedVersion: meeting.version, proposal: reviewed.proposal)

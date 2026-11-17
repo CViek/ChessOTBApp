@@ -19,7 +19,7 @@ struct MeetingProposalView: View {
             }
         }
         .background(DesignTokens.Colors.paper)
-        .navigationTitle(model.reviewed == nil ? (model.sourceMeeting == nil ? "Propose a Game" : (model.sourceMeeting?.pendingRevision == nil ? "Propose a Change" : "Edit Change")) : "Review Proposal")
+        .navigationTitle(model.reviewed == nil ? (model.sourceMeeting == nil ? "Propose a Game" : (model.sourceMeeting?.status == .pending ? "Edit Invitation" : (model.sourceMeeting?.pendingRevision == nil ? "Propose a Change" : "Edit Change"))) : "Review Proposal")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() }.disabled(model.isSending) }
@@ -67,7 +67,7 @@ struct MeetingProposalView: View {
             }
             Section("Optional note") {
                 TextField("Entrance, floor, what to bring…", text: $model.note, axis: .vertical)
-                    .focused($focusedField, equals: .note).accessibilityIdentifier("meeting.note")
+                    .autocorrectionDisabled().focused($focusedField, equals: .note).accessibilityIdentifier("meeting.note")
             }
             if let error = model.errorMessage { Section { AccountFeedback(message: error, isError: true) } }
             Section {
@@ -86,7 +86,7 @@ struct MeetingProposalView: View {
                 StateNotice(message: "Sending proposes these details. The other player must accept before they become agreed.")
                 if let error = model.errorMessage { AccountFeedback(message: error, isError: true) }
                 if model.isSending { ProgressView("Sending proposal…") }
-                PrimaryButton(title: reviewed.attempted ? "Retry sending proposal" : "Send Proposal") { sendRequest += 1 }
+                PrimaryButton(title: reviewed.attempted ? "Retry sending proposal" : (model.sourceMeeting?.status == .pending ? "Send Updated Invitation" : "Send Proposal")) { sendRequest += 1 }
                     .disabled(model.isSending).accessibilityIdentifier("meeting.send")
                 PrimaryButton(title: "Edit details", kind: .secondary) { model.edit() }
                     .disabled(!model.canEdit).accessibilityIdentifier("meeting.edit")

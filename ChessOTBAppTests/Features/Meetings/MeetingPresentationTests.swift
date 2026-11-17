@@ -96,6 +96,7 @@ import Testing
     var value = meeting()
     var requests: [UUID] = []
     var editRequests: [UUID] = []
+    var invitationEdits: [UUID] = []
     var responseRequests: [UUID] = []
     var failCreate = false
     var pauseDetail = false
@@ -116,6 +117,7 @@ import Testing
     @MainActor func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting {
         if changeConflict { throw APIError.conflict }; return value
     }
+    @MainActor func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { invitationEdits.append(requestID); return value }
     @MainActor func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { editRequests.append(requestID); return value }
     @MainActor func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { responseRequests.append(requestID); return value }
     static func meeting(status: MeetingStatus = .pending, startsAt: Date = .distantFuture, pendingProposerID: UUID? = nil) -> Meeting {

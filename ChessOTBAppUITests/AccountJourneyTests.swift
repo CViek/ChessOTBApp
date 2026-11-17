@@ -367,6 +367,8 @@ final class AccountJourneyTests: XCTestCase {
         let meetingID = try XCTUnwrap((JSONSerialization.jsonObject(with: created) as? [String: Any])?["id"] as? String)
         _ = try await post("/rest/v1/rpc/respond_to_meeting", body: ["p_meeting_id": meetingID, "p_request_id": UUID().uuidString, "p_expected_version": 1, "p_decision": "confirmed"], token: second)
         _ = try await post("/rest/v1/rpc/propose_meeting_change_with_place", body: ["p_meeting_id": meetingID, "p_request_id": UUID().uuidString, "p_expected_version": 2, "p_starts_at": "2099-05-17T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Bryant Park", "p_place": newPlace, "p_note": "Bring a board"], token: first)
+        let outgoingData = try await post("/rest/v1/rpc/create_meeting_with_place", body: ["p_conversation_id": thread, "p_request_id": UUID().uuidString, "p_starts_at": "2099-05-18T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Central Library", "p_place": oldPlace, "p_note": "Original invitation note"], token: second)
+        let outgoingID = try XCTUnwrap((JSONSerialization.jsonObject(with: outgoingData) as? [String: Any])?["id"] as? String)
         let app = XCUIApplication(); app.launch()
         if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
         if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
@@ -408,6 +410,25 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.buttons["meeting.cancel"], in: app)
         tap(app.alerts["Cancel this meeting?"].buttons["Cancel Meeting"].firstMatch, in: app)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Cancelled")).firstMatch.waitForExistence(timeout: 10))
+        app.navigationBars.buttons.firstMatch.tap()
+        tap(app.buttons["meeting.row." + outgoingID.lowercased()], in: app)
+        tap(app.buttons["meeting.editInvitation"], in: app)
+        let note = app.textViews["meeting.note"].exists ? app.textViews["meeting.note"] : app.textFields["meeting.note"]
+        tap(note, in: app)
+        note.typeText("Please bring a board. ")
+        let editedNote = try XCTUnwrap(note.value as? String)
+        XCTAssertTrue(editedNote.contains("Please bring a board."))
+        XCTAssertNotEqual(editedNote, "Original invitation note")
+        tap(app.buttons["meeting.review"], in: app)
+        tap(app.buttons["meeting.send"], in: app)
+        XCTAssertTrue(app.staticTexts[editedNote].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["meeting.status"].label, "Awaiting agreement")
+        let editedData = try await post("/rest/v1/rpc/get_meeting", body: ["p_meeting_id": outgoingID], token: first)
+        let edited = try XCTUnwrap(JSONSerialization.jsonObject(with: editedData) as? [String: Any])
+        XCTAssertEqual(edited["version"] as? Int, 2)
+        XCTAssertEqual(edited["status"] as? String, "pending")
+        XCTAssertEqual((edited["revision"] as? [String: Any])?["note"] as? String, editedNote)
+        capture("Editable sent invitation", app: app)
         tap(app.tabBars.buttons["Profile"], in: app); signOut(app)
     }
 

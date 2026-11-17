@@ -21,6 +21,7 @@ import Foundation
     var canAccept: Bool { canRespond && (meeting?.revision.startsAt ?? .distantPast) > .now }
     var canRespondToChange: Bool { meeting?.status == .confirmed && meeting?.pendingRevision != nil && meeting?.pendingProposerID != ownProfileID && mutation == nil }
     var canAcceptChange: Bool { canRespondToChange && (meeting?.pendingRevision?.startsAt ?? .distantPast) > .now }
+    var canEditInvitation: Bool { meeting?.status == .pending && meeting?.proposerID == ownProfileID && mutation == nil }
     var canProposeChange: Bool { meeting?.status == .confirmed && meeting?.pendingRevision == nil && mutation == nil }
     var canCancel: Bool { (meeting?.status == .pending || meeting?.status == .confirmed) && mutation == nil }
     var conversationRoute: ConversationRoute? {
@@ -49,7 +50,7 @@ import Foundation
         guard active, cache.isActive, !isMutating, let meeting else { return }
         if let mutation, mutation.action != action { return }
         if mutation == nil, let expectedVersion, expectedVersion != meeting.version {
-            errorMessage = String(localized: "This change was edited while you were reviewing it. Check the new details before responding.")
+            errorMessage = String(localized: "The meeting details changed while you were reviewing them. Review the latest details before responding.")
             return
         }
         isMutating = true; errorMessage = nil

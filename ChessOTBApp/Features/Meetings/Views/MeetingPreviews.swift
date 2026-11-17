@@ -16,6 +16,7 @@ private nonisolated struct PreviewMeetingService: MeetingServiceProtocol {
     func cancel(id: UUID, requestID: UUID, expectedVersion: Int) async throws -> Meeting { value }
     func respond(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { value }
     func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { value }
+    func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { value }
     func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { value }
     func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { value }
 }

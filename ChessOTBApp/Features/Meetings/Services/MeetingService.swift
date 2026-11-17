@@ -1,6 +1,7 @@
 import Foundation
 
 nonisolated protocol MeetingServiceProtocol: Sendable {
+    func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
     func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
     func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
     func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting
@@ -69,6 +70,14 @@ nonisolated struct MeetingService: MeetingServiceProtocol {
                                     p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
                                     p_location: proposal.location, p_note: proposal.note, p_place: proposal.place)
         return try await client.request("rest/v1/rpc/edit_meeting_change_with_place", method: "POST", body: JSONEncoder().encode(payload), token: token())
+    }
+    func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting {
+        let proposal = try proposal.normalized()
+        guard proposal.place != nil else { throw APIError.rejected }
+        let payload = ChangeRequest(p_meeting_id: id, p_request_id: requestID, p_expected_version: expectedVersion,
+                                    p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
+                                    p_location: proposal.location, p_note: proposal.note, p_place: proposal.place)
+        return try await client.request("rest/v1/rpc/edit_meeting_invitation_with_place", method: "POST", body: JSONEncoder().encode(payload), token: token())
     }
     func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting {
         try await client.request("rest/v1/rpc/respond_to_meeting_change", method: "POST",

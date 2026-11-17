@@ -9,7 +9,7 @@ struct MeetingDetailView: View {
     @State private var showChange = false
     @State private var proposalModel: ProposalViewModel?
     @State private var refreshRequest = 0
-    private struct RequestedAction: Equatable { let id = UUID(); let action: MeetingDetailViewModel.Action }
+    private struct RequestedAction: Equatable { let id = UUID(); let action: MeetingDetailViewModel.Action; let version: Int? }
     private var active: Bool { scenePhase == .active && workspace.cache.isActive }
     init(model: MeetingDetailViewModel, workspace: MessagingWorkspace) {
         _model = StateObject(wrappedValue: model); self.workspace = workspace
@@ -45,7 +45,7 @@ struct MeetingDetailView: View {
                 do { try await Task.sleep(for: .seconds(3)) } catch { return }
             } while !Task.isCancelled
         }
-        .task(id: action) { if let action { await model.perform(action.action); self.action = nil } }
+        .task(id: action) { if let action { await model.perform(action.action, expectedVersion: action.version); self.action = nil } }
         .task(id: refreshRequest) { if refreshRequest > 0 { await model.refresh() } }
         .disabled(!workspace.cache.isActive)
     }
@@ -70,16 +70,22 @@ struct MeetingDetailView: View {
             Text("Currently agreed details").font(DesignTokens.Typography.eyebrow)
         }
         MeetingFactsView(revision: meeting.revision)
-        actions
+        actions(meeting)
         if let route = model.conversationRoute {
             NavigationLink("Open conversation", value: route).frame(minHeight: 44).accessibilityIdentifier("meeting.conversation")
         }
     }
-    private var actions: some View {
+    private func actions(_ meeting: Meeting) -> some View {
         VStack(spacing: 12) {
             if model.canRespond {
-                PrimaryButton(title: "Accept Proposal") { request(.accept) }.disabled(!model.canAccept).accessibilityIdentifier("meeting.accept")
-                PrimaryButton(title: "Decline Proposal", kind: .secondary) { request(.decline) }.accessibilityIdentifier("meeting.decline")
+                PrimaryButton(title: "Accept Proposal") { request(.accept, version: meeting.version) }.disabled(!model.canAccept).accessibilityIdentifier("meeting.accept")
+                PrimaryButton(title: "Decline Proposal", kind: .secondary) { request(.decline, version: meeting.version) }.accessibilityIdentifier("meeting.decline")
+            }
+            if model.canEditInvitation {
+                PrimaryButton(title: "Edit Invitation", kind: .secondary) {
+                    proposalModel = workspace.proposal(conversationID: meeting.conversationID, meeting: meeting)
+                    showChange = proposalModel != nil
+                }.accessibilityIdentifier("meeting.editInvitation")
             }
             if model.canProposeChange {
                 PrimaryButton(title: "Propose a Change", kind: .secondary) {
@@ -89,10 +95,10 @@ struct MeetingDetailView: View {
                     }
                 }.accessibilityIdentifier("meeting.change")
             }
-            if model.canCancel {
+            if model.canCancel && !model.canRespond {
                 PrimaryButton(title: "Cancel Meeting", kind: .danger) { showCancellation = true }.accessibilityIdentifier("meeting.cancel")
             }
         }.disabled(model.isMutating)
     }
-    private func request(_ value: MeetingDetailViewModel.Action) { action = RequestedAction(action: value) }
+    private func request(_ value: MeetingDetailViewModel.Action, version: Int? = nil) { action = RequestedAction(action: value, version: version) }
 }
