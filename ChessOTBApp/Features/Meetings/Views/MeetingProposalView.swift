@@ -7,6 +7,7 @@ struct MeetingProposalView: View {
     @Environment(\.dismiss) private var dismiss
     private enum Field: Hashable { case location, note }
     @FocusState private var focusedField: Field?
+    @State private var showAddressSearch = false
     @State private var reviewRequest = 0
     @State private var sendRequest = 0
     var body: some View {
@@ -18,11 +19,14 @@ struct MeetingProposalView: View {
             }
         }
         .background(DesignTokens.Colors.paper)
-        .navigationTitle(model.reviewed == nil ? "Propose a Game" : "Review Proposal")
+        .navigationTitle(model.reviewed == nil ? (model.sourceMeeting == nil ? "Propose a Game" : (model.sourceMeeting?.pendingRevision == nil ? "Propose a Change" : "Edit Change")) : "Review Proposal")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() }.disabled(model.isSending) }
             ToolbarItemGroup(placement: .keyboard) { Spacer(); Button("Done") { focusedField = nil } }
+        }
+        .sheet(isPresented: $showAddressSearch) {
+            NavigationStack { MeetingPlaceSearchView { model.selectPlace($0) } }
         }
         .task(id: reviewRequest) {
             guard reviewRequest > 0 else { return }
@@ -46,12 +50,23 @@ struct MeetingProposalView: View {
                     ForEach(Array(Set(TimeZone.knownTimeZoneIdentifiers + ["UTC"])).sorted(), id: \.self) { Text($0).tag($0) }
                 }.accessibilityIdentifier("meeting.timeZone")
             }
-            Section("Place") {
-                TextField("Where will you meet?", text: $model.location, axis: .vertical)
-                    .autocorrectionDisabled().focused($focusedField, equals: .location).accessibilityIdentifier("meeting.location")
+            Section("Meeting location") {
+                if let place = model.place {
+                    Text(place.name).font(DesignTokens.Typography.control)
+                    Text(place.address).font(DesignTokens.Typography.field).textSelection(.enabled)
+                    if let url = place.mapsURL { Link("Open in Apple Maps", destination: url).frame(minHeight: 44) }
+                } else if !model.location.isEmpty {
+                    Text(model.location).font(DesignTokens.Typography.field)
+                    Text("This older location needs an exact address. Search and select it below.")
+                        .font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted)
+                }
+                Button { focusedField = nil; showAddressSearch = true } label: {
+                    Label(model.place == nil ? "Search for an address" : "Change meeting address", systemImage: "magnifyingglass")
+                        .frame(minHeight: 44)
+                }.accessibilityIdentifier("meeting.location")
             }
             Section("Optional note") {
-                TextField("Anything the other player should know?", text: $model.note, axis: .vertical)
+                TextField("Entrance, floor, what to bring…", text: $model.note, axis: .vertical)
                     .focused($focusedField, equals: .note).accessibilityIdentifier("meeting.note")
             }
             if let error = model.errorMessage { Section { AccountFeedback(message: error, isError: true) } }
@@ -67,7 +82,7 @@ struct MeetingProposalView: View {
                 Text("Chess with \(peerName)").font(DesignTokens.Typography.playerTitle)
                 MeetingFactsView(revision: MeetingRevision(id: reviewed.requestID, meetingID: model.sourceMeeting?.id ?? reviewed.requestID,
                                                           startsAt: reviewed.proposal.startsAt, timeZone: reviewed.proposal.timeZone,
-                                                          location: reviewed.proposal.location, note: reviewed.proposal.note))
+                                                          location: reviewed.proposal.location, note: reviewed.proposal.note, place: reviewed.proposal.place))
                 StateNotice(message: "Sending proposes these details. The other player must accept before they become agreed.")
                 if let error = model.errorMessage { AccountFeedback(message: error, isError: true) }
                 if model.isSending { ProgressView("Sending proposal…") }

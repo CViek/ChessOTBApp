@@ -16,6 +16,7 @@ private nonisolated struct PreviewMeetingService: MeetingServiceProtocol {
     func cancel(id: UUID, requestID: UUID, expectedVersion: Int) async throws -> Meeting { value }
     func respond(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { value }
     func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { value }
+    func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { value }
     func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { value }
 }
 
@@ -56,7 +57,7 @@ private struct MeetingPreview: View {
                                                    service: PreviewMessagingService(state: .empty, peerID: peerID), ownProfileID: ownID,
                                                    meetingService: PreviewMeetingService(state: state, value: meeting))
                 if let draft = workspace.proposal(conversationID: meeting.conversationID, meeting: nil) {
-                    draft.location = revision.location; draft.note = revision.note
+                    draft.selectPlace(MeetingPlace(name: "Central Library", address: "476 5th Ave, New York, NY 10018", latitude: 40.7532, longitude: -73.9822)); draft.note = revision.note
                     if screen == .review { draft.review() }
                 }
                 value = meeting; self.workspace = workspace

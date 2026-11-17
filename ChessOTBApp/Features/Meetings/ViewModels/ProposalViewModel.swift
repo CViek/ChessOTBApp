@@ -10,7 +10,8 @@ nonisolated struct ReviewedProposal: Codable, Equatable, Sendable {
 @MainActor final class ProposalViewModel: ObservableObject {
     @Published var startsAt = Date.now.addingTimeInterval(86400) { didSet { persist() } }
     @Published var timeZone = TimeZone.current.identifier { didSet { persist() } }
-    @Published var location = "" { didSet { persist() } }
+    @Published var location = "" { didSet { if place?.summary != location { place = nil }; persist() } }
+    @Published private(set) var place: MeetingPlace?
     @Published var note = "" { didSet { persist() } }
     @Published private(set) var reviewed: ReviewedProposal?
     @Published private(set) var sentMeeting: Meeting?
@@ -24,30 +25,44 @@ nonisolated struct ReviewedProposal: Codable, Equatable, Sendable {
     private var restoring = false
     private var key: String { "proposal:" + (sourceMeeting?.id ?? conversationID).uuidString }
     var canEdit: Bool { active && cache.isActive && reviewed?.attempted != true && !isSending }
-    var canReview: Bool { canEdit && !location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    var canReview: Bool { canEdit && place != nil }
 
     init(conversationID: UUID, meeting: Meeting?, service: any MeetingServiceProtocol, cache: AccountCache) {
         self.conversationID = conversationID; sourceMeeting = meeting; self.service = service; self.cache = cache
         restoring = true
         do {
             if let draft = try cache.load(Draft.self, key: key), draft.sourceVersion == meeting?.version {
-                startsAt = draft.startsAt; timeZone = draft.timeZone; location = draft.location; note = draft.note; reviewed = draft.reviewed
+                startsAt = draft.startsAt; timeZone = draft.timeZone; location = draft.location; note = draft.note; place = draft.place; reviewed = draft.reviewed
+                if reviewed?.proposal.place == nil && reviewed?.attempted != true { reviewed = nil }
             } else if let meeting {
-                startsAt = max(meeting.revision.startsAt, .now.addingTimeInterval(3600))
-                timeZone = meeting.revision.timeZone; location = meeting.revision.location; note = meeting.revision.note
+                let initial = meeting.pendingRevision ?? meeting.revision
+                startsAt = initial.startsAt > .now ? initial.startsAt : .now.addingTimeInterval(3600)
+                timeZone = initial.timeZone; location = initial.location; note = initial.note; place = initial.place
             }
         } catch { errorMessage = error.localizedDescription }
         restoring = false
     }
-    func review() {
+    func selectPlace(_ selected: MeetingPlace) {
         guard canEdit else { return }
         do {
-            let proposal = try MeetingProposal(startsAt: startsAt, timeZone: timeZone, location: location, note: note).normalized()
+            let selected = try selected.validated()
+            location = selected.summary; place = selected; persist()
+        } catch { errorMessage = error.localizedDescription }
+    }
+    func review() {
+        guard canEdit else { return }
+        guard let place else { errorMessage = String(localized: "Search for and select an exact meeting address."); return }
+        do {
+            let proposal = try MeetingProposal(startsAt: startsAt, timeZone: timeZone, location: location, note: note, place: place).normalized()
             guard startsAt > .now else { throw APIError.rejected }
+            if let agreed = sourceMeeting?.revision {
+                let proposed = MeetingRevision(id: UUID(), meetingID: agreed.meetingID, startsAt: proposal.startsAt, timeZone: proposal.timeZone, location: proposal.location, note: proposal.note, place: proposal.place)
+                guard !MeetingChanges(agreed: agreed, proposed: proposed).isEmpty else { errorMessage = String(localized: "Change the time, location or note before proposing new details."); return }
+            }
             reviewed = ReviewedProposal(requestID: UUID(), proposal: proposal)
             errorMessage = nil
             try save()
-        } catch { reviewed = nil; errorMessage = String(localized: "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters.") }
+        } catch { reviewed = nil; errorMessage = String(localized: "Choose a future time, a valid time zone and a selected address. Notes may use up to 2,000 characters.") }
     }
     func edit() {
         guard canEdit else { return }
@@ -62,7 +77,11 @@ nonisolated struct ReviewedProposal: Codable, Equatable, Sendable {
             try save() // A durable request ID must exist before any network side effect.
             let result: Meeting
             if let meeting = sourceMeeting {
-                result = try await service.proposeChange(id: meeting.id, requestID: reviewed.requestID, expectedVersion: meeting.version, proposal: reviewed.proposal)
+                if meeting.pendingRevision != nil {
+                    result = try await service.editChange(id: meeting.id, requestID: reviewed.requestID, expectedVersion: meeting.version, proposal: reviewed.proposal)
+                } else {
+                    result = try await service.proposeChange(id: meeting.id, requestID: reviewed.requestID, expectedVersion: meeting.version, proposal: reviewed.proposal)
+                }
             } else {
                 result = try await service.create(conversationID: conversationID, requestID: reviewed.requestID, proposal: reviewed.proposal)
             }
@@ -94,20 +113,21 @@ nonisolated struct ReviewedProposal: Codable, Equatable, Sendable {
     }
     func deactivate() {
         active = false; restoring = true
-        location = ""; note = ""; reviewed = nil; sentMeeting = nil; errorMessage = nil
+        location = ""; place = nil; note = ""; reviewed = nil; sentMeeting = nil; errorMessage = nil
     }
     private func persist() {
         guard !restoring, active, cache.isActive else { return }
         do { try save() } catch { errorMessage = error.localizedDescription }
     }
     private func save() throws {
-        try cache.save(Draft(startsAt: startsAt, timeZone: timeZone, location: location, note: note, reviewed: reviewed, sourceVersion: sourceMeeting?.version), key: key)
+        try cache.save(Draft(startsAt: startsAt, timeZone: timeZone, location: location, note: note, place: place, reviewed: reviewed, sourceVersion: sourceMeeting?.version), key: key)
     }
     private struct Draft: Codable {
         let startsAt: Date
         let timeZone: String
         let location: String
         let note: String
+        let place: MeetingPlace?
         let reviewed: ReviewedProposal?
         let sourceVersion: Int?
     }

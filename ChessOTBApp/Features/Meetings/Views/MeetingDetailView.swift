@@ -24,13 +24,14 @@ struct MeetingDetailView: View {
                     PrimaryButton(title: "Retry action") { request(retry) }.disabled(model.isMutating).accessibilityIdentifier("meeting.retry")
                 }
                 if model.isMutating { ProgressView("Saving meeting…") }
-                Button("Refresh") { refreshRequest += 1 }.frame(minHeight: 44)
             }.padding(22)
         }
+        .clipped()
         .background(DesignTokens.Colors.paper).navigationTitle("Meeting Details").navigationBarTitleDisplayMode(.inline)
         .refreshable { await model.refresh() }
-        .confirmationDialog("Cancel this meeting?", isPresented: $showCancellation, titleVisibility: .visible) {
-            Button("Cancel Meeting", role: .destructive) { request(.cancel) }.accessibilityIdentifier("meeting.confirmCancel")
+        .alert("Cancel this meeting?", isPresented: $showCancellation) {
+            Button("Keep Meeting", role: .cancel) {}
+            Button("Cancel Meeting", role: .destructive) { request(.cancel) }
         } message: { Text("Both players will see the cancellation. Any pending change will be withdrawn.") }
         .sheet(isPresented: $showChange) {
             if let meeting = model.meeting, let proposalModel {
@@ -52,30 +53,26 @@ struct MeetingDetailView: View {
         Text("Chess with \(meeting.peerName(ownProfileID: workspace.ownProfileID))").font(DesignTokens.Typography.playerTitle)
         VStack(alignment: .leading, spacing: 8) {
             Text(meeting.statusTitle).font(DesignTokens.Typography.statusTitle).accessibilityIdentifier("meeting.status")
-            Text(meeting.statusExplanation).font(DesignTokens.Typography.notice)
+            Text(meeting.pendingRevision != nil ? (meeting.pendingProposerID == workspace.ownProfileID ? String(localized: "Waiting for the other player to respond to your change. The agreed plan is unchanged.") : String(localized: "Review the proposed change and accept or reject it. The agreed plan is unchanged until you accept.")) : meeting.statusExplanation).font(DesignTokens.Typography.notice)
         }.padding(16).frame(maxWidth: .infinity, alignment: .leading)
             .background(DesignTokens.Colors.sage, in: .rect(cornerRadius: 8))
-        if meeting.pendingRevision != nil { Text("Agreed details").font(DesignTokens.Typography.eyebrow) }
-        MeetingFactsView(revision: meeting.revision)
-        if let pending = meeting.pendingRevision {
-            Text("Proposed new details").font(DesignTokens.Typography.eyebrow)
-            MeetingFactsView(revision: pending)
+        if meeting.pendingRevision != nil {
+            NavigationLink {
+                MeetingChangeView(model: model, workspace: workspace)
+            } label: {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(meeting.pendingProposerID == workspace.ownProfileID ? "You proposed a change" : "A change needs your response")
+                        .font(DesignTokens.Typography.control)
+                    Label("View proposed change", systemImage: "chevron.right").font(DesignTokens.Typography.body)
+                }.frame(maxWidth: .infinity, minHeight: 60, alignment: .leading).padding(16)
+                    .background(DesignTokens.Colors.sage, in: .rect(cornerRadius: 12))
+            }.buttonStyle(.plain).accessibilityIdentifier("meeting.viewChange")
+            Text("Currently agreed details").font(DesignTokens.Typography.eyebrow)
         }
+        MeetingFactsView(revision: meeting.revision)
         actions
         if let route = model.conversationRoute {
             NavigationLink("Open conversation", value: route).frame(minHeight: 44).accessibilityIdentifier("meeting.conversation")
-        }
-        if let history = meeting.revisions, history.count > 1 {
-            DisclosureGroup("Proposal history") {
-                ForEach(history) { revision in
-                    VStack(alignment: .leading) {
-                        if revision.id == meeting.revision.id { Text("Current agreed details").font(DesignTokens.Typography.caption) }
-                        else if revision.id == meeting.pendingRevision?.id { Text("Awaiting agreement").font(DesignTokens.Typography.caption) }
-                        else { Text("Previous proposal").font(DesignTokens.Typography.caption) }
-                        MeetingFactsView(revision: revision)
-                    }.padding(.vertical, 8)
-                }
-            }
         }
     }
     private var actions: some View {
@@ -83,10 +80,6 @@ struct MeetingDetailView: View {
             if model.canRespond {
                 PrimaryButton(title: "Accept Proposal") { request(.accept) }.disabled(!model.canAccept).accessibilityIdentifier("meeting.accept")
                 PrimaryButton(title: "Decline Proposal", kind: .secondary) { request(.decline) }.accessibilityIdentifier("meeting.decline")
-            }
-            if model.canRespondToChange {
-                PrimaryButton(title: "Accept New Details") { request(.acceptChange) }.disabled(!model.canAcceptChange).accessibilityIdentifier("meeting.acceptChange")
-                PrimaryButton(title: "Decline Change", kind: .secondary) { request(.declineChange) }.accessibilityIdentifier("meeting.declineChange")
             }
             if model.canProposeChange {
                 PrimaryButton(title: "Propose a Change", kind: .secondary) {

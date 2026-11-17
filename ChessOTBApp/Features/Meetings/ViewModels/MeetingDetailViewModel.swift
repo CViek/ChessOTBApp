@@ -45,9 +45,13 @@ import Foundation
         } catch is CancellationError { return }
         catch { if active, cache.isActive, generation == stamp { errorMessage = error.localizedDescription } }
     }
-    func perform(_ action: Action) async {
+    func perform(_ action: Action, expectedVersion: Int? = nil) async {
         guard active, cache.isActive, !isMutating, let meeting else { return }
         if let mutation, mutation.action != action { return }
+        if mutation == nil, let expectedVersion, expectedVersion != meeting.version {
+            errorMessage = String(localized: "This change was edited while you were reviewing it. Check the new details before responding.")
+            return
+        }
         isMutating = true; errorMessage = nil
         defer { isMutating = false }
         do {

@@ -7,13 +7,14 @@ nonisolated struct MeetingRevision: Codable, Equatable, Identifiable, Sendable {
     let timeZone: String
     let location: String
     let note: String
+    var place: MeetingPlace? = nil
 
     enum CodingKeys: String, CodingKey {
-        case id, meetingID = "meetingId", startsAt, timeZone, location, note
+        case id, meetingID = "meetingId", startsAt, timeZone, location, note, place
     }
 
-    init(id: UUID, meetingID: UUID, startsAt: Date, timeZone: String, location: String, note: String) {
-        self.id = id; self.meetingID = meetingID; self.startsAt = startsAt; self.timeZone = timeZone; self.location = location; self.note = note
+    init(id: UUID, meetingID: UUID, startsAt: Date, timeZone: String, location: String, note: String, place: MeetingPlace? = nil) {
+        self.id = id; self.meetingID = meetingID; self.startsAt = startsAt; self.timeZone = timeZone; self.location = location; self.note = note; self.place = place
     }
 
     init(from decoder: any Decoder) throws {
@@ -24,6 +25,7 @@ nonisolated struct MeetingRevision: Codable, Equatable, Identifiable, Sendable {
         timeZone = try values.decode(String.self, forKey: .timeZone)
         location = try values.decode(String.self, forKey: .location)
         note = try values.decode(String.self, forKey: .note)
+        place = try values.decodeIfPresent(MeetingPlace.self, forKey: .place)
     }
 
     func encode(to encoder: any Encoder) throws {
@@ -34,6 +36,7 @@ nonisolated struct MeetingRevision: Codable, Equatable, Identifiable, Sendable {
         try values.encode(timeZone, forKey: .timeZone)
         try values.encode(location, forKey: .location)
         try values.encode(note, forKey: .note)
+        try values.encodeIfPresent(place, forKey: .place)
     }
 }
 

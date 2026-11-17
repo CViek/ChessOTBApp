@@ -29,7 +29,8 @@ struct FriendshipActionsView: View {
             } else { ProgressView("Loading friendship…") }
         }
         .disabled(model.busy.contains(peerID))
-        .confirmationDialog("Remove this friend?", isPresented: $confirmRemoval, titleVisibility: .visible) {
+        .alert("Remove this friend?", isPresented: $confirmRemoval) {
+            Button("Keep Friend", role: .cancel) {}
             Button("Remove friend", role: .destructive) { perform(.remove) }
         } message: { Text("Your conversations and meeting history will remain available.") }
         .task(id: request) {
