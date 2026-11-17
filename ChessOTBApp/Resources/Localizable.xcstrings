@@ -1176,6 +1176,16 @@
         }
       }
     },
+    "Friends and requests" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Friends and requests"
+          }
+        }
+      }
+    },
     "Group details" : {
       "localizations" : {
         "en" : {
@@ -1382,6 +1392,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Load more players"
+          }
+        }
+      }
+    },
+    "Load more requests" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load more requests"
           }
         }
       }
@@ -1786,7 +1806,18 @@
         }
       }
     },
+    "No friend requests. Incoming and sent requests appear here." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No friend requests. Incoming and sent requests appear here."
+          }
+        }
+      }
+    },
     "No friends or requests yet. Open a player's profile to send a friend request." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1802,6 +1833,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No friends to choose yet. Send or accept a friend request from Friends, or propose a game from a conversation."
+          }
+        }
+      }
+    },
+    "No friends yet. Open a player's profile to send a friend request." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No friends yet. Open a player's profile to send a friend request."
           }
         }
       }
@@ -2280,6 +2321,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Request Sent"
+          }
+        }
+      }
+    },
+    "Requests" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requests"
           }
         }
       }
