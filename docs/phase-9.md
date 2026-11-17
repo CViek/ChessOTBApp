@@ -1,0 +1,13 @@
+# Phase 9 — Nearby groups
+
+Execution of implementation.md Phase 9 on the existing phase9 branch. Use the existing SwiftUI, Supabase and one-on-one coordination stack.
+
+Implementation choices: operator-maintained verified listings; database-only private import/update and removal, no in-app administration. Operators must verify listing ownership, contact consent and introduction consent before import. Empty production seed; no prototype people or listings. An absent introduction omits its card. Native existing components supply missing/error/retry states. Contacts must resolve to live, non-deactivated accounts; missing contacts retain the listing with an unavailable message. Group queries use area/radius only and preserve player rating settings.
+
+Plan: focused authorization/geography tests first; additive 011 migration and operator instructions; account-bound transport and feature models; Discover segment and detail/profile/conversation routing; localization, focused Swift/database checks and Debug/Release builds. Prior minimal verification preference retained: no journeys, broad regression or extra agents. No hosted deployment, commit or push.
+
+Status: implemented with focused verification. Discover now switches Players/Groups with shared area/radius and independent queries. Group detail uses its designated profile identity for messaging and real introduction profile links. Missing/removed listings and contacts have recoverable states. Rating criteria remain saved for Players and never enter group queries. Existing conversation/proposal/explicit acceptance services are reused.
+
+Evidence: 11 Swift tests pass (6 GroupsTests and 5 affected DiscoveryViewModelTests), `/tmp/chess-phase9-final-tests.log`; Debug simulator build passes as part of those tests. Release simulator build passes, `/tmp/chess-phase9-release.log`. 21 focused group database assertions pass, `/tmp/chess-phase9-db-green.log`; fixtures roll back. Migration 011 applied to the existing local database with migration history and schema reload, without resetting user data. No production sample listings, hosted deployment or exact screenshot-fidelity claim. Figma Make source supplied the group layout and people glyph; screenshot/session calls remain unsupported. Full UI arrangement journeys and broad regression were deferred under the existing minimal verification preference.
+
+Operator process: [group-listing-operations.md](group-listing-operations.md). Maintenance requires a trusted database operator; ownership, consenting contact identities and introductions must be verified before publication. No real listings/contact consent were supplied, so the shipped seed remains empty.

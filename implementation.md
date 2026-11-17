@@ -132,7 +132,7 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 | Q3 | How coarse is public location; does editing search area also change the discoverable profile area; how does a user become open to contact? Confirmed for Phase 3: US locations only; explicitly saved city/neighborhood profile areas opt into discovery; independently adjustable search area; no raw GPS stored in Supabase or shown to players; distances computed from approximate centers and displayed as rounded whole miles or less than 1 mile. Default radius 5 miles. User-approved correction: slider and editable whole-mile value from 1 to 100. On-demand location permission, Apple area lookup, manual fallback and explicit ambiguous-area selection. First area save initializes profile and search; later search changes do not alter the profile area. | Phase 3 |
 | Q4 | Confirmed November 16: new proposals/replacements use future instants; past pending proposals cannot be accepted and appear in History without expiry/attendance claims. One outstanding replacement; either participant proposes and only the counterpart responds. Declining preserves the accepted plan. Stale mutations conflict; cancellation clears the replacement. Native cancellation action uses the detail action group and confirmation dialog for pending/confirmed meetings. | Phases 5–6 resolved |
 | Q5 | Phase 7 implementation defaults: one optional self-reported entry; Chess.com rapid/blitz/bullet, Lichess rapid/blitz/bullet/classical, US Chess regular/quick/blitz; whole numbers 1–4000. A single native picker names the exact source and format. No custom-source workflow, conversion or provider integration. Defaults are documented implementation choices for the requested minimal scope. | Phase 7 implemented |
-| Q6 | Who supplies and maintains group listings and contact identities? How does a genuine introduction/profile link reach the group screen? Recommended minimal listing model: operator-maintained verified listings, no in-app administration; absent introductions show no fabricated sample card. Confirm that conditional layout in Figma. | Phase 9 |
+| Q6 | Phase 9 implementation defaults: operator-maintained verified listings through private database import/update/removal, no in-app administration. Contacts require live accounts and operator verification/consent. Introduction text and profile links require approved records; absent introductions omit the card. These are implementation choices for the requested minimal scope; Figma Make's sample introduction is not production data. See docs/group-listing-operations.md. | Phase 9 implemented |
 | Q7 | Confirmed November 16: text-only messaging; visible active chat refreshes every 1 second, visible active Inbox every 3 seconds, plus pull-to-refresh. Stop polling when hidden, inactive or signed out. Background push remains deferred. | Phase 4 confirmed; Phase 10 delivery scope |
 | Q8 | What are launch privacy/contact controls, blocking/reporting, moderation ownership, account deletion and retention rules? Confirm required scope and Figma flows; the description lists these as unresolved, not preapproved functionality. | Before external user testing; implement chosen launch requirements in Phase 10 |
 | Q9 | Confirmed: generated initials, existing sage avatars, persistent dark toggle; no photos, images, attachments or bios. Remove the attachment affordance from text-only chat. | Phase 4 confirmed |
@@ -391,6 +391,8 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 ## Phase 9 — Nearby groups and real designated contacts
 
+**Status:** Implemented with focused checks and builds; see [Phase 9 record](docs/phase-9.md). Full UI journeys and broad regression remain deferred under the prior minimal verification preference.
+
 **Goal:** Finish MVP3 with genuine local group listings that lead into individual coordination.
 
 **Dependencies / entrance decisions:** Phase 8; Q6 listing owner/maintenance/contact/introduction model and conditional introduction layout. A designated contact must correspond to an actual account.
@@ -401,14 +403,14 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 **Sequential work:**
 
-- [ ] Test geographic filtering, no results, missing/deactivated contact and correct contact/profile ID routing. Rating filters must not silently filter group listings.
-- [ ] Implement read-only discovery/detail and the agreed controlled listing maintenance process. Test fixtures are isolated; production discovery contains only genuine listings.
-- [ ] Bind Message Contact to the listing's designated person. Render introduction/profile links only from real approved records; never manufacture the prototype's Sam introduction.
-- [ ] Verify contact → individual profile/conversation → reviewed proposal → explicit agreement using the existing services.
+- [x] Test geographic filtering, no results, missing/deactivated contact and correct contact/profile ID routing. Rating filters must not silently filter group listings.
+- [x] Implement read-only discovery/detail and the agreed controlled listing maintenance process. Test fixtures are isolated; production discovery contains only genuine listings.
+- [x] Bind Message Contact to the listing's designated person. Render introduction/profile links only from real approved records; never manufacture the prototype's Sam introduction.
+- [x] Wire contact → individual profile/conversation → reviewed proposal → explicit agreement using the existing services. Contact/profile identity verified with focused tests; full UI agreement journey deferred.
 
 **Definition of Done:** Groups respond to the actual area/radius; the correct contact receives messages; missing listings/contacts have honest recoverable states. The complete group-assisted path reaches the same one-on-one arrangement flow without requiring event registration.
 
-**Verification:** `GroupsViewModelTests`, group-service and listing-write authorization tests; use two listings with different contacts to catch the prototype's fixed-Sam bug. UI switch Players/Groups, widen area from empty, view detail, message contact, follow genuine introduction, arrange a game. Manually verify operator update/removal and absent introductions. Run baseline and prior regression suites.
+**Verification:** `GroupsViewModelTests`, group-service and listing-write authorization tests; use two listings with different contacts to catch the prototype's fixed-Sam bug. UI switch Players/Groups, widen area from empty, view detail, message contact, follow genuine introduction, arrange a game. Manually verify operator update/removal and absent introductions. Verification scope follows the prior minimal preference: focused group/affected discovery tests, focused group SQL assertions and Debug/Release builds; baseline, full UI journeys and prior regression suites deferred.
 
 ## Phase 10 — Release readiness and agreed operating requirements
 

@@ -15,7 +15,7 @@ final class DiscoveryViewModel: ObservableObject {
     private var generation = UUID()
     init(service: any DiscoveryServiceProtocol) { self.service = service }
 
-    func refresh() async {
+    func refresh(searchPlayers: Bool = true) async {
         guard !isSaving else { return }
         let request = UUID(); generation = request
         isLoading = true; isLoadingMore = false; errorMessage = nil
@@ -24,16 +24,17 @@ final class DiscoveryViewModel: ObservableObject {
             let saved = try await service.loadSettings()
             try Task.checkCancellation()
             guard generation == request else { return }
-            if let saved { await search(settings: saved) }
+            if let saved { await search(settings: saved, searchPlayers: searchPlayers) }
             else { settings = nil; players = []; nextCursor = nil }
         } catch is CancellationError { return }
         catch { if generation == request { record(error) } }
     }
-    func search(settings: DiscoverySettings) async {
+    func search(settings: DiscoverySettings, searchPlayers: Bool = true) async {
         let request = UUID(); generation = request
         self.settings = settings; players = []; nextCursor = nil
         isLoading = true; isLoadingMore = false; errorMessage = nil
         defer { if generation == request { isLoading = false } }
+        guard searchPlayers else { return }
         do {
             let page = try await service.searchPlayers(settings: settings, cursor: nil)
             try Task.checkCancellation()
@@ -57,7 +58,7 @@ final class DiscoveryViewModel: ObservableObject {
         } catch is CancellationError { return }
         catch { if generation == request { record(error) } }
     }
-    func setRadius(_ radius: SearchRadius) async -> Bool {
+    func setRadius(_ radius: SearchRadius, searchPlayers: Bool = true) async -> Bool {
         guard !isSaving, let settings else { return false }
         let request = UUID(); generation = request
         isLoading = false; isLoadingMore = false
@@ -67,7 +68,7 @@ final class DiscoveryViewModel: ObservableObject {
             let saved = try await service.saveSettings(area: settings.area, radius: radius)
             try Task.checkCancellation()
             guard generation == request else { return false }
-            await search(settings: saved)
+            await search(settings: saved, searchPlayers: searchPlayers)
             return true
         } catch is CancellationError { return false }
         catch { if generation == request { record(error) }; return false }

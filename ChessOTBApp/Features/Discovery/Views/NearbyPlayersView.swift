@@ -2,6 +2,15 @@ import SwiftUI
 
 struct NearbyPlayersView: View {
     @StateObject private var model: DiscoveryViewModel
+    @StateObject private var groups: GroupsViewModel
+    @State private var mode: Mode = .players
+    private enum Mode: Hashable { case players, groups }
+    private struct ReloadKey: Hashable { let mode: Mode; let retry: Int }
+    private struct GroupSearchKey: Hashable {
+        let mode: Mode
+        let settings: DiscoverySettings?
+        let retry: Int
+    }
     @Environment(SessionViewModel.self) private var session
     @State private var showArea = false
     @State private var showFilters = false
@@ -17,7 +26,8 @@ struct NearbyPlayersView: View {
     let profiles: any ProfileServiceProtocol
     let areas: any AreaServiceProtocol
 
-    init(service: any DiscoveryServiceProtocol, profiles: any ProfileServiceProtocol, areas: any AreaServiceProtocol, workspace: MessagingWorkspace? = nil) {
+    init(service: any DiscoveryServiceProtocol, profiles: any ProfileServiceProtocol, areas: any AreaServiceProtocol, workspace: MessagingWorkspace? = nil, groups: any GroupServiceProtocol = UnavailableGroupService()) {
+        _groups = StateObject(wrappedValue: GroupsViewModel(service: groups))
         self.workspace = workspace
         _model = StateObject(wrappedValue: DiscoveryViewModel(service: service))
         self.profiles = profiles; self.areas = areas
@@ -26,16 +36,20 @@ struct NearbyPlayersView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 Text("ChessOTB").font(DesignTokens.Typography.eyebrow).foregroundStyle(DesignTokens.Colors.forest)
-                Text("Nearby Players").font(DesignTokens.Typography.listTitle).accessibilityAddTraits(.isHeader)
+                Text(mode == .players ? "Nearby Players" : "Nearby Groups").font(DesignTokens.Typography.listTitle).accessibilityAddTraits(.isHeader)
+                Picker("Discover", selection: $mode) {
+                    Text("Players").tag(Mode.players)
+                    Text("Groups").tag(Mode.groups)
+                }.pickerStyle(.segmented).accessibilityIdentifier("discovery.segment")
                 controls
                 if let settings = model.settings {
-                    Button { showFilters = true } label: {
+                    Button { if mode == .groups { showArea = true } else { showFilters = true } } label: {
                         Text("Within \(settings.radius.rawValue) miles")
                             .font(DesignTokens.Typography.caption).padding(.horizontal, 14).padding(.vertical, 10)
                             .background(DesignTokens.Colors.sage, in: .capsule)
                     }.frame(minHeight: 44).accessibilityIdentifier("discovery.distanceChip")
                 }
-                if let rating = model.settings?.rating {
+                if mode == .players, let rating = model.settings?.rating {
                     Button { pendingAction = .clearRating(UUID()) } label: {
                         HStack { Text(rating.summary); Image(systemName: "xmark").accessibilityHidden(true) }
                             .font(DesignTokens.Typography.caption).padding(12)
@@ -43,17 +57,31 @@ struct NearbyPlayersView: View {
                     }.accessibilityLabel("Remove rating filter: \(rating.summary)").disabled(model.isSaving)
                         .accessibilityIdentifier("discovery.ratingChip")
                 }
+                if mode == .groups, model.settings != nil {
+                    NearbyGroupsView(model: groups, canWiden: model.settings?.radius.widened != nil,
+                                     widen: { if let radius = model.settings?.radius.widened { pendingAction = .radius(UUID(), radius) } },
+                                     changeArea: { showArea = true }, retry: { retryRequest += 1 })
+                }
                 if let error = model.errorMessage {
                     AccountFeedback(message: error, isError: true)
                     PrimaryButton(title: "Retry", kind: .secondary) { retryRequest += 1 }.accessibilityIdentifier("discovery.retry")
                 }
-                if model.isLoading { skeleton }
-                else if model.players.isEmpty, model.errorMessage == nil { empty }
-                else { playerRows }
+                if mode == .groups, model.settings == nil, model.errorMessage == nil {
+                    if model.isLoading { ProgressView("Loading search area…") }
+                    else { PrimaryButton(title: "Change search area", kind: .secondary) { showArea = true } }
+                }
+                if mode == .players {
+                    if model.isLoading { skeleton }
+                    else if model.players.isEmpty, model.errorMessage == nil { empty }
+                    else { playerRows }
+                }
             }.padding(DesignTokens.Spacing.pageInset)
         }
         .background(DesignTokens.Colors.paper)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: GroupRoute.self) { route in
+            GroupDetailView(id: route.id, service: groups.service, workspace: workspace)
+        }
         .navigationDestination(for: NearbyPlayer.self) { player in
             PlayerProfileView(id: player.id, distanceDescription: player.distanceDescription, service: profiles, workspace: workspace)
         }
@@ -65,20 +93,30 @@ struct NearbyPlayersView: View {
             }
         }
         .sheet(isPresented: $showFilters) { SearchFiltersView(model: model) }
-        .refreshable { await model.refresh() }
-        .task(id: retryRequest) { await model.refresh() }
+        .refreshable {
+            await model.refresh(searchPlayers: mode == .players)
+            if mode == .groups, let settings = model.settings { await groups.search(settings: settings) }
+        }
+        .task(id: GroupSearchKey(mode: mode, settings: model.settings, retry: retryRequest)) {
+            if mode == .groups, let settings = model.settings { await groups.search(settings: settings) }
+        }
+        .task(id: groups.needsSignIn) { if groups.needsSignIn { await session.signOut() } }
+        .task(id: ReloadKey(mode: mode, retry: retryRequest)) { await model.refresh(searchPlayers: mode == .players) }
         .task(id: pendingAction) {
             guard let action = pendingAction else { return }
             switch action {
-            case .search(_, let settings): await model.search(settings: settings)
+            case .search(_, let settings): await model.search(settings: settings, searchPlayers: mode == .players)
             case .more: await model.loadMore()
             case .clearRating: if let radius = model.settings?.radius { _ = await model.setFilters(radius: radius, rating: nil) }
-            case .radius(_, let radius): _ = await model.setRadius(radius)
+            case .radius(_, let radius): _ = await model.setRadius(radius, searchPlayers: mode == .players)
             }
             // Consume completed/cancelled work so a later appearance cannot replay it.
             if pendingAction == action { pendingAction = nil }
         }
         .task(id: model.needsSignIn) { if model.needsSignIn { await session.signOut() } }
+    }
+    private var visibleFilterCount: Int {
+        mode == .groups ? (model.settings == nil || model.settings?.radius == .five ? 0 : 1) : model.filterCount
     }
     private var controls: some View {
         HStack(spacing: 10) {
@@ -96,13 +134,13 @@ struct NearbyPlayersView: View {
                     .background(DesignTokens.Colors.surface, in: .rect(cornerRadius: 11))
                     .overlay(RoundedRectangle(cornerRadius: 11).strokeBorder(DesignTokens.Colors.line))
             }.accessibilityIdentifier("discovery.area")
-            Button { showFilters = true } label: {
+            Button { if mode == .groups { showArea = true } else { showFilters = true } } label: {
                 VStack(spacing: 2) {
                     Image("IconTune").accessibilityHidden(true)
-                    if model.filterCount > 0 { Text("\(model.filterCount)").font(DesignTokens.Typography.caption) }
+                    if visibleFilterCount > 0 { Text("\(visibleFilterCount)").font(DesignTokens.Typography.caption) }
                 }.padding(12).frame(minWidth: 56, minHeight: 56)
                     .foregroundStyle(DesignTokens.Colors.paper).background(DesignTokens.Colors.forest, in: .rect(cornerRadius: 11))
-            }.accessibilityLabel("Search filters").accessibilityIdentifier("discovery.filters")
+            }.accessibilityLabel(mode == .groups ? "Group search area and distance" : "Search filters").accessibilityIdentifier("discovery.filters")
                 .disabled(model.settings == nil)
         }
         .disabled(model.isSaving)
