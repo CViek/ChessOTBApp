@@ -3,6 +3,21 @@ import Testing
 @testable import ChessOTBApp
 
 struct MeetingServiceTests {
+    @Test func cancellationUsesVersionAndDurableRequestID() async throws {
+        let id = UUID(), requestID = UUID()
+        let client = try HTTPStub.client { request in
+            #expect(request.url?.path == "/rest/v1/rpc/cancel_meeting")
+            let body = try JSONSerialization.jsonObject(with: HTTPStub.body(request)) as! [String: Any]
+            #expect(body["p_meeting_id"] as? String == id.uuidString)
+            #expect(body["p_request_id"] as? String == requestID.uuidString)
+            #expect(body["p_expected_version"] as? Int == 3)
+            return (200, Data(String(decoding: Self.meetingJSON, as: UTF8.self).replacingOccurrences(of: "pending", with: "cancelled").utf8))
+        }
+        let service = MeetingService(client: client, auth: AuthDouble(), accountID: AccountFixtures.userID)
+        let meeting = try await service.cancel(id: id, requestID: requestID, expectedVersion: 3)
+        #expect(meeting.status == .cancelled)
+    }
+
     @Test func staleResponseIsARefreshableConflict() async throws {
         let client = try HTTPStub.client { _ in
             (409, Data(#"{"code":"PT409","message":"Proposal changed; refresh before responding"}"#.utf8))
@@ -54,6 +69,9 @@ struct MeetingServiceTests {
         let service = MeetingService(client: client, auth: AuthDouble(), accountID: UUID())
         await #expect(throws: APIError.unauthorized) { _ = try await service.list(before: nil) }
         await #expect(throws: APIError.unauthorized) { _ = try await service.detail(id: UUID()) }
+        await #expect(throws: APIError.unauthorized) {
+            _ = try await service.cancel(id: UUID(), requestID: UUID(), expectedVersion: 1)
+        }
         await #expect(throws: APIError.unauthorized) {
             _ = try await service.respond(id: UUID(), requestID: UUID(), expectedVersion: 1, decision: .confirmed)
         }
