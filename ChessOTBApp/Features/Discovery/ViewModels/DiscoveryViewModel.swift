@@ -72,6 +72,24 @@ final class DiscoveryViewModel: ObservableObject {
         } catch is CancellationError { return false }
         catch { if generation == request { record(error) }; return false }
     }
+    func setFilters(radius: SearchRadius, rating: RatingCriteria?) async -> Bool {
+        guard !isSaving, let settings else { return false }
+        let request = UUID(); generation = request
+        isSaving = true; isLoading = false; isLoadingMore = false; errorMessage = nil
+        defer { isSaving = false }
+        do {
+            let saved = try await service.saveFilters(settings: DiscoverySettings(area: settings.area, radius: radius, rating: settings.rating), rating: rating)
+            try Task.checkCancellation()
+            guard generation == request else { return false }
+            await search(settings: saved)
+            return true
+        } catch is CancellationError { return false }
+        catch { if generation == request { record(error) }; return false }
+    }
+    var filterCount: Int {
+        guard let settings else { return 0 }
+        return (settings.radius == .five ? 0 : 1) + (settings.rating == nil ? 0 : 1)
+    }
     private func record(_ error: Error) {
         errorMessage = error.localizedDescription
         needsSignIn = [.unauthorized, .sessionExpired].contains(error as? APIError)

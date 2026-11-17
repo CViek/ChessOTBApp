@@ -4,6 +4,19 @@ nonisolated struct ProfileService: ProfileServiceProtocol {
     let client: APIClient
     let auth: any AuthServiceProtocol
 
+    func saveProfile(displayName: String, rating: RatingEntry?) async throws -> PlayerProfile {
+        let name = try PlayerProfile.validatedName(displayName)
+        if let rating { _ = try RatingEntry.parse(kind: rating.kind, text: String(rating.value)) }
+        let session = try await auth.validSession()
+        let payload = RatedProfileRequest(p_display_name: name, p_rating_kind: rating?.kind.rawValue, p_rating_value: rating?.value)
+        let rows: [PlayerProfile] = try await client.request("rest/v1/rpc/save_rated_profile", method: "POST", body: JSONEncoder().encode(payload), token: session.accessToken)
+        guard let row = rows.first else { throw APIError.invalidResponse }; return row
+    }
+    private struct RatedProfileRequest: Encodable {
+        let p_display_name: String
+        let p_rating_kind: String?
+        let p_rating_value: Int?
+    }
     func loadOwnProfile() async throws -> PlayerProfile? {
         let session = try await auth.validSession()
         let profiles: [PlayerProfile] = try await client.request("rest/v1/rpc/get_own_profile", method: "POST", body: Data("{}".utf8), token: session.accessToken)

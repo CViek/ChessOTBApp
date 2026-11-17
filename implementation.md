@@ -131,7 +131,7 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 | Q2 | Confirmed November 16 for Phases 4–6: user approved completing truncated Review Proposal/Meeting Detail and missing states with native controls matching existing design tokens. Make source remains available; Make screenshot/session calls remain unsupported, so no exact screenshot-fidelity claim is made. | Phase 4–6 resolved; later phases retain their design gates |
 | Q3 | How coarse is public location; does editing search area also change the discoverable profile area; how does a user become open to contact? Confirmed for Phase 3: US locations only; explicitly saved city/neighborhood profile areas opt into discovery; independently adjustable search area; no raw GPS stored in Supabase or shown to players; distances computed from approximate centers and displayed as rounded whole miles or less than 1 mile. Default radius 5 miles. User-approved correction: slider and editable whole-mile value from 1 to 100. On-demand location permission, Apple area lookup, manual fallback and explicit ambiguous-area selection. First area save initializes profile and search; later search changes do not alter the profile area. | Phase 3 |
 | Q4 | Confirmed November 16: new proposals/replacements use future instants; past pending proposals cannot be accepted and appear in History without expiry/attendance claims. One outstanding replacement; either participant proposes and only the counterpart responds. Declining preserves the accepted plan. Stale mutations conflict; cancellation clears the replacement. Native cancellation action uses the detail action group and confirmation dialog for pending/confirmed meetings. | Phases 5–6 resolved |
-| Q5 | Which rating sources and formats/time controls are comparable, what values are valid, and is a custom source required? Figma's three choices cannot by themselves distinguish Chess.com rapid from blitz. Use one optional entry and an exact comparison key; add a format control only after Figma coverage exists. | Phase 7 |
+| Q5 | Phase 7 implementation defaults: one optional self-reported entry; Chess.com rapid/blitz/bullet, Lichess rapid/blitz/bullet/classical, US Chess regular/quick/blitz; whole numbers 1–4000. A single native picker names the exact source and format. No custom-source workflow, conversion or provider integration. Defaults are documented implementation choices for the requested minimal scope. | Phase 7 implemented |
 | Q6 | Who supplies and maintains group listings and contact identities? How does a genuine introduction/profile link reach the group screen? Recommended minimal listing model: operator-maintained verified listings, no in-app administration; absent introductions show no fabricated sample card. Confirm that conditional layout in Figma. | Phase 9 |
 | Q7 | Confirmed November 16: text-only messaging; visible active chat refreshes every 1 second, visible active Inbox every 3 seconds, plus pull-to-refresh. Stop polling when hidden, inactive or signed out. Background push remains deferred. | Phase 4 confirmed; Phase 10 delivery scope |
 | Q8 | What are launch privacy/contact controls, blocking/reporting, moderation ownership, account deletion and retention rules? Confirm required scope and Figma flows; the description lists these as unresolved, not preapproved functionality. | Before external user testing; implement chosen launch requirements in Phase 10 |
@@ -345,6 +345,8 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 ## Phase 7 — Optional ratings and comparable search
 
+**Status:** Implemented with the user-requested minimal verification scope. See [Phase 7 record](docs/phase-7.md).
+
 **Goal:** Add MVP2 opponent selection while preserving access for unrated users.
 
 **Dependencies / entrance decisions:** Phase 6; Q5 canonical sources/formats, validation limits and Figma additions if needed.
@@ -355,14 +357,14 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 **Sequential work:**
 
-- [ ] Test absent rating, add/update/remove, invalid values, inclusive bounds, one-sided bounds, min greater than max, and source/format mismatches using the approved comparison keys.
-- [ ] Persist one optional self-reported entry and render its source accurately; blank means no rating, not zero. Do not call rating-provider APIs.
-- [ ] Combine rating and geographic predicates on the server. Persist applied settings, implement Clear, and display true filter count/range/source.
-- [ ] Verify no-result recovery by widening/removing filters and continue from a matching profile through the unchanged MVP1 arrangement flow.
+- [x] Test absent rating, add/update/remove, invalid values, inclusive bounds, one-sided bounds, min greater than max, and source/format mismatches using the approved comparison keys.
+- [x] Persist one optional self-reported entry and render its source accurately; blank means no rating, not zero. Do not call rating-provider APIs.
+- [x] Combine rating and geographic predicates on the server. Persist applied settings, implement Clear, and display true filter count/range/source.
+- [x] Wire no-result recovery by widening/removing filters, preserving existing profile/message routes. Per user request, verification is limited to builds and focused rating/database tests; no user journeys or broad regression runs.
 
 **Definition of Done:** Same-source/format filters return only valid matches; searches with no rating filter include unrated players; removing a rating restores unrated presentation. Saving or clearing affects subsequent searches/relaunch. No conversion, automatic pairing or balanced-game guarantee is introduced.
 
-**Verification:** `RatingValidationTests`, `RatingFilterTests`, updated profile/discovery ViewModel tests and backend combined-query tests. UI add/edit/remove rating; apply/clear source/range; empty recovery; select result and arrange a game. Include another source with the same numeric value and an unrated account. Run baseline and MVP1 regression checks.
+**Verification:** `RatingValidationTests`, `RatingFilterTests`, updated profile/discovery ViewModel tests and backend combined-query tests. UI add/edit/remove rating; apply/clear source/range; empty recovery; select result and arrange a game. Include another source with the same numeric value and an unrated account. Per the user’s revised instructions, run only a build check and focused rating tests; defer full UI and regression journeys.
 
 ## Phase 8 — Mutual friends and repeat scheduling
 

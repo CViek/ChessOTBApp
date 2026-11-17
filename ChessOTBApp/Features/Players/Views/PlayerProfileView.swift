@@ -25,6 +25,7 @@ struct PlayerProfileView: View {
                         }
                         if let distanceDescription { Text(distanceDescription).font(DesignTokens.Typography.caption) }
                     }.frame(maxWidth: .infinity).padding(28).background(DesignTokens.Colors.sage, in: .rect(cornerRadius: 12))
+                    RatingSummaryView(rating: profile.rating)
                     StateNotice(message: "Nearby means this player has chosen an area near your search. It doesn't mean they're available to play right now.")
                     if let workspace, profile.id != workspace.ownProfileID {
                         NavigationLink(value: ConversationRoute(peerID: profile.id, displayName: profile.displayName)) {

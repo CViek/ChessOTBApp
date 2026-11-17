@@ -1,2011 +1,2322 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "%lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ · %lld–%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lld–%lld"
           }
         }
       }
     },
-    "%lld miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld miles"
+    "%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         }
       }
     },
-    "%lld unread messages": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld unread messages"
+    "%lld · %@ · self-reported" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld · %@ · self-reported"
           }
         }
       }
     },
-    "1": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1"
+    "%lld miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld miles"
           }
         }
       }
     },
-    "1 mile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 mile"
+    "%lld unread messages" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld unread messages"
           }
         }
       }
     },
-    "1–100 miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1–100 miles"
+    "1" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1"
           }
         }
       }
     },
-    "A new code has been requested. Check your email.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A new code has been requested. Check your email."
+    "1 mile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 mile"
           }
         }
       }
     },
-    "About %lld miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About %lld miles"
+    "1–100 miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1–100 miles"
           }
         }
       }
     },
-    "About 1 mile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About 1 mile"
+    "A new code has been requested. Check your email." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A new code has been requested. Check your email."
           }
         }
       }
     },
-    "About 2 miles": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About 2 miles"
+    "About %lld miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About %lld miles"
           }
         }
       }
     },
-    "Accept New Details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accept New Details"
+    "About 1 mile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About 1 mile"
           }
         }
       }
     },
-    "Accept Proposal": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accept Proposal"
+    "About 2 miles" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About 2 miles"
           }
         }
       }
     },
-    "Agreed details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agreed details"
+    "Accept New Details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accept New Details"
           }
         }
       }
     },
-    "Anything the other player should know?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anything the other player should know?"
+    "Accept Proposal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accept Proposal"
           }
         }
       }
     },
-    "Apply distance": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apply distance"
+    "Agreed details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agreed details"
           }
         }
       }
     },
-    "Awaiting agreement": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Awaiting agreement"
+    "Any rating or unrated" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Any rating or unrated"
           }
         }
       }
     },
-    "Back to sign in": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back to sign in"
+    "Anything the other player should know?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anything the other player should know?"
           }
         }
       }
     },
-    "Both players agreed to this time and place.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Both players agreed to this time and place."
+    "Apply distance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply distance"
           }
         }
       }
     },
-    "Both players will see the cancellation. Any pending change will be withdrawn.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Both players will see the cancellation. Any pending change will be withdrawn."
+    "Apply filters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply filters"
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+    "Awaiting agreement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awaiting agreement"
           }
         }
       }
     },
-    "Cancel Meeting": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel Meeting"
+    "Back to sign in" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back to sign in"
           }
         }
       }
     },
-    "Cancel this meeting?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel this meeting?"
+    "Both players agreed to this time and place." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both players agreed to this time and place."
           }
         }
       }
     },
-    "Cancelled": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelled"
+    "Both players will see the cancellation. Any pending change will be withdrawn." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both players will see the cancellation. Any pending change will be withdrawn."
           }
         }
       }
     },
-    "Change awaiting agreement": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Change awaiting agreement"
+    "Cancel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         }
       }
     },
-    "Change search area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Change search area"
+    "Cancel Meeting" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Meeting"
           }
         }
       }
     },
-    "Changing your profile area keeps your search area unchanged.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Changing your profile area keeps your search area unchanged."
+    "Cancel this meeting?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel this meeting?"
           }
         }
       }
     },
-    "Chess with %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chess with %@"
+    "Cancelled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelled"
           }
         }
       }
     },
-    "ChessOTB": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ChessOTB"
+    "Change awaiting agreement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change awaiting agreement"
           }
         }
       }
     },
-    "Choose a city or neighborhood to appear in nearby searches. Players see this area and an approximate distance, never your device coordinates.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a city or neighborhood to appear in nearby searches. Players see this area and an approximate distance, never your device coordinates."
+    "Change search area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change search area"
           }
         }
       }
     },
-    "Choose a city or neighborhood to search. This keeps your public profile area unchanged.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a city or neighborhood to search. This keeps your public profile area unchanged."
+    "Changing your profile area keeps your search area unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changing your profile area keeps your search area unchanged."
           }
         }
       }
     },
-    "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters."
+    "Chess with %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chess with %@"
           }
         }
       }
     },
-    "Choose a valid area from the search results.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a valid area from the search results."
+    "Chess.com · Blitz" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chess.com · Blitz"
           }
         }
       }
     },
-    "Choose an area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose an area"
+    "Chess.com · Bullet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chess.com · Bullet"
           }
         }
       }
     },
-    "Choose my search area": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose my search area"
+    "Chess.com · Rapid" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chess.com · Rapid"
           }
         }
       }
     },
-    "Choose search area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose search area"
+    "ChessOTB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ChessOTB"
           }
         }
       }
     },
-    "City or neighborhood": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "City or neighborhood"
+    "Choose a city or neighborhood to appear in nearby searches. Players see this area and an approximate distance, never your device coordinates." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a city or neighborhood to appear in nearby searches. Players see this area and an approximate distance, never your device coordinates."
           }
         }
       }
     },
-    "Close": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Close"
+    "Choose a city or neighborhood to search. This keeps your public profile area unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a city or neighborhood to search. This keeps your public profile area unchanged."
           }
         }
       }
     },
-    "Confirm email": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Confirm email"
+    "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters."
           }
         }
       }
     },
-    "Confirm your email": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Confirm your email"
+    "Choose a rating source and format. Bounds must be 1–4,000, with minimum no greater than maximum." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a rating source and format. Bounds must be 1–4,000, with minimum no greater than maximum."
           }
         }
       }
     },
-    "Confirm your email before signing in.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Confirm your email before signing in."
+    "Choose a valid area from the search results." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a valid area from the search results."
           }
         }
       }
     },
-    "Confirmed": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Confirmed"
+    "Choose an area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose an area"
           }
         }
       }
     },
-    "Conversation": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conversation"
+    "Choose my search area" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose my search area"
           }
         }
       }
     },
-    "Conversations stay here between arrangements.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conversations stay here between arrangements."
+    "Choose search area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose search area"
           }
         }
       }
     },
-    "Could not access secure sign-in storage. Please try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Could not access secure sign-in storage. Please try again."
+    "City or neighborhood" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "City or neighborhood"
           }
         }
       }
     },
-    "Could not connect. Check your connection and try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Could not connect. Check your connection and try again."
+    "Clear" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
           }
         }
       }
     },
-    "Could not find your area. Try again or enter it manually.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Could not find your area. Try again or enter it manually."
+    "Clear filters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear filters"
           }
         }
       }
     },
-    "Create account": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create account"
+    "Close" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
           }
         }
       }
     },
-    "Create your account": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create your account"
+    "Compare only the same source and format. Ratings are self-reported; no rating filter includes unrated players." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compare only the same source and format. Ratings are self-reported; no rating filter includes unrated players."
           }
         }
       }
     },
-    "Current agreed details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Current agreed details"
+    "Confirm email" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm email"
           }
         }
       }
     },
-    "Current-location lookup uses Apple Maps to resolve a named area. Only that area's approximate center is saved.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Current-location lookup uses Apple Maps to resolve a named area. Only that area's approximate center is saved."
+    "Confirm your email" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm your email"
           }
         }
       }
     },
-    "Dark appearance": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dark appearance"
+    "Confirm your email before signing in." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm your email before signing in."
           }
         }
       }
     },
-    "Date and time": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Date and time"
+    "Confirmed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmed"
           }
         }
       }
     },
-    "Decline Change": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Decline Change"
+    "Conversation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversation"
           }
         }
       }
     },
-    "Decline Proposal": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Decline Proposal"
+    "Conversations stay here between arrangements." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversations stay here between arrangements."
           }
         }
       }
     },
-    "Declined": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Declined"
+    "Could not access secure sign-in storage. Please try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not access secure sign-in storage. Please try again."
           }
         }
       }
     },
-    "Discover": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Discover"
+    "Could not connect. Check your connection and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not connect. Check your connection and try again."
           }
         }
       }
     },
-    "Discussion doesn't confirm a meeting. Agree on the details together.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Discussion doesn't confirm a meeting. Agree on the details together."
+    "Could not find your area. Try again or enter it manually." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not find your area. Try again or enter it manually."
           }
         }
       }
     },
-    "Display name": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Display name"
+    "Create account" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create account"
           }
         }
       }
     },
-    "Distance in miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distance in miles"
+    "Create your account" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create your account"
           }
         }
       }
     },
-    "Distances are approximate and measured between named area centers.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distances are approximate and measured between named area centers."
+    "Current agreed details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current agreed details"
           }
         }
       }
     },
-    "Done": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Done"
+    "Current-location lookup uses Apple Maps to resolve a named area. Only that area's approximate center is saved." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current-location lookup uses Apple Maps to resolve a named area. Only that area's approximate center is saved."
           }
         }
       }
     },
-    "Edit Profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit Profile"
+    "Dark appearance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark appearance"
           }
         }
       }
     },
-    "Edit details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit details"
+    "Date and time" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date and time"
           }
         }
       }
     },
-    "Edit profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit profile"
+    "Decline Change" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decline Change"
           }
         }
       }
     },
-    "Email": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Email"
+    "Decline Proposal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decline Proposal"
           }
         }
       }
     },
-    "Email code": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Email code"
+    "Declined" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Declined"
           }
         }
       }
     },
-    "Enter a US city or neighborhood.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter a US city or neighborhood."
+    "Discover" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discover"
           }
         }
       }
     },
-    "Enter a display name of 1–60 characters, without control characters.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter a display name of 1–60 characters, without control characters."
+    "Discussion doesn't confirm a meeting. Agree on the details together." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discussion doesn't confirm a meeting. Agree on the details together."
           }
         }
       }
     },
-    "Enter a valid email address.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter a valid email address."
+    "Display name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display name"
           }
         }
       }
     },
-    "Enter a whole number from 1 to 100 miles.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter a whole number from 1 to 100 miles."
+    "Distance in miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance in miles"
           }
         }
       }
     },
-    "Enter area manually": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter area manually"
+    "Distances are approximate and measured between named area centers." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distances are approximate and measured between named area centers."
           }
         }
       }
     },
-    "Enter the code sent to your email. If you already have an account, sign in instead.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter the code sent to your email. If you already have an account, sign in instead."
+    "Done" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
           }
         }
       }
     },
-    "Enter the verification code from your email.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter the verification code from your email."
+    "e.g. Brooklyn, NY" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "e.g. Brooklyn, NY"
           }
         }
       }
     },
-    "Error: %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Error: %@"
+    "Edit details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit details"
           }
         }
       }
     },
-    "Find nearby players": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Find nearby players"
+    "Edit profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit profile"
           }
         }
       }
     },
-    "Find the player across the board.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Find the player across the board."
+    "Edit Profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Profile"
           }
         }
       }
     },
-    "Finding areas…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finding areas…"
+    "Email" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
           }
         }
       }
     },
-    "Finding nearby players…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finding nearby players…"
+    "Email code" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email code"
           }
         }
       }
     },
-    "Forgot password?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Forgot password?"
+    "Enter a display name of 1–60 characters, without control characters." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a display name of 1–60 characters, without control characters."
           }
         }
       }
     },
-    "History": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "History"
+    "Enter a US city or neighborhood." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a US city or neighborhood."
           }
         }
       }
     },
-    "If an account exists for this email, a reset code has been sent.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "If an account exists for this email, a reset code has been sent."
+    "Enter a valid email address." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a valid email address."
           }
         }
       }
     },
-    "Inbox": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inbox"
+    "Enter a whole number from 1 to 100 miles." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a whole number from 1 to 100 miles."
           }
         }
       }
     },
-    "Less than 1 mile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Less than 1 mile"
+    "Enter a whole-number rating from 1 to 4,000, or leave it blank." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a whole-number rating from 1 to 4,000, or leave it blank."
           }
         }
       }
     },
-    "Load more meetings": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Load more meetings"
+    "Enter area manually" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter area manually"
           }
         }
       }
     },
-    "Load more players": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Load more players"
+    "Enter the code sent to your email. If you already have an account, sign in instead." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the code sent to your email. If you already have an account, sign in instead."
           }
         }
       }
     },
-    "Load older conversations": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Load older conversations"
+    "Enter the verification code from your email." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the verification code from your email."
           }
         }
       }
     },
-    "Load older messages": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Load older messages"
+    "Error: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error: %@"
           }
         }
       }
     },
-    "Loading conversations…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading conversations…"
+    "Find nearby players" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find nearby players"
           }
         }
       }
     },
-    "Loading meetings…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading meetings…"
+    "Find the player across the board." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find the player across the board."
           }
         }
       }
     },
-    "Loading meeting…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading meeting…"
+    "Finding areas…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finding areas…"
           }
         }
       }
     },
-    "Loading messages…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading messages…"
+    "Finding nearby players…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finding nearby players…"
           }
         }
       }
     },
-    "Loading more players…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading more players…"
+    "Forgot password?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot password?"
           }
         }
       }
     },
-    "Loading older conversations…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading older conversations…"
+    "History" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
           }
         }
       }
     },
-    "Loading player…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading player…"
+    "If an account exists for this email, a reset code has been sent." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If an account exists for this email, a reset code has been sent."
           }
         }
       }
     },
-    "Loading profile…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading profile…"
+    "Inbox" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inbox"
           }
         }
       }
     },
-    "Location access is off. Manual search works just as well.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Location access is off. Manual search works just as well."
+    "Leave blank for no rating" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave blank for no rating"
           }
         }
       }
     },
-    "Meet nearby chess players, talk first, then agree on a time and place together.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meet nearby chess players, talk first, then agree on a time and place together."
+    "Less than 1 mile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Less than 1 mile"
           }
         }
       }
     },
-    "Meeting Details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meeting Details"
+    "Lichess · Blitz" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichess · Blitz"
           }
         }
       }
     },
-    "Meetings": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meetings"
+    "Lichess · Bullet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichess · Bullet"
           }
         }
       }
     },
-    "Message": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Message"
+    "Lichess · Classical" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichess · Classical"
           }
         }
       }
     },
-    "Message to Arrange a Game": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Message to Arrange a Game"
+    "Lichess · Rapid" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lichess · Rapid"
           }
         }
       }
     },
-    "Miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Miles"
+    "Load more meetings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load more meetings"
           }
         }
       }
     },
-    "My Meetings": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My Meetings"
+    "Load more players" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load more players"
           }
         }
       }
     },
-    "Nearby Players": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nearby Players"
+    "Load older conversations" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load older conversations"
           }
         }
       }
     },
-    "Nearby means this player has chosen an area near your search. It doesn't mean they're available to play right now.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nearby means this player has chosen an area near your search. It doesn't mean they're available to play right now."
+    "Load older messages" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load older messages"
           }
         }
       }
     },
-    "New password": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "New password"
+    "Loading conversations…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading conversations…"
           }
         }
       }
     },
-    "No conversations yet. Open a nearby player's profile to start arranging a game.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No conversations yet. Open a nearby player's profile to start arranging a game."
+    "Loading meeting…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading meeting…"
           }
         }
       }
     },
-    "No matching areas found. Add a city or state and try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No matching areas found. Add a city or state and try again."
+    "Loading meetings…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading meetings…"
           }
         }
       }
     },
-    "No meeting history": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No meeting history"
+    "Loading messages…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading messages…"
           }
         }
       }
     },
-    "No players in this area yet": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No players in this area yet"
+    "Loading more players…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading more players…"
           }
         }
       }
     },
-    "No upcoming meetings": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No upcoming meetings"
+    "Loading older conversations…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading older conversations…"
           }
         }
       }
     },
-    "Not now": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not now"
+    "Loading player…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading player…"
           }
         }
       }
     },
-    "Not sent. Retry": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not sent. Retry"
+    "Loading profile…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading profile…"
           }
         }
       }
     },
-    "Only the recipient can accept. Discussion alone does not confirm a meeting.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Only the recipient can accept. Discussion alone does not confirm a meeting."
+    "Location access is off. Manual search works just as well." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location access is off. Manual search works just as well."
           }
         }
       }
     },
-    "Open conversation": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open conversation"
+    "Maximum (optional)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum (optional)"
           }
         }
       }
     },
-    "Opening your workspace…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opening your workspace…"
+    "Meet nearby chess players, talk first, then agree on a time and place together." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meet nearby chess players, talk first, then agree on a time and place together."
           }
         }
       }
     },
-    "Optional note": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optional note"
+    "Meeting Details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting Details"
           }
         }
       }
     },
-    "Password": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Password"
+    "Meetings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meetings"
           }
         }
       }
     },
-    "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played."
+    "Message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Message"
           }
         }
       }
     },
-    "Place": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Place"
+    "Message to Arrange a Game" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Message to Arrange a Game"
           }
         }
       }
     },
-    "Player profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Player profile"
+    "miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "miles"
           }
         }
       }
     },
-    "Please wait…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Please wait…"
+    "Miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles"
           }
         }
       }
     },
-    "Previous proposal": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Previous proposal"
+    "Minimum (optional)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum (optional)"
           }
         }
       }
     },
-    "Profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profile"
+    "My Meetings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Meetings"
           }
         }
       }
     },
-    "Profile area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profile area"
+    "Nearby means this player has chosen an area near your search. It doesn't mean they're available to play right now." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearby means this player has chosen an area near your search. It doesn't mean they're available to play right now."
           }
         }
       }
     },
-    "Profile area not set": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Profile area not set"
+    "Nearby Players" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearby Players"
           }
         }
       }
     },
-    "Proposal history": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proposal history"
+    "New password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New password"
           }
         }
       }
     },
-    "Propose a Change": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Propose a Change"
+    "No conversations yet. Open a nearby player's profile to start arranging a game." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No conversations yet. Open a nearby player's profile to start arranging a game."
           }
         }
       }
     },
-    "Propose a Game": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Propose a Game"
+    "No matching areas found. Add a city or state and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No matching areas found. Add a city or state and try again."
           }
         }
       }
     },
-    "Propose a game from a conversation. Both players must agree to confirm it.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Propose a game from a conversation. Both players must agree to confirm it."
+    "No meeting history" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No meeting history"
           }
         }
       }
     },
-    "Proposed new details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Proposed new details"
+    "No players in this area yet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No players in this area yet"
           }
         }
       }
     },
-    "Refresh": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Refresh"
+    "No upcoming meetings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No upcoming meetings"
           }
         }
       }
     },
-    "Resend code": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Resend code"
+    "Not now" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
           }
         }
       }
     },
-    "Reset to 5 miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset to 5 miles"
+    "Not sent. Retry" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not sent. Retry"
           }
         }
       }
     },
-    "Reset your password": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset your password"
+    "Only the recipient can accept. Discussion alone does not confirm a meeting." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only the recipient can accept. Discussion alone does not confirm a meeting."
           }
         }
       }
     },
-    "Restoring your session…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restoring your session…"
+    "Open conversation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open conversation"
           }
         }
       }
     },
-    "Retry": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry"
+    "Opening your workspace…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening your workspace…"
           }
         }
       }
     },
-    "Retry action": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry action"
+    "Optional note" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optional note"
           }
         }
       }
     },
-    "Retry sending proposal": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry sending proposal"
+    "Optional rating" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optional rating"
           }
         }
       }
     },
-    "Review Proposal": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Review Proposal"
+    "Password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
           }
         }
       }
     },
-    "Save": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
+    "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played."
           }
         }
       }
     },
-    "Save area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save area"
+    "Place" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place"
           }
         }
       }
     },
-    "Save new password": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save new password"
+    "Player profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Player profile"
           }
         }
       }
     },
-    "Save profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save profile"
+    "Please wait…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please wait…"
           }
         }
       }
     },
-    "Saving meeting…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saving meeting…"
+    "Previous proposal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous proposal"
           }
         }
       }
     },
-    "Saving…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saving…"
+    "Profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile"
           }
         }
       }
     },
-    "Search area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search area"
+    "Profile area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile area"
           }
         }
       }
     },
-    "Search area not set": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search area not set"
+    "Profile area not set" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile area not set"
           }
         }
       }
     },
-    "Search areas": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search areas"
+    "Proposal history" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proposal history"
           }
         }
       }
     },
-    "Search currently supports US areas only.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search currently supports US areas only."
+    "Propose a Change" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Propose a Change"
           }
         }
       }
     },
-    "Search distance": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search distance"
+    "Propose a Game" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Propose a Game"
           }
         }
       }
     },
-    "Search filters": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search filters"
+    "Propose a game from a conversation. Both players must agree to confirm it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Propose a game from a conversation. Both players must agree to confirm it."
           }
         }
       }
     },
-    "Send Proposal": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send Proposal"
+    "Proposed new details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proposed new details"
           }
         }
       }
     },
-    "Send message": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send message"
+    "Rating" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating"
           }
         }
       }
     },
-    "Send reset code": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send reset code"
+    "Rating not provided" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating not provided"
           }
         }
       }
     },
-    "Sending proposal…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sending proposal…"
+    "Rating source and format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating source and format"
           }
         }
       }
     },
-    "Sending proposes these details. The other player must accept before they become agreed.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sending proposes these details. The other player must accept before they become agreed."
+    "Rating value" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating value"
           }
         }
       }
     },
-    "Sending…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sending…"
+    "Refresh" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh"
           }
         }
       }
     },
-    "Set up your profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Set up your profile"
+    "Remove rating" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove rating"
           }
         }
       }
     },
-    "Sign in": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign in"
+    "Remove rating filter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove rating filter"
           }
         }
       }
     },
-    "Sign out": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign out"
+    "Remove rating filter: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove rating filter: %@"
           }
         }
       }
     },
-    "Sign out of ChessOTB?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign out of ChessOTB?"
+    "Resend code" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resend code"
           }
         }
       }
     },
-    "Sign out on this device": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign out on this device"
+    "Reset to 5 miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset to 5 miles"
           }
         }
       }
     },
-    "Signed out on this device. The server session could not be revoked.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Signed out on this device. The server session could not be revoked."
+    "Reset your password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset your password"
           }
         }
       }
     },
-    "Signing out…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Signing out…"
+    "Restoring your session…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restoring your session…"
           }
         }
       }
     },
-    "Start a conversation": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start a conversation"
+    "Retry" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
           }
         }
       }
     },
-    "Start your conversation here.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start your conversation here."
+    "Retry action" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry action"
           }
         }
       }
     },
-    "The account service is unavailable. Please try again later.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The account service is unavailable. Please try again later."
+    "Retry sending proposal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry sending proposal"
           }
         }
       }
     },
-    "The agreed plan stays confirmed until the other player accepts the new details.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The agreed plan stays confirmed until the other player accepts the new details."
+    "Review Proposal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review Proposal"
           }
         }
       }
     },
-    "The email or password is incorrect.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The email or password is incorrect."
+    "Save" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
           }
         }
       }
     },
-    "The send may have succeeded. Retry to check its status before editing.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The send may have succeeded. Retry to check its status before editing."
+    "Save area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save area"
           }
         }
       }
     },
-    "The server returned an unexpected response. Please try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The server returned an unexpected response. Please try again."
+    "Save new password" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save new password"
           }
         }
       }
     },
-    "These details have changed. Refresh before trying again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "These details have changed. Refresh before trying again."
+    "Save profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save profile"
           }
         }
       }
     },
-    "This cancellation is visible to both players.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This cancellation is visible to both players."
+    "Saving meeting…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving meeting…"
           }
         }
       }
     },
-    "This player's profile is no longer available.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This player's profile is no longer available."
+    "Saving…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving…"
           }
         }
       }
     },
-    "This proposal was declined. Discuss another option in your conversation.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This proposal was declined. Discuss another option in your conversation."
+    "Search area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search area"
           }
         }
       }
     },
-    "This request could not be completed. Check your details and try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This request could not be completed. Check your details and try again."
+    "Search area not set" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search area not set"
           }
         }
       }
     },
-    "Time zone": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Time zone"
+    "Search areas" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search areas"
           }
         }
       }
     },
-    "Too many attempts. Please wait and try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Too many attempts. Please wait and try again."
+    "Search currently supports US areas only." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search currently supports US areas only."
           }
         }
       }
     },
-    "Try a wider distance or choose another area. New players will appear here when they save a nearby profile area.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Try a wider distance or choose another area. New players will appear here when they save a nearby profile area."
+    "Search distance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search distance"
           }
         }
       }
     },
-    "Upcoming": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Upcoming"
+    "Search filters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search filters"
           }
         }
       }
     },
-    "Use at least 8 characters. If your password is very long, shorten it.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use at least 8 characters. If your password is very long, shorten it."
+    "Self-reported. Ratings are not verified or synchronized. Enter 1–4,000, or leave blank." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Self-reported. Ratings are not verified or synchronized. Enter 1–4,000, or leave blank."
           }
         }
       }
     },
-    "Use at least 8 characters. Your email and password stay off your public profile.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use at least 8 characters. Your email and password stay off your public profile."
+    "Send message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send message"
           }
         }
       }
     },
-    "Use current location": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use current location"
+    "Send Proposal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Proposal"
           }
         }
       }
     },
-    "View %@'s profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "View %@'s profile"
+    "Send reset code" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send reset code"
           }
         }
       }
     },
-    "View meeting details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "View meeting details"
+    "Sending proposal…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending proposal…"
           }
         }
       }
     },
-    "Welcome back": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welcome back"
+    "Sending proposes these details. The other player must accept before they become agreed." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending proposes these details. The other player must accept before they become agreed."
           }
         }
       }
     },
-    "What should players call you?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "What should players call you?"
+    "Sending…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending…"
           }
         }
       }
     },
-    "Where should we look?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Where should we look?"
+    "Set up your profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up your profile"
           }
         }
       }
     },
-    "Where will you meet?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Where will you meet?"
+    "Sign in" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in"
           }
         }
       }
     },
-    "Widen search distance": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Widen search distance"
+    "Sign out" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out"
           }
         }
       }
     },
-    "Within %lld miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Within %lld miles"
+    "Sign out of ChessOTB?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out of ChessOTB?"
           }
         }
       }
     },
-    "Your chosen profile area makes you discoverable. It doesn’t mean you’re available to play right now.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your chosen profile area makes you discoverable. It doesn’t mean you’re available to play right now."
+    "Sign out on this device" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out on this device"
           }
         }
       }
     },
-    "Your display name appears on your public profile. Your email stays private.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your display name appears on your public profile. Your email stays private."
+    "Signed out on this device. The server session could not be revoked." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signed out on this device. The server session could not be revoked."
           }
         }
       }
     },
-    "Your profile": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your profile"
+    "Signing out…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing out…"
           }
         }
       }
     },
-    "Your profile area": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your profile area"
+    "Start a conversation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a conversation"
           }
         }
       }
     },
-    "Your profile is saved. A search area is required before you can find players.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your profile is saved. A search area is required before you can find players."
+    "Start your conversation here." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start your conversation here."
           }
         }
       }
     },
-    "Your session has expired. Please sign in again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your session has expired. Please sign in again."
+    "The account service is unavailable. Please try again later." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The account service is unavailable. Please try again later."
           }
         }
       }
     },
-    "e.g. Brooklyn, NY": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "e.g. Brooklyn, NY"
+    "The agreed plan stays confirmed until the other player accepts the new details." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The agreed plan stays confirmed until the other player accepts the new details."
           }
         }
       }
     },
-    "miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "miles"
+    "The email or password is incorrect." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The email or password is incorrect."
+          }
+        }
+      }
+    },
+    "The send may have succeeded. Retry to check its status before editing." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The send may have succeeded. Retry to check its status before editing."
+          }
+        }
+      }
+    },
+    "The server returned an unexpected response. Please try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The server returned an unexpected response. Please try again."
+          }
+        }
+      }
+    },
+    "These details have changed. Refresh before trying again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These details have changed. Refresh before trying again."
+          }
+        }
+      }
+    },
+    "This cancellation is visible to both players." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This cancellation is visible to both players."
+          }
+        }
+      }
+    },
+    "This player's profile is no longer available." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This player's profile is no longer available."
+          }
+        }
+      }
+    },
+    "This proposal was declined. Discuss another option in your conversation." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This proposal was declined. Discuss another option in your conversation."
+          }
+        }
+      }
+    },
+    "This request could not be completed. Check your details and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This request could not be completed. Check your details and try again."
+          }
+        }
+      }
+    },
+    "Time zone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time zone"
+          }
+        }
+      }
+    },
+    "Too many attempts. Please wait and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too many attempts. Please wait and try again."
+          }
+        }
+      }
+    },
+    "Try a wider distance or choose another area. New players will appear here when they save a nearby profile area." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try a wider distance or choose another area. New players will appear here when they save a nearby profile area."
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upcoming"
+          }
+        }
+      }
+    },
+    "US Chess · Blitz" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "US Chess · Blitz"
+          }
+        }
+      }
+    },
+    "US Chess · Quick" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "US Chess · Quick"
+          }
+        }
+      }
+    },
+    "US Chess · Regular" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "US Chess · Regular"
+          }
+        }
+      }
+    },
+    "Use at least 8 characters. If your password is very long, shorten it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use at least 8 characters. If your password is very long, shorten it."
+          }
+        }
+      }
+    },
+    "Use at least 8 characters. Your email and password stay off your public profile." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use at least 8 characters. Your email and password stay off your public profile."
+          }
+        }
+      }
+    },
+    "Use current location" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use current location"
+          }
+        }
+      }
+    },
+    "View %@'s profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View %@'s profile"
+          }
+        }
+      }
+    },
+    "View meeting details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View meeting details"
+          }
+        }
+      }
+    },
+    "Welcome back" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome back"
+          }
+        }
+      }
+    },
+    "What should players call you?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What should players call you?"
+          }
+        }
+      }
+    },
+    "Where should we look?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where should we look?"
+          }
+        }
+      }
+    },
+    "Where will you meet?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where will you meet?"
+          }
+        }
+      }
+    },
+    "Widen search distance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widen search distance"
+          }
+        }
+      }
+    },
+    "Within %lld miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Within %lld miles"
+          }
+        }
+      }
+    },
+    "Your chosen profile area makes you discoverable. It doesn’t mean you’re available to play right now." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your chosen profile area makes you discoverable. It doesn’t mean you’re available to play right now."
+          }
+        }
+      }
+    },
+    "Your display name appears on your public profile. Your email stays private." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your display name appears on your public profile. Your email stays private."
+          }
+        }
+      }
+    },
+    "Your profile" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your profile"
+          }
+        }
+      }
+    },
+    "Your profile area" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your profile area"
+          }
+        }
+      }
+    },
+    "Your profile is saved. A search area is required before you can find players." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your profile is saved. A search area is required before you can find players."
+          }
+        }
+      }
+    },
+    "Your session has expired. Please sign in again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your session has expired. Please sign in again."
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
