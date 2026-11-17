@@ -9,6 +9,7 @@ struct NearbyPlayersView: View {
     private enum PendingAction: Equatable {
         case search(UUID, DiscoverySettings)
         case more(UUID)
+        case clearRating(UUID)
         case radius(UUID, SearchRadius)
     }
     @State private var retryRequest = 0
@@ -33,6 +34,14 @@ struct NearbyPlayersView: View {
                             .font(DesignTokens.Typography.caption).padding(.horizontal, 14).padding(.vertical, 10)
                             .background(DesignTokens.Colors.sage, in: .capsule)
                     }.frame(minHeight: 44).accessibilityIdentifier("discovery.distanceChip")
+                }
+                if let rating = model.settings?.rating {
+                    Button { pendingAction = .clearRating(UUID()) } label: {
+                        HStack { Text(rating.summary); Image(systemName: "xmark").accessibilityHidden(true) }
+                            .font(DesignTokens.Typography.caption).padding(12)
+                            .background(DesignTokens.Colors.sage, in: .capsule)
+                    }.accessibilityLabel("Remove rating filter: \(rating.summary)").disabled(model.isSaving)
+                        .accessibilityIdentifier("discovery.ratingChip")
                 }
                 if let error = model.errorMessage {
                     AccountFeedback(message: error, isError: true)
@@ -63,6 +72,7 @@ struct NearbyPlayersView: View {
             switch action {
             case .search(_, let settings): await model.search(settings: settings)
             case .more: await model.loadMore()
+            case .clearRating: if let radius = model.settings?.radius { _ = await model.setFilters(radius: radius, rating: nil) }
             case .radius(_, let radius): _ = await model.setRadius(radius)
             }
             // Consume completed/cancelled work so a later appearance cannot replay it.
@@ -89,7 +99,7 @@ struct NearbyPlayersView: View {
             Button { showFilters = true } label: {
                 VStack(spacing: 2) {
                     Image("IconTune").accessibilityHidden(true)
-                    if let radius = model.settings?.radius, radius != .five { Text("1").font(DesignTokens.Typography.caption) }
+                    if model.filterCount > 0 { Text("\(model.filterCount)").font(DesignTokens.Typography.caption) }
                 }.padding(12).frame(minWidth: 56, minHeight: 56)
                     .foregroundStyle(DesignTokens.Colors.paper).background(DesignTokens.Colors.forest, in: .rect(cornerRadius: 11))
             }.accessibilityLabel("Search filters").accessibilityIdentifier("discovery.filters")
@@ -106,6 +116,7 @@ struct NearbyPlayersView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             Text(player.displayName).font(DesignTokens.Typography.control)
                             Text(player.areaName).font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
+                            RatingSummaryView(rating: player.rating)
                             Text(player.distanceDescription).font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         Image("IconChevron").accessibilityHidden(true)
@@ -130,6 +141,9 @@ struct NearbyPlayersView: View {
                     pendingAction = .radius(UUID(), radius)
                 }.disabled(model.isSaving)
                     .accessibilityIdentifier("discovery.widen")
+            }
+            if model.settings?.rating != nil {
+                PrimaryButton(title: "Remove rating filter", kind: .secondary) { pendingAction = .clearRating(UUID()) }.disabled(model.isSaving)
             }
             PrimaryButton(title: "Change search area", kind: .secondary) { showArea = true }.disabled(model.isSaving)
         }.padding(.vertical, 25).frame(maxWidth: .infinity)

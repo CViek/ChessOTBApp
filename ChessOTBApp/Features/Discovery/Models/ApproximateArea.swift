@@ -52,6 +52,7 @@ nonisolated struct SearchRadius: RawRepresentable, Codable, Hashable, Sendable {
 nonisolated struct DiscoverySettings: Codable, Hashable, Sendable {
     let area: ApproximateArea
     let radius: SearchRadius
+    var rating: RatingCriteria? = nil
 }
 
 nonisolated struct NearbyPlayer: Codable, Hashable, Identifiable, Sendable {
@@ -59,6 +60,7 @@ nonisolated struct NearbyPlayer: Codable, Hashable, Identifiable, Sendable {
     let displayName: String
     let areaName: String
     let distanceMiles: Int
+    var rating: RatingEntry? = nil
 
     var distanceDescription: String {
         if distanceMiles < 1 { return String(localized: "Less than 1 mile") }

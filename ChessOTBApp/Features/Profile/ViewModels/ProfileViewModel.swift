@@ -4,6 +4,8 @@ import Foundation
 @MainActor
 final class ProfileViewModel: ObservableObject {
     @Published var displayNameDraft = ""
+    @Published var ratingKind: RatingKind = .chessComRapid
+    @Published var ratingValueDraft = ""
     @Published private(set) var profile: PlayerProfile?
     @Published private(set) var isLoading = false
     @Published private(set) var hasLoaded = false
@@ -20,6 +22,8 @@ final class ProfileViewModel: ObservableObject {
 
     func prepareDraft() {
         displayNameDraft = profile?.displayName ?? ""
+        ratingKind = profile?.rating?.kind ?? .chessComRapid
+        ratingValueDraft = profile?.rating.map { String($0.value) } ?? ""
         errorMessage = nil
     }
 
@@ -54,6 +58,19 @@ final class ProfileViewModel: ObservableObject {
         catch { record(error); return false }
     }
 
+    func saveEdits() async -> Bool {
+        guard !isSaving else { return false }
+        isSaving = true; errorMessage = nil
+        defer { isSaving = false }
+        do {
+            let rating = try RatingEntry.parse(kind: ratingKind, text: ratingValueDraft)
+            let result = try await service.saveProfile(displayName: displayNameDraft, rating: rating)
+            try Task.checkCancellation()
+            profile = result; hasLoaded = true
+            return true
+        } catch is CancellationError { return false }
+        catch { record(error); return false }
+    }
     private func record(_ error: Error) {
         errorMessage = error.localizedDescription
         needsSignIn = [.unauthorized, .sessionExpired].contains(error as? APIError)

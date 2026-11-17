@@ -12,6 +12,7 @@ struct ProfileView: View {
             VStack(alignment: .leading, spacing: DesignTokens.Spacing.pageInset) {
                 identity
                 StateNotice(message: "Your chosen profile area makes you discoverable. It doesn’t mean you’re available to play right now.")
+                RatingSummaryView(rating: profile.rating)
                 settings
                 Text("Your display name appears on your public profile. Your email stays private.")
                     .font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
