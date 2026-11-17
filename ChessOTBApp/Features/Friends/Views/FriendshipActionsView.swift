@@ -7,7 +7,7 @@ struct FriendshipActionsView: View {
     @State private var confirmRemoval = false
     private struct Request: Equatable { let id = UUID(); let action: FriendshipAction }
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             if let retry = model.pending[peerID] {
                 PrimaryButton(title: "Retry friend action", kind: .secondary) { perform(retry) }
             } else if let row = model.relationships[peerID] {
@@ -21,8 +21,12 @@ struct FriendshipActionsView: View {
                         PrimaryButton(title: "Decline request", kind: .secondary) { perform(.decline) }
                     } else { Text("Request Sent").font(DesignTokens.Typography.eyebrow) }
                 case .accepted:
-                    Text("Friends").font(DesignTokens.Typography.eyebrow)
-                    PrimaryButton(title: "Remove friend", kind: .quiet) { confirmRemoval = true }
+                    Button("Remove friend") { confirmRemoval = true }
+                        .font(DesignTokens.Typography.control)
+                        .foregroundStyle(DesignTokens.Colors.forest)
+                        .frame(maxWidth: .infinity, minHeight: 50, alignment: .leading)
+                        .contentShape(.rect)
+                        .buttonStyle(.plain)
                 }
             } else if model.errorMessage != nil {
                 Button("Retry friendship status") { performRefresh() }.frame(minHeight: 44)
