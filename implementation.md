@@ -368,6 +368,8 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 ## Phase 8 — Mutual friends and repeat scheduling
 
+**Status:** Implemented with minimal focused checks, per user instruction. See [Phase 8 record](docs/phase-8.md).
+
 **Goal:** Implement MVP3's friendship flow and make another individually agreed meeting easy to arrange.
 
 **Dependencies / entrance decisions:** Phase 7; retain the description's mutual-request model unless explicitly changed; obtain Figma coverage for removal and missing request/empty states under Q2.
@@ -378,14 +380,14 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 **Sequential work:**
 
-- [ ] Test request/send/accept/decline/remove with actor authorization, self-request prevention, duplicate/crossed requests and account-specific state.
-- [ ] Implement pair-unique requests and accepted relationships; keep outstanding incoming/outgoing requests distinct from accepted friends and derive profile button state from the same record.
-- [ ] Wire Friends and approved removal UI, including genuine loading/empty/failure states; update both participants after acceptance/removal.
-- [ ] Route accepted-friend rows to the existing conversation and create a fresh proposal using the established review/acceptance flow.
+- [x] Test request/send/accept/decline/remove with actor authorization, self-request prevention, duplicate/crossed requests and account-specific state.
+- [x] Implement pair-unique requests and accepted relationships; keep outstanding incoming/outgoing requests distinct from accepted friends and derive profile button state from the same record.
+- [x] Wire Friends and approved removal UI, including genuine loading/empty/failure states; update both participants after acceptance/removal.
+- [x] Route accepted-friend rows to the existing conversation and create a fresh proposal using the established review/acceptance flow.
 
 **Definition of Done:** A cannot accept A's own request; decline and removal work for the correct people; one player's action does not affect every profile. Friends can arrange a new game, and a friendship never auto-confirms it.
 
-**Verification:** `FriendsViewModelTests`, friendship transition tests and backend pair uniqueness/access tests. Two-account request → decline → request/accept → list → repeat proposal → new acceptance → removal, plus crossed requests. Verify existing conversations/meeting history follow the decided retention behavior after removal. Run baseline and existing journey tests.
+**Verification:** `FriendsViewModelTests`, friendship transition tests and backend pair uniqueness/access tests. Two-account request → decline → request/accept → list → repeat proposal → new acceptance → removal, plus crossed requests. Verify existing conversations/meeting history follow the decided retention behavior after removal. Per user instruction, verification is limited to focused friendship checks and builds; no journeys or broad regression runs.
 
 ## Phase 9 — Nearby groups and real designated contacts
 

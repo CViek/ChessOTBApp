@@ -45,6 +45,14 @@ struct ProfileWorkspaceView: View {
                             }
                         }
                     }
+                    if let friends = messaging.friends {
+                        Tab("Friends", image: "IconFriends") {
+                            NavigationStack {
+                                FriendsView(model: friends)
+                                    .modifier(MessagingDestinations(workspace: messaging, profiles: dependencies.profiles))
+                            }
+                        }
+                    }
                     Tab("Profile", image: "IconProfile") {
                         NavigationStack {
                             ProfileView(model: model, profile: profile, editArea: { editArea = true })
