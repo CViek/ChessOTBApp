@@ -11,7 +11,8 @@ nonisolated struct AppDependencies: Sendable {
         guard let client else { throw APIError.invalidConfiguration }
         return MessagingWorkspace(cache: try AccountCache(accountID: accountID),
                                   service: ConversationService(client: client, auth: auth, accountID: accountID), ownProfileID: profileID,
-                                  meetingService: MeetingService(client: client, auth: auth, accountID: accountID))
+                                  meetingService: MeetingService(client: client, auth: auth, accountID: accountID),
+                                  friendshipService: FriendshipService(client: client, auth: auth, accountID: accountID))
     }
 
     @MainActor static func live(bundle: Bundle = .main) -> AppDependencies {

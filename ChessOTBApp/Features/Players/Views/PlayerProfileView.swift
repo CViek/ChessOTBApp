@@ -33,6 +33,9 @@ struct PlayerProfileView: View {
                                 .frame(maxWidth: .infinity, minHeight: 50).padding(.horizontal, 18)
                                 .foregroundStyle(DesignTokens.Colors.paper).background(DesignTokens.Colors.forest, in: .rect(cornerRadius: 12))
                         }.accessibilityIdentifier("player.message")
+                        if let friends = workspace.friends {
+                            ProfileFriendshipView(model: friends, peerID: profile.id)
+                        }
                     }
                 } else if model.isLoading { ProgressView("Loading player…") }
                 else if let error = model.errorMessage {

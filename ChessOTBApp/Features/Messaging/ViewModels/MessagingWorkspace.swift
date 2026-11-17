@@ -7,12 +7,14 @@ import Foundation
     let inbox: InboxViewModel
     let meetingService: (any MeetingServiceProtocol)?
     let meetings: MyMeetingsViewModel?
+    let friends: FriendsViewModel?
     private var details: [UUID: MeetingDetailViewModel] = [:]
     private var proposals: [String: ProposalViewModel] = [:]
     private var threads: [UUID: ConversationViewModel] = [:]
-    init(cache: AccountCache, service: any ConversationServiceProtocol, ownProfileID: UUID, meetingService: (any MeetingServiceProtocol)? = nil) {
+    init(cache: AccountCache, service: any ConversationServiceProtocol, ownProfileID: UUID, meetingService: (any MeetingServiceProtocol)? = nil, friendshipService: (any FriendshipServiceProtocol)? = nil) {
         self.cache = cache; self.service = service; self.ownProfileID = ownProfileID
         self.meetingService = meetingService
+        friends = friendshipService.map { FriendsViewModel(service: $0, cache: cache, ownProfileID: ownProfileID) }
         meetings = meetingService.map { MyMeetingsViewModel(service: $0, cache: cache) }
         inbox = InboxViewModel(service: service, cache: cache)
     }
@@ -39,6 +41,7 @@ import Foundation
         cache.deactivate()
         inbox.deactivate()
         meetings?.deactivate()
+        friends?.deactivate()
         for model in details.values { model.deactivate() }
         for model in proposals.values { model.deactivate() }
         details.removeAll(); proposals.removeAll()
