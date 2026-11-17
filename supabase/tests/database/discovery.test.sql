@@ -1,9 +1,12 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 select no_plan();
+-- Isolate geographic counts from saved local players. The final rollback
+-- restores their areas; accounts, profiles and persistent data are retained.
+delete from public.profile_areas;
 select has_function('public','save_own_profile_area',array['text','double precision','double precision','text','integer'],'profile area save exists');
 select has_function('public','get_discovery_settings',array[]::text[],'private settings reader exists');
-select has_function('public','search_players',array['double precision','double precision','integer','text','integer'],'paged geographic search exists');
+select has_function('public','search_players',array['double precision','double precision','integer','text','integer','text','integer','integer'],'paged geographic search exists');
 insert into auth.users(id,email) values
  ('33333333-3333-3333-3333-333333333331','geo-one@example.test'),
  ('33333333-3333-3333-3333-333333333332','geo-two@example.test'),
@@ -41,7 +44,7 @@ select is(public.search_players(40.71,-74.01,5,public.search_players(40.71,-74.0
 select is(jsonb_array_length(public.search_players(10,10,10,null,20)->'players'),0,'empty query returns no fabricated players');
 select throws_ok($$select public.search_players(40.71,-74.01,101,null,20)$$,'22023','Invalid search','unsupported radius rejected');
 select throws_ok($$select public.search_players(40.71,-74.01,5,'invalid',20)$$,'22023','Invalid cursor','malformed cursor rejected');
-select is((select array_agg(key order by key) from jsonb_object_keys((public.search_players(40.71,-74.01,3,null,20)->'players'->0)) as key),array['area_name','display_name','distance_miles','id'],'discovery excludes coordinates, email and owner IDs');
+select is((select array_agg(key order by key) from jsonb_object_keys((public.search_players(40.71,-74.01,3,null,20)->'players'->0)) as key),array['area_name','display_name','distance_miles','id','rating'],'discovery exposes only approved public fields including optional rating');
 select public.save_search_area('Boston, MA',42.36,-71.06,'US',10);
 select is((select area_name from public.get_own_profile()),'New York, NY','search edit preserves public profile area');
 select public.save_own_profile_area('Changed profile, NY',40.73,-74.01,'US',5);
