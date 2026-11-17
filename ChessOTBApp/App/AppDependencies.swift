@@ -15,6 +15,11 @@ nonisolated struct AppDependencies: Sendable {
                                   friendshipService: FriendshipService(client: client, auth: auth, accountID: accountID))
     }
 
+    func groupService(accountID: UUID) -> any GroupServiceProtocol {
+        guard let client else { return UnavailableGroupService() }
+        return GroupService(client: client, auth: auth, accountID: accountID)
+    }
+
     @MainActor static func live(bundle: Bundle = .main) -> AppDependencies {
         do {
             guard let value = bundle.object(forInfoDictionaryKey: "ChessOTBSupabaseURL") as? String,

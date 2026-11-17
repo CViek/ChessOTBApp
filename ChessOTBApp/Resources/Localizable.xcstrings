@@ -545,6 +545,16 @@
         }
       }
     },
+    "Contact for introductions and local play questions.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact for introductions and local play questions."
+          }
+        }
+      }
+    },
     "Conversation": {
       "localizations": {
         "en": {
@@ -691,6 +701,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Declined"
+          }
+        }
+      }
+    },
+    "Designated contact": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Designated contact"
           }
         }
       }
@@ -925,6 +945,16 @@
         }
       }
     },
+    "Finding nearby groups…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finding nearby groups…"
+          }
+        }
+      }
+    },
     "Finding nearby players…": {
       "localizations": {
         "en": {
@@ -965,6 +995,46 @@
         }
       }
     },
+    "Group details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group details"
+          }
+        }
+      }
+    },
+    "Group search area and distance": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group search area and distance"
+          }
+        }
+      }
+    },
+    "Groups": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groups"
+          }
+        }
+      }
+    },
+    "Groups are listings, not events. ChessOTB does not manage membership, registration, or group chat.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Groups are listings, not events. ChessOTB does not manage membership, registration, or group chat."
+          }
+        }
+      }
+    },
     "History": {
       "localizations": {
         "en": {
@@ -1001,6 +1071,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Incoming requests"
+          }
+        }
+      }
+    },
+    "Introduction": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introduction"
           }
         }
       }
@@ -1075,6 +1155,16 @@
         }
       }
     },
+    "Load more groups": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load more groups"
+          }
+        }
+      }
+    },
     "Load more meetings": {
       "localizations": {
         "en": {
@@ -1145,6 +1235,16 @@
         }
       }
     },
+    "Loading group…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading group…"
+          }
+        }
+      }
+    },
     "Loading meetings…": {
       "localizations": {
         "en": {
@@ -1171,6 +1271,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loading messages…"
+          }
+        }
+      }
+    },
+    "Loading more groups…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading more groups…"
           }
         }
       }
@@ -1211,6 +1321,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loading profile…"
+          }
+        }
+      }
+    },
+    "Loading search area…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading search area…"
+          }
+        }
+      }
+    },
+    "Local listings with a designated contact": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local listings with a designated contact"
           }
         }
       }
@@ -1275,6 +1405,16 @@
         }
       }
     },
+    "Message Contact": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message Contact"
+          }
+        }
+      }
+    },
     "Message to Arrange a Game": {
       "localizations": {
         "en": {
@@ -1311,6 +1451,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "My Meetings"
+          }
+        }
+      }
+    },
+    "Nearby Groups": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nearby Groups"
           }
         }
       }
@@ -1361,6 +1511,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "No friends or requests yet. Open a player's profile to send a friend request."
+          }
+        }
+      }
+    },
+    "No groups in this area": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No groups in this area"
           }
         }
       }
@@ -1525,6 +1685,16 @@
         }
       }
     },
+    "Players": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Players"
+          }
+        }
+      }
+    },
     "Please wait…": {
       "localizations": {
         "en": {
@@ -1671,6 +1841,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Refresh"
+          }
+        }
+      }
+    },
+    "Refresh contact": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh contact"
           }
         }
       }
@@ -2206,6 +2386,26 @@
         }
       }
     },
+    "This group listing is no longer available. Return to Discover for nearby listings.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This group listing is no longer available. Return to Discover for nearby listings."
+          }
+        }
+      }
+    },
+    "This group's contact is currently unavailable. Try refreshing later or choose another listing.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This group's contact is currently unavailable. Try refreshing later or choose another listing."
+          }
+        }
+      }
+    },
     "This player's profile is no longer available.": {
       "localizations": {
         "en": {
@@ -2262,6 +2462,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try a wider distance or choose another area. New players will appear here when they save a nearby profile area."
+          }
+        }
+      }
+    },
+    "Try increasing your distance or changing the search area.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try increasing your distance or changing the search area."
           }
         }
       }
@@ -2342,6 +2552,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "View %@'s profile"
+          }
+        }
+      }
+    },
+    "View %@’s Profile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View %@’s Profile"
           }
         }
       }

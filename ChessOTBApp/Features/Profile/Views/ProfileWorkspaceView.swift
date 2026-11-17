@@ -28,7 +28,7 @@ struct ProfileWorkspaceView: View {
                 TabView {
                     Tab("Discover", image: "IconDiscover") {
                         NavigationStack {
-                            NearbyPlayersView(service: dependencies.discovery, profiles: dependencies.profiles, areas: dependencies.areas, workspace: messaging)
+                            NearbyPlayersView(service: dependencies.discovery, profiles: dependencies.profiles, areas: dependencies.areas, workspace: messaging, groups: dependencies.groupService(accountID: accountID))
                                 .modifier(MessagingDestinations(workspace: messaging, profiles: dependencies.profiles))
                         }
                     }
