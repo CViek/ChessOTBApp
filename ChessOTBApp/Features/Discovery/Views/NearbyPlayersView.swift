@@ -12,10 +12,12 @@ struct NearbyPlayersView: View {
         case radius(UUID, SearchRadius)
     }
     @State private var retryRequest = 0
+    let workspace: MessagingWorkspace?
     let profiles: any ProfileServiceProtocol
     let areas: any AreaServiceProtocol
 
-    init(service: any DiscoveryServiceProtocol, profiles: any ProfileServiceProtocol, areas: any AreaServiceProtocol) {
+    init(service: any DiscoveryServiceProtocol, profiles: any ProfileServiceProtocol, areas: any AreaServiceProtocol, workspace: MessagingWorkspace? = nil) {
+        self.workspace = workspace
         _model = StateObject(wrappedValue: DiscoveryViewModel(service: service))
         self.profiles = profiles; self.areas = areas
     }
@@ -44,7 +46,7 @@ struct NearbyPlayersView: View {
         .background(DesignTokens.Colors.paper)
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: NearbyPlayer.self) { player in
-            PlayerProfileView(id: player.id, distanceDescription: player.distanceDescription, service: profiles)
+            PlayerProfileView(id: player.id, distanceDescription: player.distanceDescription, service: profiles, workspace: workspace)
         }
         .sheet(isPresented: $showArea) {
             NavigationStack {

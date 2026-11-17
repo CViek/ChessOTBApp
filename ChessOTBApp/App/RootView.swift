@@ -17,7 +17,7 @@ struct RootView: View {
                     AccountEntryView(session: session)
                 }
             case .signedIn(let user):
-                ProfileWorkspaceView(dependencies: dependencies).id(user.id)
+                ProfileWorkspaceView(dependencies: dependencies, accountID: user.id).id(user.id)
             case .restoreFailed(let message):
                 restoreFailure(message)
             }

@@ -2,11 +2,13 @@ import SwiftUI
 
 struct PlayerProfileView: View {
     let id: UUID
-    let distanceDescription: String
+    let distanceDescription: String?
+    let workspace: MessagingWorkspace?
     @StateObject private var model: PlayerProfileViewModel
     @Environment(SessionViewModel.self) private var session
     @State private var retry = 0
-    init(id: UUID, distanceDescription: String, service: any ProfileServiceProtocol) {
+    init(id: UUID, distanceDescription: String? = nil, service: any ProfileServiceProtocol, workspace: MessagingWorkspace? = nil) {
+        self.workspace = workspace
         self.id = id; self.distanceDescription = distanceDescription
         _model = StateObject(wrappedValue: PlayerProfileViewModel(service: service))
     }
@@ -21,9 +23,16 @@ struct PlayerProfileView: View {
                             Label { Text(area) } icon: { Image("IconPin").accessibilityHidden(true) }
                                 .font(DesignTokens.Typography.notice)
                         }
-                        Text(distanceDescription).font(DesignTokens.Typography.caption)
+                        if let distanceDescription { Text(distanceDescription).font(DesignTokens.Typography.caption) }
                     }.frame(maxWidth: .infinity).padding(28).background(DesignTokens.Colors.sage, in: .rect(cornerRadius: 12))
                     StateNotice(message: "Nearby means this player has chosen an area near your search. It doesn't mean they're available to play right now.")
+                    if let workspace, profile.id != workspace.ownProfileID {
+                        NavigationLink(value: ConversationRoute(peerID: profile.id, displayName: profile.displayName)) {
+                            Text("Message to Arrange a Game").font(DesignTokens.Typography.control)
+                                .frame(maxWidth: .infinity, minHeight: 50).padding(.horizontal, 18)
+                                .foregroundStyle(DesignTokens.Colors.paper).background(DesignTokens.Colors.forest, in: .rect(cornerRadius: 12))
+                        }.accessibilityIdentifier("player.message")
+                    }
                 } else if model.isLoading { ProgressView("Loading player…") }
                 else if let error = model.errorMessage {
                     AccountFeedback(message: error, isError: true)

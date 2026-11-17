@@ -1,8 +1,7 @@
 import Foundation
 
-/// The reviewed payload. Date/past-answer policy is a separate entrance decision;
-/// these structural checks do not imply that a particular date is schedulable.
-nonisolated struct MeetingProposal: Equatable, Sendable {
+/// Exact details preserved through review and retries.
+nonisolated struct MeetingProposal: Codable, Equatable, Sendable {
     let startsAt: Date
     let timeZone: String
     let location: String

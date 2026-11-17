@@ -23,8 +23,19 @@ nonisolated struct Meeting: Codable, Equatable, Identifiable, Sendable {
     let updatedAt: String
     let revision: MeetingRevision
 
+    var pendingRevision: MeetingRevision? = nil
+    var pendingProposerID: UUID? = nil
+    var revisions: [MeetingRevision]? = nil
+
+    func isHistory(at now: Date) -> Bool {
+        status == .declined || status == .cancelled || max(revision.startsAt, pendingRevision?.startsAt ?? revision.startsAt) <= now
+    }
+    func peerID(ownProfileID: UUID) -> UUID { proposerID == ownProfileID ? recipientID : proposerID }
+    func peerName(ownProfileID: UUID) -> String { proposerID == ownProfileID ? recipientName : proposerName }
+
     enum CodingKeys: String, CodingKey {
-        case id, sequence, status, version, proposerName, recipientName, createdAt, updatedAt, revision
+        case id, sequence, status, version, proposerName, recipientName, createdAt, updatedAt, revision, pendingRevision, revisions
+        case pendingProposerID = "pendingProposerId"
         case conversationID = "conversationId", proposerID = "proposerId"
         case recipientID = "recipientId", requestID = "requestId"
     }

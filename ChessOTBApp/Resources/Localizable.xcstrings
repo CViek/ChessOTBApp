@@ -1,12 +1,32 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        }
+      }
+    },
     "%lld miles": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld miles"
+          }
+        }
+      }
+    },
+    "%lld unread messages": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld unread messages"
           }
         }
       }
@@ -82,6 +102,46 @@
         }
       }
     },
+    "Accept New Details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accept New Details"
+          }
+        }
+      }
+    },
+    "Accept Proposal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accept Proposal"
+          }
+        }
+      }
+    },
+    "Agreed details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agreed details"
+          }
+        }
+      }
+    },
+    "Anything the other player should know?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anything the other player should know?"
+          }
+        }
+      }
+    },
     "Apply distance": {
       "localizations": {
         "en": {
@@ -92,12 +152,42 @@
         }
       }
     },
+    "Awaiting agreement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awaiting agreement"
+          }
+        }
+      }
+    },
     "Back to sign in": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Back to sign in"
+          }
+        }
+      }
+    },
+    "Both players agreed to this time and place.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Both players agreed to this time and place."
+          }
+        }
+      }
+    },
+    "Both players will see the cancellation. Any pending change will be withdrawn.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Both players will see the cancellation. Any pending change will be withdrawn."
           }
         }
       }
@@ -123,6 +213,36 @@
         }
       }
     },
+    "Cancel this meeting?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel this meeting?"
+          }
+        }
+      }
+    },
+    "Cancelled": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        }
+      }
+    },
+    "Change awaiting agreement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change awaiting agreement"
+          }
+        }
+      }
+    },
     "Change search area": {
       "localizations": {
         "en": {
@@ -139,6 +259,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Changing your profile area keeps your search area unchanged."
+          }
+        }
+      }
+    },
+    "Chess with %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chess with %@"
           }
         }
       }
@@ -169,6 +299,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a city or neighborhood to search. This keeps your public profile area unchanged."
+          }
+        }
+      }
+    },
+    "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a future time, a valid time zone and a place (up to 500 characters). Notes may use up to 2,000 characters."
           }
         }
       }
@@ -224,6 +364,16 @@
         }
       }
     },
+    "Close": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
     "Confirm email": {
       "localizations": {
         "en": {
@@ -250,6 +400,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Confirm your email before signing in."
+          }
+        }
+      }
+    },
+    "Confirmed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmed"
+          }
+        }
+      }
+    },
+    "Conversation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conversation"
+          }
+        }
+      }
+    },
+    "Conversations stay here between arrangements.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conversations stay here between arrangements."
           }
         }
       }
@@ -304,6 +484,16 @@
         }
       }
     },
+    "Current agreed details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current agreed details"
+          }
+        }
+      }
+    },
     "Current-location lookup uses Apple Maps to resolve a named area. Only that area's approximate center is saved.": {
       "localizations": {
         "en": {
@@ -324,12 +514,62 @@
         }
       }
     },
+    "Date and time": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date and time"
+          }
+        }
+      }
+    },
+    "Decline Change": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decline Change"
+          }
+        }
+      }
+    },
+    "Decline Proposal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decline Proposal"
+          }
+        }
+      }
+    },
+    "Declined": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Declined"
+          }
+        }
+      }
+    },
     "Discover": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Discover"
+          }
+        }
+      }
+    },
+    "Discussion doesn't confirm a meeting. Agree on the details together.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discussion doesn't confirm a meeting. Agree on the details together."
           }
         }
       }
@@ -380,6 +620,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit Profile"
+          }
+        }
+      }
+    },
+    "Edit details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit details"
           }
         }
       }
@@ -544,12 +794,32 @@
         }
       }
     },
+    "History": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        }
+      }
+    },
     "If an account exists for this email, a reset code has been sent.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "If an account exists for this email, a reset code has been sent."
+          }
+        }
+      }
+    },
+    "Inbox": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inbox"
           }
         }
       }
@@ -564,6 +834,16 @@
         }
       }
     },
+    "Load more meetings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load more meetings"
+          }
+        }
+      }
+    },
     "Load more players": {
       "localizations": {
         "en": {
@@ -574,12 +854,82 @@
         }
       }
     },
+    "Load older conversations": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load older conversations"
+          }
+        }
+      }
+    },
+    "Load older messages": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load older messages"
+          }
+        }
+      }
+    },
+    "Loading conversations…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading conversations…"
+          }
+        }
+      }
+    },
+    "Loading meetings…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading meetings…"
+          }
+        }
+      }
+    },
+    "Loading meeting…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading meeting…"
+          }
+        }
+      }
+    },
+    "Loading messages…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading messages…"
+          }
+        }
+      }
+    },
     "Loading more players…": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Loading more players…"
+          }
+        }
+      }
+    },
+    "Loading older conversations…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading older conversations…"
           }
         }
       }
@@ -624,12 +974,62 @@
         }
       }
     },
+    "Meeting Details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting Details"
+          }
+        }
+      }
+    },
+    "Meetings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meetings"
+          }
+        }
+      }
+    },
+    "Message": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message"
+          }
+        }
+      }
+    },
+    "Message to Arrange a Game": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message to Arrange a Game"
+          }
+        }
+      }
+    },
     "Miles": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Miles"
+          }
+        }
+      }
+    },
+    "My Meetings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Meetings"
           }
         }
       }
@@ -664,12 +1064,32 @@
         }
       }
     },
+    "No conversations yet. Open a nearby player's profile to start arranging a game.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No conversations yet. Open a nearby player's profile to start arranging a game."
+          }
+        }
+      }
+    },
     "No matching areas found. Add a city or state and try again.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No matching areas found. Add a city or state and try again."
+          }
+        }
+      }
+    },
+    "No meeting history": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No meeting history"
           }
         }
       }
@@ -684,6 +1104,16 @@
         }
       }
     },
+    "No upcoming meetings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No upcoming meetings"
+          }
+        }
+      }
+    },
     "Not now": {
       "localizations": {
         "en": {
@@ -694,12 +1124,82 @@
         }
       }
     },
+    "Not sent. Retry": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not sent. Retry"
+          }
+        }
+      }
+    },
+    "Only the recipient can accept. Discussion alone does not confirm a meeting.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the recipient can accept. Discussion alone does not confirm a meeting."
+          }
+        }
+      }
+    },
+    "Open conversation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open conversation"
+          }
+        }
+      }
+    },
+    "Opening your workspace…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening your workspace…"
+          }
+        }
+      }
+    },
+    "Optional note": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional note"
+          }
+        }
+      }
+    },
     "Password": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Password"
+          }
+        }
+      }
+    },
+    "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played."
+          }
+        }
+      }
+    },
+    "Place": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place"
           }
         }
       }
@@ -720,6 +1220,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Please wait…"
+          }
+        }
+      }
+    },
+    "Previous proposal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous proposal"
           }
         }
       }
@@ -750,6 +1260,66 @@
           "stringUnit": {
             "state": "translated",
             "value": "Profile area not set"
+          }
+        }
+      }
+    },
+    "Proposal history": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proposal history"
+          }
+        }
+      }
+    },
+    "Propose a Change": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Propose a Change"
+          }
+        }
+      }
+    },
+    "Propose a Game": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Propose a Game"
+          }
+        }
+      }
+    },
+    "Propose a game from a conversation. Both players must agree to confirm it.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Propose a game from a conversation. Both players must agree to confirm it."
+          }
+        }
+      }
+    },
+    "Proposed new details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proposed new details"
+          }
+        }
+      }
+    },
+    "Refresh": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh"
           }
         }
       }
@@ -804,6 +1374,36 @@
         }
       }
     },
+    "Retry action": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry action"
+          }
+        }
+      }
+    },
+    "Retry sending proposal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry sending proposal"
+          }
+        }
+      }
+    },
+    "Review Proposal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Review Proposal"
+          }
+        }
+      }
+    },
     "Save": {
       "localizations": {
         "en": {
@@ -840,6 +1440,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save profile"
+          }
+        }
+      }
+    },
+    "Saving meeting…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving meeting…"
           }
         }
       }
@@ -915,12 +1525,62 @@
         }
       }
     },
+    "Send Proposal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send Proposal"
+          }
+        }
+      }
+    },
+    "Send message": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send message"
+          }
+        }
+      }
+    },
     "Send reset code": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Send reset code"
+          }
+        }
+      }
+    },
+    "Sending proposal…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sending proposal…"
+          }
+        }
+      }
+    },
+    "Sending proposes these details. The other player must accept before they become agreed.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sending proposes these details. The other player must accept before they become agreed."
+          }
+        }
+      }
+    },
+    "Sending…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sending…"
           }
         }
       }
@@ -995,12 +1655,42 @@
         }
       }
     },
+    "Start a conversation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a conversation"
+          }
+        }
+      }
+    },
+    "Start your conversation here.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start your conversation here."
+          }
+        }
+      }
+    },
     "The account service is unavailable. Please try again later.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The account service is unavailable. Please try again later."
+          }
+        }
+      }
+    },
+    "The agreed plan stays confirmed until the other player accepts the new details.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The agreed plan stays confirmed until the other player accepts the new details."
           }
         }
       }
@@ -1015,12 +1705,42 @@
         }
       }
     },
+    "The send may have succeeded. Retry to check its status before editing.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The send may have succeeded. Retry to check its status before editing."
+          }
+        }
+      }
+    },
     "The server returned an unexpected response. Please try again.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The server returned an unexpected response. Please try again."
+          }
+        }
+      }
+    },
+    "These details have changed. Refresh before trying again.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These details have changed. Refresh before trying again."
+          }
+        }
+      }
+    },
+    "This cancellation is visible to both players.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This cancellation is visible to both players."
           }
         }
       }
@@ -1035,12 +1755,32 @@
         }
       }
     },
+    "This proposal was declined. Discuss another option in your conversation.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This proposal was declined. Discuss another option in your conversation."
+          }
+        }
+      }
+    },
     "This request could not be completed. Check your details and try again.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "This request could not be completed. Check your details and try again."
+          }
+        }
+      }
+    },
+    "Time zone": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time zone"
           }
         }
       }
@@ -1061,6 +1801,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try a wider distance or choose another area. New players will appear here when they save a nearby profile area."
+          }
+        }
+      }
+    },
+    "Upcoming": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upcoming"
           }
         }
       }
@@ -1095,6 +1845,26 @@
         }
       }
     },
+    "View %@'s profile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View %@'s profile"
+          }
+        }
+      }
+    },
+    "View meeting details": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View meeting details"
+          }
+        }
+      }
+    },
     "Welcome back": {
       "localizations": {
         "en": {
@@ -1121,6 +1891,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Where should we look?"
+          }
+        }
+      }
+    },
+    "Where will you meet?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where will you meet?"
           }
         }
       }

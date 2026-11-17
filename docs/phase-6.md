@@ -1,5 +1,15 @@
 # Phase 6 implementation record
 
+## Current completion status — November 16, 2026
+
+Immutable multi-revision history, accepted/pending pointers, either-participant proposals, counterpart accept/decline, cancellation invalidation and stale recovery implemented in additive migration 008 and native UI.
+
+85 Swift unit tests, 144 database assertions, local two-account meeting/revision/race HTTP contracts and Debug/Release simulator builds pass. The user stopped comprehensive UI journeys and requested basic build/unit checks plus a visual glance. Full end-to-end acceptance is not claimed; see [completion ledger](plans/finish-mvp1.md). No commit, push, hosted deployment or account reset.
+
+## Historical implementation record
+
+The following records describe earlier partial states; the current status above supersedes their remaining-scope lists.
+
 Source: implementation.md Phase 6 and project_description.md. Work remains on
 existing clean `phase6` branch, using native SwiftUI, Swift 6, iOS 27 and Supabase.
 

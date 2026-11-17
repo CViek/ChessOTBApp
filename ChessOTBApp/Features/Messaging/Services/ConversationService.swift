@@ -2,6 +2,7 @@ import Foundation
 
 nonisolated protocol ConversationServiceProtocol: Sendable {
     func open(peerID: UUID) async throws -> UUID
+    func inboxPage(cursor: InboxCursor?) async throws -> ConversationPage
     func inbox() async throws -> [Conversation]
     func history(conversationID: UUID, before: Int64?) async throws -> MessagePage
     func send(conversationID: UUID, clientID: UUID, body: String) async throws -> Message
@@ -23,6 +24,13 @@ nonisolated struct ConversationService: ConversationServiceProtocol {
         try await client.request("rest/v1/rpc/open_conversation", method: "POST",
                                  body: JSONEncoder().encode(OpenRequest(p_peer_id: peerID)), token: token())
     }
+    func inboxPage(cursor: InboxCursor?) async throws -> ConversationPage {
+        try await client.request("rest/v1/rpc/inbox_page", method: "POST",
+                                 body: JSONEncoder().encode(InboxRequest(p_before_time: cursor?.updatedAt, p_before_id: cursor?.id, p_limit: 30)), token: token())
+    }
+    private struct InboxRequest: Encodable {
+        let p_before_time: String?; let p_before_id: UUID?; let p_limit: Int
+    }
     func inbox() async throws -> [Conversation] {
         try await client.request("rest/v1/rpc/list_conversations", method: "POST", body: Data("{}".utf8), token: token())
     }
@@ -42,4 +50,10 @@ nonisolated struct ConversationService: ConversationServiceProtocol {
     private struct HistoryRequest: Encodable { let p_conversation_id: UUID; let p_before: Int64?; let p_limit: Int }
     private struct SendRequest: Encodable { let p_conversation_id: UUID; let p_client_id: UUID; let p_body: String }
     private struct ReadRequest: Encodable { let p_conversation_id: UUID; let p_through: Int64 }
+}
+
+nonisolated extension ConversationServiceProtocol {
+    func inboxPage(cursor: InboxCursor?) async throws -> ConversationPage {
+        ConversationPage(conversations: try await inbox(), nextCursor: nil)
+    }
 }

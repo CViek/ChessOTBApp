@@ -280,6 +280,191 @@ final class AccountJourneyTests: XCTestCase {
         app.tabBars.buttons["Profile"].tap(); signOut(app)
     }
 
+    func testMessagingTwoAccountsDraftsProfilesUnreadAndRelaunch() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let firstEmail = "ui-chat-a-" + UUID().uuidString.lowercased() + "@example.com"
+        let secondEmail = "ui-chat-b-" + UUID().uuidString.lowercased() + "@example.com"
+        let firstToken = try await createConfirmedAccount(email: firstEmail)
+        let secondToken = try await createConfirmedAccount(email: secondEmail)
+        let firstData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Chat first player"], token: firstToken)
+        let secondData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Chat second player"], token: secondToken)
+        let firstID = try XCTUnwrap((JSONSerialization.jsonObject(with: firstData) as? [[String: Any]])?.first?["id"] as? String)
+        let secondID = try XCTUnwrap((JSONSerialization.jsonObject(with: secondData) as? [[String: Any]])?.first?["id"] as? String)
+        for token in [firstToken, secondToken] {
+            _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: token)
+        }
+        let threadData = try await post("/rest/v1/rpc/open_conversation", body: ["p_peer_id": secondID], token: firstToken)
+        let thread = try XCTUnwrap(JSONSerialization.jsonObject(with: threadData, options: .fragmentsAllowed) as? String)
+        _ = try await post("/rest/v1/rpc/send_message", body: ["p_conversation_id": thread, "p_client_id": UUID().uuidString, "p_body": "Hello from the second player"], token: secondToken)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: firstEmail, password: password)
+        tap(app.tabBars.buttons["Inbox"], in: app)
+        let row = app.buttons["inbox.thread." + thread.lowercased()]
+        tap(row, in: app)
+        XCTAssertTrue(app.staticTexts["Hello from the second player"].waitForExistence(timeout: 15))
+        XCTAssertFalse(app.buttons["chat.send"].isEnabled)
+        fill(app.textFields["chat.draft"], with: "Reply from the first player", in: app)
+        app.buttons["chat.send"].tap()
+        XCTAssertTrue(app.staticTexts["Reply from the first player"].waitForExistence(timeout: 15))
+        fill(app.textFields["chat.draft"], with: "A draft to keep", in: app)
+        app.buttons["chat.done"].tap()
+        app.navigationBars.buttons.firstMatch.tap()
+        tap(row, in: app)
+        XCTAssertEqual(app.textFields["chat.draft"].value as? String, "A draft to keep")
+        tap(app.buttons["chat.peerProfile"], in: app)
+        XCTAssertEqual(app.staticTexts["player.displayName"].label, "Chat second player")
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+        signIn(app, email: secondEmail, password: password)
+        tap(app.tabBars.buttons["Inbox"], in: app); tap(row, in: app)
+        XCTAssertTrue(app.staticTexts["Reply from the first player"].waitForExistence(timeout: 15))
+        XCTAssertFalse(app.staticTexts["A draft to keep"].exists)
+        fill(app.textFields["chat.draft"], with: "A real second-account reply", in: app)
+        app.buttons["chat.send"].tap()
+        app.terminate(); app.launch()
+        tap(app.tabBars.buttons["Inbox"], in: app); tap(row, in: app)
+        XCTAssertTrue(app.staticTexts["A real second-account reply"].waitForExistence(timeout: 15))
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+        signIn(app, email: firstEmail, password: password)
+        tap(app.tabBars.buttons["Inbox"], in: app); tap(row, in: app)
+        XCTAssertEqual(app.textFields["chat.draft"].value as? String, "A draft to keep")
+        _ = try await post("/rest/v1/rpc/send_message", body: ["p_conversation_id": thread, "p_client_id": UUID().uuidString, "p_body": "Active-chat refresh reply"], token: secondToken)
+        XCTAssertTrue(app.staticTexts["Active-chat refresh reply"].waitForExistence(timeout: 6))
+        capture("Real two-account conversation", app: app)
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+        XCTAssertNotEqual(firstID, secondID)
+    }
+
+    func testMeetingProposalReviewAgreementChangesAndCancellation() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let firstEmail = "ui-meeting-a-" + UUID().uuidString.lowercased() + "@example.com"
+        let secondEmail = "ui-meeting-b-" + UUID().uuidString.lowercased() + "@example.com"
+        let first = try await createConfirmedAccount(email: firstEmail)
+        let second = try await createConfirmedAccount(email: secondEmail)
+        _ = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Meeting first"], token: first)
+        let peerData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Meeting second"], token: second)
+        let peer = try XCTUnwrap((JSONSerialization.jsonObject(with: peerData) as? [[String: Any]])?.first?["id"] as? String)
+        for token in [first, second] {
+            _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: token)
+        }
+        let threadData = try await post("/rest/v1/rpc/open_conversation", body: ["p_peer_id": peer], token: first)
+        let thread = try XCTUnwrap(JSONSerialization.jsonObject(with: threadData, options: .fragmentsAllowed) as? String)
+        _ = try await post("/rest/v1/rpc/send_message", body: ["p_conversation_id": thread, "p_client_id": UUID().uuidString, "p_body": "Arrange a game"], token: second)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: firstEmail, password: password)
+        tap(app.tabBars.buttons["Inbox"], in: app)
+        tap(app.buttons["inbox.thread." + thread.lowercased()], in: app)
+        tap(app.buttons["meeting.propose"], in: app)
+        fill(app.textFields["meeting.location"], with: "Public library entrance", in: app)
+        app.terminate(); app.launch()
+        tap(app.tabBars.buttons["Inbox"], in: app)
+        tap(app.buttons["inbox.thread." + thread.lowercased()], in: app)
+        tap(app.buttons["meeting.propose"], in: app)
+        XCTAssertEqual(app.textFields["meeting.location"].value as? String, "Public library entrance")
+        tap(app.buttons["meeting.review"], in: app)
+        XCTAssertTrue(app.staticTexts["Public library entrance"].waitForExistence(timeout: 5))
+        tap(app.buttons["meeting.edit"], in: app)
+        XCTAssertEqual(app.textFields["meeting.location"].value as? String, "Public library entrance")
+        tap(app.buttons["meeting.review"], in: app)
+        tap(app.buttons["meeting.send"], in: app)
+        XCTAssertTrue(app.staticTexts["meeting.status"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["meeting.status"].label, "Awaiting agreement")
+        XCTAssertFalse(app.buttons["meeting.accept"].exists)
+        app.terminate(); app.launch()
+        tap(app.tabBars.buttons["Meetings"], in: app)
+        tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        XCTAssertEqual(app.staticTexts["meeting.status"].label, "Awaiting agreement")
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+        signIn(app, email: secondEmail, password: password)
+        tap(app.tabBars.buttons["Meetings"], in: app)
+        tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        tap(app.buttons["meeting.accept"], in: app)
+        let confirmed = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Confirmed")).firstMatch
+        XCTAssertTrue(confirmed.waitForExistence(timeout: 15))
+        tap(app.buttons["meeting.change"], in: app)
+        fill(app.textFields["meeting.location"], with: "Library upstairs", in: app)
+        tap(app.buttons["meeting.review"], in: app); tap(app.buttons["meeting.send"], in: app)
+        XCTAssertTrue(app.staticTexts["Library upstairs"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["Public library entrance"].exists)
+        XCTAssertFalse(app.buttons["meeting.acceptChange"].exists)
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+        signIn(app, email: firstEmail, password: password)
+        tap(app.tabBars.buttons["Meetings"], in: app)
+        tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        tap(app.buttons["meeting.declineChange"], in: app)
+        XCTAssertTrue(confirmed.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["Public library entrance"].exists)
+        tap(app.buttons["meeting.change"], in: app)
+        fill(app.textFields["meeting.location"], with: "Library reading room", in: app)
+        tap(app.buttons["meeting.review"], in: app); tap(app.buttons["meeting.send"], in: app)
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+        signIn(app, email: secondEmail, password: password)
+        tap(app.tabBars.buttons["Meetings"], in: app)
+        tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        tap(app.buttons["meeting.acceptChange"], in: app)
+        XCTAssertTrue(confirmed.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["Library reading room"].exists)
+        capture("Agreed replacement details", app: app)
+        tap(app.buttons["meeting.cancel"], in: app)
+        tap(app.buttons["meeting.confirmCancel"], in: app)
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Cancelled")).firstMatch.waitForExistence(timeout: 15))
+        app.navigationBars.buttons.firstMatch.tap()
+        tap(app.buttons["History"], in: app)
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch.waitForExistence(timeout: 15))
+        app.tabBars.buttons["Profile"].tap(); signOut(app)
+    }
+
+    func testMeetingAccessibilityAtLargeTextInDarkAppearance() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let firstEmail = "ui-access-a-" + UUID().uuidString.lowercased() + "@example.com"
+        let secondEmail = "ui-access-b-" + UUID().uuidString.lowercased() + "@example.com"
+        let first = try await createConfirmedAccount(email: firstEmail)
+        let second = try await createConfirmedAccount(email: secondEmail)
+        _ = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Accessible player"], token: first)
+        let peerData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Other player"], token: second)
+        let peer = try XCTUnwrap((JSONSerialization.jsonObject(with: peerData) as? [[String: Any]])?.first?["id"] as? String)
+        _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: first)
+        let threadData = try await post("/rest/v1/rpc/open_conversation", body: ["p_peer_id": peer], token: first)
+        let thread = try XCTUnwrap(JSONSerialization.jsonObject(with: threadData, options: .fragmentsAllowed) as? String)
+        _ = try await post("/rest/v1/rpc/create_meeting", body: ["p_conversation_id": thread, "p_request_id": UUID().uuidString, "p_starts_at": "2099-05-17T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Public library near the main entrance", "p_note": "A quiet game. Bring a board if you have one."], token: first)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: firstEmail, password: password)
+        tap(app.tabBars.buttons["Profile"], in: app)
+        let dark = app.switches["profile.darkAppearance"]
+        if dark.value as? String != "1" { tap(dark, in: app) }
+        app.terminate()
+        app.launchArguments = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        tap(app.tabBars.buttons["Meetings"], in: app)
+        capture("Meeting list dark accessibility text", app: app)
+        try app.performAccessibilityAudit(for: [.contrast, .textClipped, .sufficientElementDescription])
+        tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        XCTAssertTrue(app.staticTexts["meeting.status"].waitForExistence(timeout: 10))
+        capture("Meeting details dark accessibility text", app: app)
+        try app.performAccessibilityAudit(for: [.contrast, .textClipped, .sufficientElementDescription])
+        app.terminate(); app.launchArguments = []; app.launch()
+        tap(app.tabBars.buttons["Profile"], in: app)
+        if app.switches["profile.darkAppearance"].value as? String == "1" { tap(app.switches["profile.darkAppearance"], in: app) }
+        signOut(app)
+    }
+
     private func selectDistance(_ miles: Int, in app: XCUIApplication) {
         fill(app.textFields["discovery.radiusMiles"], with: String(miles), in: app)
         let done = app.buttons["discovery.radiusDone"]
@@ -318,7 +503,7 @@ final class AccountJourneyTests: XCTestCase {
     }
 
     private func tap(_ element: XCUIElement, in app: XCUIApplication) {
-        XCTAssertTrue(element.waitForExistence(timeout: 10))
+        XCTAssertTrue(element.exists || element.waitForExistence(timeout: 10))
         if element.identifier == "area.search", app.keyboards.buttons["Search"].exists {
             app.keyboards.buttons["Search"].tap()
             return
@@ -343,7 +528,13 @@ final class AccountJourneyTests: XCTestCase {
             element.tap()
         }
         if let current = element.value as? String, current != element.placeholderValue, !current.isEmpty {
-            element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: element.elementType == .secureTextField ? 128 : current.count))
+            if element.identifier.hasPrefix("meeting.") {
+                // Multiline meeting fields reopen with a caret at the start.
+                element.typeKey("a", modifierFlags: .command)
+                element.typeText(XCUIKeyboardKey.delete.rawValue)
+            } else {
+                element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: element.elementType == .secureTextField ? 128 : current.count))
+            }
         }
         element.typeText(value)
         if element.elementType == .textField {

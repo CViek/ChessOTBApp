@@ -12,10 +12,24 @@ final class SessionViewModel {
     private(set) var notice: String?
     let auth: any AuthServiceProtocol
     private var version = 0
+    private var accountCleanup: (owner: UUID, action: @MainActor () -> Void)?
 
     init(auth: any AuthServiceProtocol) { self.auth = auth }
 
+    func registerAccountCleanup(accountID: UUID, handler: @escaping @MainActor () -> Void) -> Bool {
+        guard case .signedIn(let user) = state, user.id == accountID else { return false }
+        clearAccountWorkspace()
+        accountCleanup = (accountID, handler)
+        return true
+    }
+    private func clearAccountWorkspace() {
+        let action = accountCleanup?.action
+        accountCleanup = nil
+        action?()
+    }
+
     func restore() async {
+        clearAccountWorkspace()
         version += 1
         let stamp = version
         state = .restoring
@@ -52,6 +66,7 @@ final class SessionViewModel {
     }
 
     func signOut() async {
+        clearAccountWorkspace()
         version += 1
         let stamp = version
         isSigningOut = true
@@ -75,6 +90,7 @@ final class SessionViewModel {
     private func accept(_ session: AuthSession?, stamp: Int) throws {
         try Task.checkCancellation()
         guard version == stamp else { throw CancellationError() }
+        if accountCleanup?.owner != session?.user.id { clearAccountWorkspace() }
         state = session.map { .signedIn($0.user) } ?? .signedOut
     }
 }
