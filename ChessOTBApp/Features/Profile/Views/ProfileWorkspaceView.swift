@@ -64,7 +64,8 @@ struct ProfileWorkspaceView: View {
                 NavigationStack { onboarding.toolbar { signOutToolbar } }
             }
         }
-        .confirmationDialog("Sign out of ChessOTB?", isPresented: $showSignOutConfirmation, titleVisibility: .visible) {
+        .alert("Sign out of ChessOTB?", isPresented: $showSignOutConfirmation) {
+            Button("Stay Signed In", role: .cancel) {}
             Button("Sign out", role: .destructive) { signOutRequested = true }
         }
         .sheet(isPresented: $editArea) {

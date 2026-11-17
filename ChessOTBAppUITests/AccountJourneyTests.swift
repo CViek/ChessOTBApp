@@ -340,6 +340,98 @@ final class AccountJourneyTests: XCTestCase {
         XCTAssertNotEqual(firstID, secondID)
     }
 
+    func testMeetingAddressPickerAndCompactChangePage() async throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
+        baseURL = environment["CHESSOTB_TEST_API_URL"] ?? ""
+        publishableKey = environment["CHESSOTB_TEST_PUBLISHABLE_KEY"] ?? ""
+        guard baseURL == "http://127.0.0.1:54321" else { XCTFail("Local backend only"); return }
+        let firstEmail = "ui-address-a-" + UUID().uuidString.lowercased() + "@example.com"
+        let secondEmail = "ui-address-b-" + UUID().uuidString.lowercased() + "@example.com"
+        let first = try await createConfirmedAccount(email: firstEmail)
+        let second = try await createConfirmedAccount(email: secondEmail)
+        let ownData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Address friend"], token: first)
+        let peerData = try await post("/rest/v1/rpc/save_own_profile", body: ["p_display_name": "Address recipient"], token: second)
+        let own = try XCTUnwrap((JSONSerialization.jsonObject(with: ownData) as? [[String: Any]])?.first?["id"] as? String)
+        let peer = try XCTUnwrap((JSONSerialization.jsonObject(with: peerData) as? [[String: Any]])?.first?["id"] as? String)
+        for token in [first, second] {
+            _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: token)
+        }
+        _ = try await post("/rest/v1/rpc/mutate_friendship", body: ["p_peer_id": peer, "p_action": "send", "p_request_id": UUID().uuidString, "p_expected_version": 0], token: first)
+        _ = try await post("/rest/v1/rpc/mutate_friendship", body: ["p_peer_id": own, "p_action": "accept", "p_request_id": UUID().uuidString, "p_expected_version": 1], token: second)
+        let threadData = try await post("/rest/v1/rpc/open_conversation", body: ["p_peer_id": peer], token: first)
+        let thread = try XCTUnwrap(JSONSerialization.jsonObject(with: threadData, options: .fragmentsAllowed) as? String)
+        let oldPlace: [String: Any] = ["name": "Central Library", "address": "476 5th Ave, New York, NY 10018", "latitude": 40.7532, "longitude": -73.9822]
+        let newPlace: [String: Any] = ["name": "Bryant Park", "address": "40 W 40th St, New York, NY 10018", "latitude": 40.7536, "longitude": -73.9832]
+        let created = try await post("/rest/v1/rpc/create_meeting_with_place", body: ["p_conversation_id": thread, "p_request_id": UUID().uuidString, "p_starts_at": "2099-05-17T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Central Library", "p_place": oldPlace, "p_note": "Bring a board"], token: first)
+        let meetingID = try XCTUnwrap((JSONSerialization.jsonObject(with: created) as? [String: Any])?["id"] as? String)
+        _ = try await post("/rest/v1/rpc/respond_to_meeting", body: ["p_meeting_id": meetingID, "p_request_id": UUID().uuidString, "p_expected_version": 1, "p_decision": "confirmed"], token: second)
+        _ = try await post("/rest/v1/rpc/propose_meeting_change_with_place", body: ["p_meeting_id": meetingID, "p_request_id": UUID().uuidString, "p_expected_version": 2, "p_starts_at": "2099-05-17T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Bryant Park", "p_place": newPlace, "p_note": "Bring a board"], token: first)
+        let outgoingData = try await post("/rest/v1/rpc/create_meeting_with_place", body: ["p_conversation_id": thread, "p_request_id": UUID().uuidString, "p_starts_at": "2099-05-18T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Central Library", "p_place": oldPlace, "p_note": "Original invitation note"], token: second)
+        let outgoingID = try XCTUnwrap((JSONSerialization.jsonObject(with: outgoingData) as? [String: Any])?["id"] as? String)
+        let app = XCUIApplication(); app.launch()
+        if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
+        if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
+        signIn(app, email: secondEmail, password: password)
+        tap(app.tabBars.buttons["Meetings"], in: app)
+        tap(app.buttons["meetings.new"], in: app)
+        tap(app.buttons["meeting.chooseFriend." + own.lowercased()], in: app)
+        tap(app.buttons["meeting.location"], in: app)
+        let search = app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5)); search.tap(); search.typeText("476 5th Ave New York")
+        let result = app.buttons["meeting.addressResult"].firstMatch
+        XCTAssertTrue(result.waitForExistence(timeout: 20)); result.tap()
+        XCTAssertTrue(app.buttons["meeting.review"].isEnabled)
+        capture("Selected exact meeting address", app: app)
+        tap(app.buttons["Close"], in: app)
+        tap(app.buttons["meeting.row." + meetingID.lowercased()], in: app)
+        XCTAssertTrue(app.links["meeting.openMaps"].exists || app.buttons["meeting.openMaps"].exists)
+        XCTAssertFalse(app.buttons["Refresh"].exists)
+        XCTAssertFalse(app.staticTexts["Proposal history"].exists)
+        tap(app.buttons["meeting.viewChange"], in: app)
+        XCTAssertTrue(app.staticTexts["40 W 40th St, New York, NY 10018"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["476 5th Ave, New York, NY 10018"].exists)
+        XCTAssertFalse(app.staticTexts["New date and time"].exists)
+        XCTAssertTrue(app.buttons["meeting.acceptChange"].exists)
+        XCTAssertTrue(app.buttons["meeting.declineChange"].exists)
+        XCTAssertFalse(app.buttons["meeting.editChange"].exists)
+        capture("Only proposed location change", app: app)
+        tap(app.buttons["meeting.acceptChange"], in: app)
+        XCTAssertTrue(app.staticTexts["No pending change"].waitForExistence(timeout: 10))
+        app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["40 W 40th St, New York, NY 10018"].waitForExistence(timeout: 10))
+        tap(app.buttons["meeting.cancel"], in: app)
+        let cancellation = app.alerts["Cancel this meeting?"]
+        XCTAssertTrue(cancellation.waitForExistence(timeout: 5))
+        XCTAssertTrue(cancellation.buttons["Keep Meeting"].exists)
+        capture("Centered meeting cancellation confirmation", app: app)
+        cancellation.buttons["Keep Meeting"].tap()
+        XCTAssertEqual(app.staticTexts["meeting.status"].label, "Confirmed")
+        tap(app.buttons["meeting.cancel"], in: app)
+        tap(app.alerts["Cancel this meeting?"].buttons["Cancel Meeting"].firstMatch, in: app)
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Cancelled")).firstMatch.waitForExistence(timeout: 10))
+        app.navigationBars.buttons.firstMatch.tap()
+        tap(app.buttons["meeting.row." + outgoingID.lowercased()], in: app)
+        tap(app.buttons["meeting.editInvitation"], in: app)
+        let note = app.textViews["meeting.note"].exists ? app.textViews["meeting.note"] : app.textFields["meeting.note"]
+        tap(note, in: app)
+        note.typeText("Please bring a board. ")
+        let editedNote = try XCTUnwrap(note.value as? String)
+        XCTAssertTrue(editedNote.contains("Please bring a board."))
+        XCTAssertNotEqual(editedNote, "Original invitation note")
+        tap(app.buttons["meeting.review"], in: app)
+        tap(app.buttons["meeting.send"], in: app)
+        XCTAssertTrue(app.staticTexts[editedNote].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["meeting.status"].label, "Awaiting agreement")
+        let editedData = try await post("/rest/v1/rpc/get_meeting", body: ["p_meeting_id": outgoingID], token: first)
+        let edited = try XCTUnwrap(JSONSerialization.jsonObject(with: editedData) as? [String: Any])
+        XCTAssertEqual(edited["version"] as? Int, 2)
+        XCTAssertEqual(edited["status"] as? String, "pending")
+        XCTAssertEqual((edited["revision"] as? [String: Any])?["note"] as? String, editedNote)
+        capture("Editable sent invitation", app: app)
+        tap(app.tabBars.buttons["Profile"], in: app); signOut(app)
+    }
+
     func testMeetingProposalReviewAgreementChangesAndCancellation() async throws {
         let environment = ProcessInfo.processInfo.environment
         guard environment["CHESSOTB_LOCAL_TESTS"] == "YES" else { throw XCTSkip("Local backend required") }
@@ -366,16 +458,16 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.tabBars.buttons["Inbox"], in: app)
         tap(app.buttons["inbox.thread." + thread.lowercased()], in: app)
         tap(app.buttons["meeting.propose"], in: app)
-        fill(app.textFields["meeting.location"], with: "Public library entrance", in: app)
+        selectMeetingAddress("New York Public Library Stephen A Schwarzman", in: app)
         app.terminate(); app.launch()
         tap(app.tabBars.buttons["Inbox"], in: app)
         tap(app.buttons["inbox.thread." + thread.lowercased()], in: app)
         tap(app.buttons["meeting.propose"], in: app)
-        XCTAssertEqual(app.textFields["meeting.location"].value as? String, "Public library entrance")
+        XCTAssertTrue(app.buttons["meeting.review"].isEnabled)
         tap(app.buttons["meeting.review"], in: app)
-        XCTAssertTrue(app.staticTexts["Public library entrance"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.links["meeting.openMaps"].exists || app.buttons["meeting.openMaps"].exists)
         tap(app.buttons["meeting.edit"], in: app)
-        XCTAssertEqual(app.textFields["meeting.location"].value as? String, "Public library entrance")
+        XCTAssertTrue(app.buttons["meeting.review"].isEnabled)
         tap(app.buttons["meeting.review"], in: app)
         tap(app.buttons["meeting.send"], in: app)
         XCTAssertTrue(app.staticTexts["meeting.status"].waitForExistence(timeout: 15))
@@ -393,31 +485,38 @@ final class AccountJourneyTests: XCTestCase {
         let confirmed = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Confirmed")).firstMatch
         XCTAssertTrue(confirmed.waitForExistence(timeout: 15))
         tap(app.buttons["meeting.change"], in: app)
-        fill(app.textFields["meeting.location"], with: "Library upstairs", in: app)
+        fill(app.textViews["meeting.note"], with: "Library upstairs", in: app)
         tap(app.buttons["meeting.review"], in: app); tap(app.buttons["meeting.send"], in: app)
+        tap(app.buttons["meeting.viewChange"], in: app)
         XCTAssertTrue(app.staticTexts["Library upstairs"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["Public library entrance"].exists)
+        XCTAssertFalse(app.staticTexts["New date and time"].exists)
         XCTAssertFalse(app.buttons["meeting.acceptChange"].exists)
         app.tabBars.buttons["Profile"].tap(); signOut(app)
         signIn(app, email: firstEmail, password: password)
         tap(app.tabBars.buttons["Meetings"], in: app)
         tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        tap(app.buttons["meeting.viewChange"], in: app)
         tap(app.buttons["meeting.declineChange"], in: app)
+        XCTAssertTrue(app.staticTexts["No pending change"].waitForExistence(timeout: 10))
+        app.navigationBars.buttons.firstMatch.tap()
         XCTAssertTrue(confirmed.waitForExistence(timeout: 15))
-        XCTAssertTrue(app.staticTexts["Public library entrance"].exists)
+        XCTAssertFalse(app.staticTexts["Library upstairs"].exists)
         tap(app.buttons["meeting.change"], in: app)
-        fill(app.textFields["meeting.location"], with: "Library reading room", in: app)
+        fill(app.textViews["meeting.note"], with: "Library reading room", in: app)
         tap(app.buttons["meeting.review"], in: app); tap(app.buttons["meeting.send"], in: app)
         app.tabBars.buttons["Profile"].tap(); signOut(app)
         signIn(app, email: secondEmail, password: password)
         tap(app.tabBars.buttons["Meetings"], in: app)
         tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
+        tap(app.buttons["meeting.viewChange"], in: app)
         tap(app.buttons["meeting.acceptChange"], in: app)
+        XCTAssertTrue(app.staticTexts["No pending change"].waitForExistence(timeout: 10))
+        app.navigationBars.buttons.firstMatch.tap()
         XCTAssertTrue(confirmed.waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["Library reading room"].exists)
         capture("Agreed replacement details", app: app)
         tap(app.buttons["meeting.cancel"], in: app)
-        tap(app.buttons["meeting.confirmCancel"], in: app)
+        tap(app.alerts["Cancel this meeting?"].buttons["Cancel Meeting"].firstMatch, in: app)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Cancelled")).firstMatch.waitForExistence(timeout: 15))
         app.navigationBars.buttons.firstMatch.tap()
         tap(app.buttons["History"], in: app)
@@ -441,7 +540,7 @@ final class AccountJourneyTests: XCTestCase {
         _ = try await post("/rest/v1/rpc/save_own_profile_area", body: ["p_name": "New York, NY", "p_latitude": 40.71, "p_longitude": -74.01, "p_country_code": "US", "p_radius_miles": 5], token: first)
         let threadData = try await post("/rest/v1/rpc/open_conversation", body: ["p_peer_id": peer], token: first)
         let thread = try XCTUnwrap(JSONSerialization.jsonObject(with: threadData, options: .fragmentsAllowed) as? String)
-        _ = try await post("/rest/v1/rpc/create_meeting", body: ["p_conversation_id": thread, "p_request_id": UUID().uuidString, "p_starts_at": "2099-05-17T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Public library near the main entrance", "p_note": "A quiet game. Bring a board if you have one."], token: first)
+        _ = try await post("/rest/v1/rpc/create_meeting_with_place", body: ["p_conversation_id": thread, "p_request_id": UUID().uuidString, "p_starts_at": "2099-05-17T18:00:00Z", "p_time_zone": "America/New_York", "p_location": "Central Library", "p_place": ["name": "Central Library", "address": "476 5th Ave, New York, NY 10018", "latitude": 40.7532, "longitude": -73.9822], "p_note": "A quiet game. Bring a board if you have one."], token: first)
         let app = XCUIApplication(); app.launch()
         if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
         if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
@@ -454,15 +553,38 @@ final class AccountJourneyTests: XCTestCase {
         app.launch()
         tap(app.tabBars.buttons["Meetings"], in: app)
         capture("Meeting list dark accessibility text", app: app)
-        try app.performAccessibilityAudit(for: [.contrast, .textClipped, .sufficientElementDescription])
+        try auditVisibleMeetingContent(app)
+        app.scrollViews.firstMatch.swipeUp()
+        try auditVisibleMeetingContent(app)
         tap(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch, in: app)
         XCTAssertTrue(app.staticTexts["meeting.status"].waitForExistence(timeout: 10))
         capture("Meeting details dark accessibility text", app: app)
-        try app.performAccessibilityAudit(for: [.contrast, .textClipped, .sufficientElementDescription])
+        try auditVisibleMeetingContent(app)
         app.terminate(); app.launchArguments = []; app.launch()
         tap(app.tabBars.buttons["Profile"], in: app)
         if app.switches["profile.darkAppearance"].value as? String == "1" { tap(app.switches["profile.darkAppearance"], in: app) }
         signOut(app)
+    }
+
+    private func auditVisibleMeetingContent(_ app: XCUIApplication) throws {
+        try app.performAccessibilityAudit(for: [.contrast, .textClipped, .sufficientElementDescription]) { issue in
+            guard issue.auditType == .contrast, let element = issue.element else { return false }
+            let navigationBottom = app.navigationBars.firstMatch.frame.maxY
+            let tabTop = app.tabBars.firstMatch.frame.minY
+            let frame = element.frame
+            // The contrast auditor captures an element's full frame even when a scroll edge
+            // clips its offscreen lines. Audit fully visible text, then scroll and audit again.
+            return frame.minY < navigationBottom || frame.maxY > tabTop
+        }
+    }
+
+    private func selectMeetingAddress(_ query: String, in app: XCUIApplication) {
+        tap(app.buttons["meeting.location"], in: app)
+        let search = app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5)); search.tap(); search.typeText(query)
+        let result = app.buttons["meeting.addressResult"].firstMatch
+        XCTAssertTrue(result.waitForExistence(timeout: 20)); result.tap()
+        XCTAssertTrue(app.buttons["meeting.review"].isEnabled)
     }
 
     private func selectDistance(_ miles: Int, in app: XCUIApplication) {
@@ -488,9 +610,9 @@ final class AccountJourneyTests: XCTestCase {
 
     private func signOut(_ app: XCUIApplication) {
         tap(app.buttons["account.signOut"], in: app)
-        let buttons = app.buttons.matching(identifier: "Sign out")
-        XCTAssertTrue(buttons.firstMatch.waitForExistence(timeout: 5))
-        buttons.element(boundBy: buttons.count - 1).tap()
+        let confirmation = app.alerts["Sign out of ChessOTB?"]
+        XCTAssertTrue(confirmation.waitForExistence(timeout: 5))
+        confirmation.buttons["Sign out"].tap()
         XCTAssertTrue(app.textFields["account.email"].waitForExistence(timeout: 15))
     }
 

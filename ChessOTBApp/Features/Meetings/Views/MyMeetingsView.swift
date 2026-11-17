@@ -5,6 +5,9 @@ struct MyMeetingsView: View {
     let ownProfileID: UUID
     let workspace: MessagingWorkspace
     @Environment(\.scenePhase) private var scenePhase
+    @State private var showNewMeeting = false
+    @State private var sentRoute: MeetingRoute?
+    @State private var sentRequest = 0
     @State private var history = false
     @State private var moreRequest = 0
     private var active: Bool { scenePhase == .active && workspace.cache.isActive }
@@ -30,9 +33,30 @@ struct MyMeetingsView: View {
                         PrimaryButton(title: "Load more meetings", kind: .secondary) { moreRequest += 1 }.disabled(model.isLoading)
                     }
                 }.padding(22)
-            }
+            }.clipped()
         }
         .background(DesignTokens.Colors.paper).navigationTitle("Meetings").navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if workspace.friends != nil {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { showNewMeeting = true } label: { Label("Propose a Game", systemImage: "plus") }
+                        .accessibilityIdentifier("meetings.new")
+                }
+            }
+        }
+        .sheet(isPresented: $showNewMeeting) {
+            if let friends = workspace.friends {
+                NavigationStack {
+                    NewMeetingView(friends: friends, workspace: workspace) { meeting in
+                        showNewMeeting = false; sentRoute = MeetingRoute(id: meeting.id); sentRequest += 1
+                    }
+                }
+            }
+        }
+        .navigationDestination(item: $sentRoute) { route in
+            if let detail = workspace.detail(id: route.id) { MeetingDetailView(model: detail, workspace: workspace) }
+        }
+        .task(id: sentRequest) { if sentRequest > 0 { await model.refresh() } }
         .refreshable { await model.refresh() }
         .task(id: active) {
             guard active else { return }
@@ -46,7 +70,7 @@ struct MyMeetingsView: View {
     private var emptyState: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(history ? "No meeting history" : "No upcoming meetings").font(DesignTokens.Typography.statusTitle)
-            Text(history ? "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played." : "Propose a game from a conversation. Both players must agree to confirm it.")
+            Text(history ? "Past, declined and cancelled arrangements appear here. Past meetings do not imply a game was played." : "Tap + to propose a game with a friend, or start from a conversation. Both players must agree to confirm it.")
                 .font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted)
         }.fixedSize(horizontal: false, vertical: true).padding(.vertical, 24)
     }

@@ -6,7 +6,7 @@ import Testing
     @Test func pastDraftCannotProceedToReview() throws {
         let model = ProposalViewModel(conversationID: UUID(), meeting: nil, service: MeetingDouble(), cache: try AccountCache(accountID: UUID(), inMemory: true))
         model.location = "Library"; model.startsAt = .distantPast
-        model.review()
+        model.selectPlace(MeetingUsabilityTests.place); model.review()
         #expect(model.reviewed == nil)
         #expect(model.errorMessage != nil)
     }
@@ -25,21 +25,21 @@ import Testing
         let thread = UUID()
         let model = ProposalViewModel(conversationID: thread, meeting: nil, service: service, cache: cache)
         model.location = " Library "; model.note = "Board"; model.startsAt = .now.addingTimeInterval(86400)
-        model.review()
-        #expect(model.reviewed?.proposal.location == "Library")
+        model.selectPlace(MeetingUsabilityTests.place); model.review()
+        #expect(model.reviewed?.proposal.location == MeetingUsabilityTests.place.summary)
         let request = model.reviewed?.requestID
         let restored = ProposalViewModel(conversationID: thread, meeting: nil, service: service, cache: cache)
         #expect(restored.reviewed?.requestID == request)
         #expect(restored.note == "Board")
         restored.edit()
         #expect(restored.reviewed == nil)
-        #expect(restored.location == " Library ")
+        #expect(restored.location == MeetingUsabilityTests.place.summary)
     }
     @Test func failedSendRetainsExactReviewedRequestUntilRetry() async throws {
         let cache = try AccountCache(accountID: UUID(), inMemory: true)
         let service = MeetingDouble(); service.failCreate = true
         let model = ProposalViewModel(conversationID: UUID(), meeting: nil, service: service, cache: cache)
-        model.location = "Library"; model.review()
+        model.location = "Library"; model.selectPlace(MeetingUsabilityTests.place); model.review()
         await model.send()
         let request = model.reviewed?.requestID
         #expect(model.errorMessage != nil)
@@ -57,10 +57,10 @@ import Testing
         service.value = Meeting(id: original.id, sequence: original.sequence, conversationID: original.conversationID, proposerID: original.proposerID, recipientID: original.recipientID, requestID: original.requestID, status: .confirmed, version: 2, proposerName: "A", recipientName: "B", createdAt: "", updatedAt: "", revision: original.revision)
         service.changeConflict = true
         let model = ProposalViewModel(conversationID: original.conversationID, meeting: original, service: service, cache: cache)
-        model.location = "My edited place"; model.review(); await model.send()
+        model.location = "My edited place"; model.selectPlace(MeetingUsabilityTests.place); model.review(); await model.send()
         #expect(model.sentMeeting?.version == 2)
         let reopened = ProposalViewModel(conversationID: original.conversationID, meeting: service.value, service: service, cache: cache)
-        #expect(reopened.location == "My edited place")
+        #expect(reopened.place == MeetingUsabilityTests.place)
     }
     @Test func historyClassifiesPastUnansweredAndTerminalWithoutClaimingPlayed() throws {
         let past = MeetingDouble.meeting(startsAt: .distantPast)
@@ -95,6 +95,9 @@ import Testing
 @MainActor final class MeetingDouble: MeetingServiceProtocol {
     var value = meeting()
     var requests: [UUID] = []
+    var editRequests: [UUID] = []
+    var invitationEdits: [UUID] = []
+    var responseRequests: [UUID] = []
     var failCreate = false
     var pauseDetail = false
     var changeConflict = false
@@ -110,11 +113,13 @@ import Testing
     }
     @MainActor func list(before: Int64?) async throws -> MeetingPage { MeetingPage(meetings: [value], nextCursor: nil) }
     @MainActor func cancel(id: UUID, requestID: UUID, expectedVersion: Int) async throws -> Meeting { value }
-    @MainActor func respond(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { value }
+    @MainActor func respond(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { responseRequests.append(requestID); return value }
     @MainActor func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting {
         if changeConflict { throw APIError.conflict }; return value
     }
-    @MainActor func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { value }
+    @MainActor func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { invitationEdits.append(requestID); return value }
+    @MainActor func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting { editRequests.append(requestID); return value }
+    @MainActor func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting { responseRequests.append(requestID); return value }
     static func meeting(status: MeetingStatus = .pending, startsAt: Date = .distantFuture, pendingProposerID: UUID? = nil) -> Meeting {
         let id = UUID()
         let revision = MeetingRevision(id: UUID(), meetingID: id, startsAt: startsAt, timeZone: "UTC", location: "Library", note: "")

@@ -1,6 +1,8 @@
 import Foundation
 
 nonisolated protocol MeetingServiceProtocol: Sendable {
+    func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
+    func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
     func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
     func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting
     func cancel(id: UUID, requestID: UUID, expectedVersion: Int) async throws -> Meeting
@@ -26,8 +28,8 @@ nonisolated struct MeetingService: MeetingServiceProtocol {
         let proposal = try proposal.normalized()
         let payload = CreateRequest(p_conversation_id: conversationID, p_request_id: requestID,
                                     p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
-                                    p_location: proposal.location, p_note: proposal.note)
-        return try await client.request("rest/v1/rpc/create_meeting", method: "POST",
+                                    p_location: proposal.location, p_note: proposal.note, p_place: proposal.place)
+        return try await client.request(proposal.place == nil ? "rest/v1/rpc/create_meeting" : "rest/v1/rpc/create_meeting_with_place", method: "POST",
                                         body: JSONEncoder().encode(payload), token: token())
     }
 
@@ -57,9 +59,25 @@ nonisolated struct MeetingService: MeetingServiceProtocol {
         let proposal = try proposal.normalized()
         let payload = ChangeRequest(p_meeting_id: id, p_request_id: requestID, p_expected_version: expectedVersion,
                                     p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
-                                    p_location: proposal.location, p_note: proposal.note)
-        return try await client.request("rest/v1/rpc/propose_meeting_change", method: "POST",
+                                    p_location: proposal.location, p_note: proposal.note, p_place: proposal.place)
+        return try await client.request(proposal.place == nil ? "rest/v1/rpc/propose_meeting_change" : "rest/v1/rpc/propose_meeting_change_with_place", method: "POST",
                                         body: JSONEncoder().encode(payload), token: token())
+    }
+    func editChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting {
+        let proposal = try proposal.normalized()
+        guard proposal.place != nil else { throw APIError.rejected }
+        let payload = ChangeRequest(p_meeting_id: id, p_request_id: requestID, p_expected_version: expectedVersion,
+                                    p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
+                                    p_location: proposal.location, p_note: proposal.note, p_place: proposal.place)
+        return try await client.request("rest/v1/rpc/edit_meeting_change_with_place", method: "POST", body: JSONEncoder().encode(payload), token: token())
+    }
+    func editInvitation(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting {
+        let proposal = try proposal.normalized()
+        guard proposal.place != nil else { throw APIError.rejected }
+        let payload = ChangeRequest(p_meeting_id: id, p_request_id: requestID, p_expected_version: expectedVersion,
+                                    p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
+                                    p_location: proposal.location, p_note: proposal.note, p_place: proposal.place)
+        return try await client.request("rest/v1/rpc/edit_meeting_invitation_with_place", method: "POST", body: JSONEncoder().encode(payload), token: token())
     }
     func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting {
         try await client.request("rest/v1/rpc/respond_to_meeting_change", method: "POST",
@@ -74,6 +92,7 @@ nonisolated struct MeetingService: MeetingServiceProtocol {
         let p_time_zone: String
         let p_location: String
         let p_note: String
+        let p_place: MeetingPlace?
     }
 
     private struct CancelRequest: Encodable {
@@ -88,6 +107,7 @@ nonisolated struct MeetingService: MeetingServiceProtocol {
         let p_time_zone: String
         let p_location: String
         let p_note: String
+        let p_place: MeetingPlace?
     }
     private struct DetailRequest: Encodable { let p_meeting_id: UUID }
     private struct ListRequest: Encodable { let p_before: Int64?; let p_limit: Int }

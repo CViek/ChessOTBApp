@@ -51,8 +51,7 @@ struct GroupDetailView: View {
                 }.accessibilityIdentifier("groups.messageContact")
             }
         } else {
-            StateNotice(message: "This group's contact is currently unavailable. Try refreshing later or choose another listing.")
-            PrimaryButton(title: "Refresh contact", kind: .secondary) { retry += 1 }
+            StateNotice(message: "This group's contact is currently unavailable. Pull down to check again later or choose another listing.")
         }
         if let introduction = group.introduction {
             VStack(alignment: .leading, spacing: 10) {

@@ -39,7 +39,7 @@ private struct NotationButtonStyle: ButtonStyle {
     private var border: Color {
         switch kind {
         case .secondary: DesignTokens.Colors.line
-        case .danger: DesignTokens.Colors.danger.opacity(0.35)
+        case .danger: DesignTokens.Colors.danger.opacity(0.65)
         case .primary, .quiet: .clear
         }
     }
