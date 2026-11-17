@@ -414,6 +414,8 @@ Subsequent migration numbers account for additive `007_inbox_pagination.sql` and
 
 ## Phase 10 — Release readiness and agreed operating requirements
 
+**Status:** Complete for **local simulator readiness**, the scope selected by the user November 17, 2026. Scope and evidence are recorded in [Phase 10 record](docs/phase-10.md): existing unit/UI smoke checks, local account journey, database checks, local schema/configuration repair and simulator builds. Q8/Q10, physical-device verification and signed distribution remain deferred to external readiness. No external-release readiness is claimed.
+
 **Goal:** Verify and package the complete app for the chosen distribution, with real service configuration and resolved launch responsibilities.
 
 **Dependencies / entrance decisions:** Phase 9; resolve Q7–Q10 and all remaining design gaps. No unresolved auth, privacy, group ownership or incomplete meeting UI can be treated as release-ready. If new operational requirements are chosen, specify their Figma references and acceptance tests inside this phase before implementation; revise the plan if they materially expand the product.
