@@ -1,6 +1,8 @@
 import Combine
 import Foundation
 
+nonisolated enum MeetingListSection: Hashable { case awaiting, confirmed, history }
+
 @MainActor final class MyMeetingsViewModel: ObservableObject {
     @Published private(set) var meetings: [Meeting] = []
     @Published private(set) var errorMessage: String?
@@ -13,6 +15,15 @@ import Foundation
     init(service: any MeetingServiceProtocol, cache: AccountCache) { self.service = service; self.cache = cache }
     func visible(history: Bool, at now: Date) -> [Meeting] {
         meetings.filter { $0.isHistory(at: now) == history }.sorted { history ? $0.revision.startsAt > $1.revision.startsAt : $0.revision.startsAt < $1.revision.startsAt }
+    }
+    func visible(section: MeetingListSection, at now: Date, on day: Date? = nil, calendar: Calendar = .current) -> [Meeting] {
+        visible(history: section == .history, at: now).filter { meeting in
+            let matchesStatus = section == .history || (section == .awaiting ? meeting.status == .pending : meeting.status == .confirmed)
+            return matchesStatus && (day.map { calendar.isDate(meeting.revision.startsAt, inSameDayAs: $0) } ?? true)
+        }
+    }
+    func meetingDays(section: MeetingListSection, at now: Date, calendar: Calendar = .current) -> [Date] {
+        Array(Set(visible(section: section, at: now).map { calendar.startOfDay(for: $0.revision.startsAt) })).sorted()
     }
     func refresh() async {
         guard active, cache.isActive else { return }

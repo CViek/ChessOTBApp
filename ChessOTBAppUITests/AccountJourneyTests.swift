@@ -384,6 +384,7 @@ final class AccountJourneyTests: XCTestCase {
         XCTAssertTrue(app.buttons["meeting.review"].isEnabled)
         capture("Selected exact meeting address", app: app)
         tap(app.buttons["Close"], in: app)
+        tap(app.buttons["Confirmed"], in: app)
         tap(app.buttons["meeting.row." + meetingID.lowercased()], in: app)
         XCTAssertTrue(app.links["meeting.openMaps"].exists || app.buttons["meeting.openMaps"].exists)
         XCTAssertFalse(app.buttons["Refresh"].exists)
@@ -411,6 +412,7 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.alerts["Cancel this meeting?"].buttons["Cancel Meeting"].firstMatch, in: app)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Cancelled")).firstMatch.waitForExistence(timeout: 10))
         app.navigationBars.buttons.firstMatch.tap()
+        tap(app.buttons["Awaiting"], in: app)
         tap(app.buttons["meeting.row." + outgoingID.lowercased()], in: app)
         tap(app.buttons["meeting.editInvitation"], in: app)
         let note = app.textViews["meeting.note"].exists ? app.textViews["meeting.note"] : app.textFields["meeting.note"]
@@ -519,8 +521,7 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.alerts["Cancel this meeting?"].buttons["Cancel Meeting"].firstMatch, in: app)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label == %@", "meeting.status", "Cancelled")).firstMatch.waitForExistence(timeout: 15))
         app.navigationBars.buttons.firstMatch.tap()
-        tap(app.buttons["History"], in: app)
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "meeting.row.")).firstMatch.waitForExistence(timeout: 15))
+        XCTAssertFalse(app.buttons["History"].exists)
         app.tabBars.buttons["Profile"].tap(); signOut(app)
     }
 
