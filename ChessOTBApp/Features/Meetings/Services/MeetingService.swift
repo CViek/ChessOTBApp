@@ -1,6 +1,8 @@
 import Foundation
 
 nonisolated protocol MeetingServiceProtocol: Sendable {
+    func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting
+    func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting
     func cancel(id: UUID, requestID: UUID, expectedVersion: Int) async throws -> Meeting
     func create(conversationID: UUID, requestID: UUID, proposal: MeetingProposal) async throws -> Meeting
     func detail(id: UUID) async throws -> Meeting
@@ -49,6 +51,29 @@ nonisolated struct MeetingService: MeetingServiceProtocol {
         try await client.request("rest/v1/rpc/cancel_meeting", method: "POST",
                                  body: JSONEncoder().encode(CancelRequest(p_meeting_id: id, p_request_id: requestID,
                                                                          p_expected_version: expectedVersion)), token: token())
+    }
+
+    func proposeChange(id: UUID, requestID: UUID, expectedVersion: Int, proposal: MeetingProposal) async throws -> Meeting {
+        let proposal = try proposal.normalized()
+        let payload = ChangeRequest(p_meeting_id: id, p_request_id: requestID, p_expected_version: expectedVersion,
+                                    p_starts_at: MeetingTimestamp.encode(proposal.startsAt), p_time_zone: proposal.timeZone,
+                                    p_location: proposal.location, p_note: proposal.note)
+        return try await client.request("rest/v1/rpc/propose_meeting_change", method: "POST",
+                                        body: JSONEncoder().encode(payload), token: token())
+    }
+    func respondToChange(id: UUID, requestID: UUID, expectedVersion: Int, decision: MeetingDecision) async throws -> Meeting {
+        try await client.request("rest/v1/rpc/respond_to_meeting_change", method: "POST",
+                                 body: JSONEncoder().encode(ResponseRequest(p_meeting_id: id, p_request_id: requestID,
+                                                                           p_expected_version: expectedVersion, p_decision: decision.rawValue)), token: token())
+    }
+    private struct ChangeRequest: Encodable {
+        let p_meeting_id: UUID
+        let p_request_id: UUID
+        let p_expected_version: Int
+        let p_starts_at: String
+        let p_time_zone: String
+        let p_location: String
+        let p_note: String
     }
 
     private struct CancelRequest: Encodable {

@@ -1,5 +1,15 @@
 # Phase 5 implementation record
 
+## Current completion status — November 16, 2026
+
+Owned persistent proposal/review drafts, future-date validation, initial recipient responses, meeting detail/list/history and linked conversation navigation implemented. Native completion of truncated layouts and Q4 defaults approved by the user.
+
+85 Swift unit tests, 144 database assertions, local two-account meeting/revision/race HTTP contracts and Debug/Release simulator builds pass. The user stopped comprehensive UI journeys and requested basic build/unit checks plus a visual glance. Full end-to-end acceptance is not claimed; see [completion ledger](plans/finish-mvp1.md). No commit, push, hosted deployment or account reset.
+
+## Historical implementation record
+
+The following records describe earlier partial states; the current status above supersedes their remaining-scope lists.
+
 Requested on November 16, 2026, on the existing `phase5` branch.
 
 Source: `implementation.md`, Phase 5. Swift 6, iOS 27+, native SwiftUI,

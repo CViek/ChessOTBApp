@@ -5,6 +5,14 @@ nonisolated struct AppDependencies: Sendable {
     let profiles: any ProfileServiceProtocol
     let areas: any AreaServiceProtocol
     let discovery: any DiscoveryServiceProtocol
+    var client: APIClient? = nil
+
+    @MainActor func messagingWorkspace(accountID: UUID, profileID: UUID) throws -> MessagingWorkspace {
+        guard let client else { throw APIError.invalidConfiguration }
+        return MessagingWorkspace(cache: try AccountCache(accountID: accountID),
+                                  service: ConversationService(client: client, auth: auth, accountID: accountID), ownProfileID: profileID,
+                                  meetingService: MeetingService(client: client, auth: auth, accountID: accountID))
+    }
 
     @MainActor static func live(bundle: Bundle = .main) -> AppDependencies {
         do {
@@ -24,7 +32,7 @@ nonisolated struct AppDependencies: Sendable {
             let auth = AuthService(client: client, store: KeychainStore(service: namespace))
             return AppDependencies(auth: auth, profiles: ProfileService(client: client, auth: auth),
                                    areas: AreaService(lookup: MapKitAreaLookup(), location: DeviceLocationClient()),
-                                   discovery: DiscoveryService(client: client, auth: auth))
+                                   discovery: DiscoveryService(client: client, auth: auth), client: client)
         } catch {
             let unavailable = UnconfiguredAccountService()
             return AppDependencies(auth: unavailable, profiles: unavailable, areas: unavailable, discovery: unavailable)

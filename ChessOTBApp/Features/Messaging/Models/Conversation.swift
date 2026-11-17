@@ -13,3 +13,12 @@ nonisolated struct Conversation: Codable, Equatable, Identifiable, Hashable, Sen
         case id, peerID = "peerId", displayName, preview, updatedAt, unreadCount
     }
 }
+
+nonisolated struct InboxCursor: Codable, Equatable, Sendable {
+    let updatedAt: String
+    let id: UUID
+}
+nonisolated struct ConversationPage: Codable, Sendable {
+    let conversations: [Conversation]
+    let nextCursor: InboxCursor?
+}

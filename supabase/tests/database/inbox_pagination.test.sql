@@ -1,0 +1,17 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select no_plan();
+select has_function('public','inbox_page',array['timestamp with time zone','uuid','integer'],'paginated inbox RPC exists');
+insert into auth.users(id,email) values ('99999999-7777-7777-7777-777777777701','inbox-owner@example.test'),('99999999-7777-7777-7777-777777777702','inbox-peer-one@example.test'),('99999999-7777-7777-7777-777777777703','inbox-peer-two@example.test');
+insert into public.profiles(id,owner_id,display_name) values ('99999999-8888-8888-8888-888888888801','99999999-7777-7777-7777-777777777701','Inbox owner'),('99999999-8888-8888-8888-888888888802','99999999-7777-7777-7777-777777777702','Inbox one'),('99999999-8888-8888-8888-888888888803','99999999-7777-7777-7777-777777777703','Inbox two');
+insert into public.conversations(id,first_profile,second_profile,created_at) values ('99999999-9999-9999-9999-999999999901','99999999-8888-8888-8888-888888888801','99999999-8888-8888-8888-888888888802','2026-11-16T10:00:00Z'),('99999999-9999-9999-9999-999999999902','99999999-8888-8888-8888-888888888801','99999999-8888-8888-8888-888888888803','2026-11-16T10:00:00Z');
+set local role authenticated;
+select set_config('request.jwt.claim.sub','99999999-7777-7777-7777-777777777701',true);
+select lives_ok($$select public.inbox_page(null,null,1)$$,'authenticated owner can fetch first page');
+select is(public.inbox_page(null,null,1)->'conversations'->0->>'display_name','Inbox two','timestamp ties use deterministic descending UUID');
+select is(public.inbox_page('2026-11-16T10:00:00Z','99999999-9999-9999-9999-999999999902',1)->'conversations'->0->>'display_name','Inbox one','cursor fetches the next distinct conversation');
+select throws_ok($$select public.inbox_page(null,'99999999-9999-9999-9999-999999999902',1)$$,'22023','Invalid inbox page','partial cursor rejected');
+set local role anon;
+select throws_ok($$select public.inbox_page(null,null,1)$$,'42501',null,'anonymous caller denied');
+select * from finish();
+rollback;

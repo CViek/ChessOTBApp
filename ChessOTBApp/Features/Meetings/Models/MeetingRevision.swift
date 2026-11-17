@@ -12,6 +12,10 @@ nonisolated struct MeetingRevision: Codable, Equatable, Identifiable, Sendable {
         case id, meetingID = "meetingId", startsAt, timeZone, location, note
     }
 
+    init(id: UUID, meetingID: UUID, startsAt: Date, timeZone: String, location: String, note: String) {
+        self.id = id; self.meetingID = meetingID; self.startsAt = startsAt; self.timeZone = timeZone; self.location = location; self.note = note
+    }
+
     init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(UUID.self, forKey: .id)

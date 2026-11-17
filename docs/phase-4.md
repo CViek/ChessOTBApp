@@ -1,6 +1,16 @@
 # Phase 4 implementation record
 
-Status: core implemented and verified on the existing `phase4` branch; Phase 4 is incomplete. Inbox/Conversation views and app routing are not implemented. No staging, commits, pushes or hosted deployment.
+## Current completion status — November 16, 2026
+
+Messaging UI, account teardown, pagination and native routes implemented. Independent review correction refreshes loaded Inbox pages so deep-thread unread counts converge.
+
+85 Swift unit tests, 144 database assertions, local two-account meeting/revision/race HTTP contracts and Debug/Release simulator builds pass. The user stopped comprehensive UI journeys and requested basic build/unit checks plus a visual glance. Full end-to-end acceptance is not claimed; see [completion ledger](plans/finish-mvp1.md). No commit, push, hosted deployment or account reset.
+
+## Historical implementation record
+
+The following records describe earlier partial states; the current status above supersedes their remaining-scope lists.
+
+Status: core verified; full UI integration verification is in progress on `correct-phase-6`. Inbox/Conversation views and app routing are implemented. No staging, commits, pushes or hosted deployment.
 
 Scope: persistent participant-only direct text conversations, canonical profile pairs, idempotent client message IDs, stable paginated history, inbox previews/unread counts, account-scoped SwiftData history/outbox/drafts, retry and native navigation.
 
@@ -10,7 +20,7 @@ Sequence:
 3. Figma F07/F08 native UI and profile routing, then two-account integration/UI verification.
 4. Full tests, Debug/Release builds and independent final review.
 
-Pending entrance decisions: foreground polling interval/push scope and attachment removal. These do not block database work.
+Confirmed November 16: text only, no attachments/images/bios; visible active chat polls every 1 second, Inbox every 3 seconds, with pull-to-refresh; background push deferred.
 
 Figma: Make context read on November 16, 2026. `create_session` and `get_screenshot` reject Make files; source/CSS are available. No exact screenshot fidelity claim.
 
@@ -41,8 +51,12 @@ Read-only reviewer `/root/phase4_core_review` found a history gap when sending b
 
 No additional definite core issues were found. The reviewer did not judge UI/navigation/polling or run the tests independently. Actual auth-switch removal of old published arrays, multiple live models writing snapshots for the same peer, physical-device behavior, disk/relaunch behavior and UI failure/retry remain integration verification work; they are not claimed complete.
 
-## Next work
+## Current completion work
 
-Resolve the pending Q7/Q9 choices from `implementation.md`: proposed foreground refresh every five seconds plus pull-to-refresh with push deferred; proposed text-only conversation with attachment control removed and no fabricated bio. Both questions were presented to the user; neither has an answer yet.
+Inbox, conversation, public-profile return, Discover Message routes and a shared account-owned thread registry are wired. Synchronous account cleanup clears visible rows before logout awaits the network and preserves only account-owned persisted drafts. Additive migration 007 implements inbox cursor pagination. All 76 Swift unit tests and 132 database assertions passed before UI integration; the real two-account messaging HTTP checks also passed.
 
-Then implement and wire Inbox/Conversation and the profile Message action, bind cache deactivation and task cancellation to account changes, verify navigation/profile return, unread refresh, keyboard/long text, draft restoration, offline retry, real two-account UI history and relaunch/account switching. Native messaging loading/error states also need the planned design acceptance. No Phase 5 proposal action has been added.
+The UI journey exposed a workspace startup dependency on profile identity alone. Saving an initial search area preserves that identity, so startup must track both identity and area, with an explicit retry for cache/configuration failures. The existing area journey reproduced the failure before correction. Chat keeps native multiline entry and the explicit Send button; keyboard Return inserts a new line.
+
+Two-account UI history, drafts, relaunch and foreground refresh are being verified. Preview fixtures remain DEBUG-only and cannot replace live accounts. No Phase 5 proposal action has been added. Full suite, Release build and final review remain outstanding.
+
+Final Swift unit re-run passes: 76 tests; `/tmp/chess-mvp-phase4-final-unit.log`. Debug/Release builds and both selected onboarding/messaging UI journeys pass. Broader UI/accessibility checks and the final independent review remain in the overall Phase 4–6 completion checklist. No commit or push.

@@ -128,14 +128,14 @@ These are explicitly unresolved decisions, not assumptions already approved. The
 | ID | Open question and proposed direction | Resolve before |
 | --- | --- | --- |
 | Q1 | Which backend/project owner, region and authentication method should be used? Confirmed for Phase 2: Supabase/PostgreSQL plus Supabase email/password authentication, recoverable sessions and sign-out. User has no Apple Developer membership, so Sign in with Apple is excluded. Hosted provisioning remains to be supplied; local isolated development may proceed. Retain the current simulator bundle ID. No Apple team is needed for local simulator development. User approved necessary native account layouts; hosted project ownership, region and provisioning remain deployment decisions. | Phase 2 |
-| Q2 | Can Figma provide the untruncated Review Proposal/Meeting Detail source or corresponding Design frames, plus missing error, loading and destructive-action states? Also confirm how native navigation, 44-point targets and dark notation contrast should reconcile with the prototype. | Phase 1 visual baseline; each affected UI phase, especially 5 |
+| Q2 | Confirmed November 16 for Phases 4–6: user approved completing truncated Review Proposal/Meeting Detail and missing states with native controls matching existing design tokens. Make source remains available; Make screenshot/session calls remain unsupported, so no exact screenshot-fidelity claim is made. | Phase 4–6 resolved; later phases retain their design gates |
 | Q3 | How coarse is public location; does editing search area also change the discoverable profile area; how does a user become open to contact? Confirmed for Phase 3: US locations only; explicitly saved city/neighborhood profile areas opt into discovery; independently adjustable search area; no raw GPS stored in Supabase or shown to players; distances computed from approximate centers and displayed as rounded whole miles or less than 1 mile. Default radius 5 miles. User-approved correction: slider and editable whole-mile value from 1 to 100. On-demand location permission, Apple area lookup, manual fallback and explicit ambiguous-area selection. First area save initializes profile and search; later search changes do not alter the profile area. | Phase 3 |
-| Q4 | When may past pending proposals be answered, how are they placed in History, and how are simultaneous/repeated revisions handled? Proposed: future-time validation; no implicit expiry state; one outstanding replacement; reject stale actions; cancelling a meeting also invalidates its replacement. The Figma text supports keeping the original confirmed until replacement acceptance. Confirm this policy and pending-cancellation placement. | Phase 5 initial/past rules; Phase 6 replacement rules |
+| Q4 | Confirmed November 16: new proposals/replacements use future instants; past pending proposals cannot be accepted and appear in History without expiry/attendance claims. One outstanding replacement; either participant proposes and only the counterpart responds. Declining preserves the accepted plan. Stale mutations conflict; cancellation clears the replacement. Native cancellation action uses the detail action group and confirmation dialog for pending/confirmed meetings. | Phases 5–6 resolved |
 | Q5 | Which rating sources and formats/time controls are comparable, what values are valid, and is a custom source required? Figma's three choices cannot by themselves distinguish Chess.com rapid from blitz. Use one optional entry and an exact comparison key; add a format control only after Figma coverage exists. | Phase 7 |
 | Q6 | Who supplies and maintains group listings and contact identities? How does a genuine introduction/profile link reach the group screen? Recommended minimal listing model: operator-maintained verified listings, no in-app administration; absent introductions show no fabricated sample card. Confirm that conditional layout in Figma. | Phase 9 |
-| Q7 | Which notifications and update latency are required while foregrounded, backgrounded and terminated? Proposed first release: foreground refresh plus pull-to-refresh, no push guarantee. If background push is required, define APNs/server delivery and notification routing within Phase 10 before release. | Phase 4 latency contract; Phase 10 delivery scope |
+| Q7 | Confirmed November 16: text-only messaging; visible active chat refreshes every 1 second, visible active Inbox every 3 seconds, plus pull-to-refresh. Stop polling when hidden, inactive or signed out. Background push remains deferred. | Phase 4 confirmed; Phase 10 delivery scope |
 | Q8 | What are launch privacy/contact controls, blocking/reporting, moderation ownership, account deletion and retention rules? Confirm required scope and Figma flows; the description lists these as unresolved, not preapproved functionality. | Before external user testing; implement chosen launch requirements in Phase 10 |
-| Q9 | Should users edit the displayed bio, choose avatar tone, and use system appearance or a persistent override? Phase 2 confirmed: generated initials, no photo upload or bio editor, and the persistent Figma dark toggle. Use the existing sage avatar treatment for now. Confirm provenance for real profile notes and approved removal of the attachment affordance. | Phase 2 profile basics; Phase 4 conversation UI |
+| Q9 | Confirmed: generated initials, existing sage avatars, persistent dark toggle; no photos, images, attachments or bios. Remove the attachment affordance from text-only chat. | Phase 4 confirmed |
 | Q10 | What is the launch area, distribution target, operating budget/owner, final app icon and font licensing source? No revenue features are planned. | Phase 1 font assets; Phase 10 distribution |
 
 ## Technical approach
@@ -288,10 +288,10 @@ The user replaced the original 3/5/10 presets with a slider and editable whole-m
 
 **Sequential work:**
 
-- [ ] Test canonical pair/thread uniqueness, participant-only reads/writes, blank messages, idempotent retry, pagination order and pending/failed-send state before adding persistence and services.
-- [ ] Implement server message history, real inbox previews/unread state and account-scoped SwiftData cache/drafts. Drafts survive navigation; account changes never expose another user's messages.
-- [ ] Connect all real rows and profile Message actions to the correct conversation; add the selected foreground refresh behavior with cancellation on disappearance/sign-out.
-- [ ] Distinguish locally sending/failed text from server-confirmed messages; retain text for retry and reconcile duplicate acknowledgments by client ID.
+- [x] Test canonical pair/thread uniqueness, participant-only reads/writes, blank messages, idempotent retry, pagination order and pending/failed-send state before adding persistence and services.
+- [x] Implement server message history, real inbox previews/unread state and account-scoped SwiftData cache/drafts. Drafts survive navigation; account changes never expose another user's messages.
+- [x] Connect all real rows and profile Message actions to the correct conversation; add the selected foreground refresh behavior with cancellation on disappearance/sign-out.
+- [x] Distinguish locally sending/failed text from server-confirmed messages; retain text for retry and reconcile duplicate acknowledgments by client ID.
 
 **Definition of Done:** Account A sends to B, B reads/replies, both can reopen the same thread after relaunch. No hardcoded Alex routing, fabricated messages or cross-thread state. Inbox empty/unread states derive from stored data.
 
@@ -299,11 +299,7 @@ The user replaced the original 3/5/10 presets with a slider and editable whole-m
 
 ## Phase 5 — Reviewed proposals and initial explicit agreement
 
-**Implementation status (November 16, 2026):** Core database/RPCs, Swift meeting
-service/records and event-link decoding are implemented and verified. Full Phase
-5 remains incomplete: review/detail design recovery, Q4 policy, messaging UI,
-owned draft/ViewModels and meeting screens/navigation are pending. See
-[Phase 5 implementation record](docs/phase-5.md) for evidence and exact limits.
+**Implementation status (November 16, 2026):** Initial agreement UI, owned persistent drafts and meeting navigation are implemented. Q4 defaults and native missing-layout completion are approved. The user requested basic build/unit and first-glance verification and stopped further UI journeys; full end-to-end acceptance is not claimed; see [completion ledger](docs/plans/finish-mvp1.md).
 
 **Goal:** Send a real proposal, let only its recipient accept/decline it, and show the same initial arrangement to both participants.
 
@@ -315,10 +311,10 @@ owned draft/ViewModels and meeting screens/navigation are pending. See
 
 **Sequential work:**
 
-- [ ] Test that whitespace-only places and disallowed dates fail validation, review preserves all entered fields, and send creates Pending rather than Confirmed. Store an absolute instant plus named time zone; exercise DST ambiguity explicitly.
-- [ ] Implement proposal/revision records and transactional create/accept/decline functions with actor validation, request IDs and expected versions. Append a linked conversation event in the same transaction.
-- [ ] Bind proposal → review → send to one owned draft; allow review/back edits without losing text. Use the actual opponent, date, place and note throughout.
-- [ ] Implement recipient actions, sender waiting state, My Meetings pagination/segments and proposal links. Derive upcoming/history from real timestamps and the resolved past-pending policy.
+- [x] Test that whitespace-only places and disallowed dates fail validation, review preserves all entered fields, and send creates Pending rather than Confirmed. Store an absolute instant plus named time zone; exercise DST ambiguity explicitly.
+- [x] Implement proposal/revision records and transactional create/accept/decline functions with actor validation, request IDs and expected versions. Append a linked conversation event in the same transaction.
+- [x] Bind proposal → review → send to one owned draft; allow review/back edits without losing text. Use the actual opponent, date, place and note throughout.
+- [x] Implement recipient actions, sender waiting state, My Meetings pagination/segments and proposal links. Derive upcoming/history from real timestamps and the resolved past-pending policy.
 
 **Definition of Done:** Both accounts see the same proposed details, and only recipient acceptance creates a confirmed appointment. Decline leaves no appointment. Retrying after a timeout produces one meeting/event. No actor-switch controls exist in production. This is an intermediate build, not yet the complete MVP1 release.
 
@@ -336,14 +332,16 @@ owned draft/ViewModels and meeting screens/navigation are pending. See
 
 **Sequential work:**
 
-- [ ] Test replacement acceptance/rejection, preserved accepted fields, role reversal, cancellation of pending/confirmed meetings, retry and concurrent accept/cancel against versioned records.
-- [ ] Implement immutable revision history, one accepted pointer and the resolved pending-replacement policy. Reuse the proposal/review flow for new values; do not hardcode the sample 3:30 PM café change.
-- [ ] Implement atomic cancellation and event updates; invalidate outstanding replacements according to Q4. Show previously agreed and newly proposed details distinctly until acceptance.
-- [ ] Complete recovery from stale versions/failed mutations, verify every MVP1 route with two accounts, and classify past records without adding results or attendance claims.
+- [x] Test replacement acceptance/rejection, preserved accepted fields, role reversal, cancellation of pending/confirmed meetings, retry and concurrent accept/cancel against versioned records.
+- [x] Implement immutable revision history, one accepted pointer and the resolved pending-replacement policy. Reuse the proposal/review flow for new values; do not hardcode the sample 3:30 PM café change.
+- [x] Implement atomic cancellation and event updates; invalidate outstanding replacements according to Q4. Show previously agreed and newly proposed details distinctly until acceptance.
+- [ ] Full verification of every MVP1 route with two accounts is deferred at the user’s request. Recovery and timestamp-based history are implemented; no results or attendance claims are added.
 
 **Definition of Done:** Declining a replacement preserves the old confirmed plan; acceptance changes all surfaces to the new agreed values; cancellation is visible to both people and prevents stale acceptance. Repeated meetings have separate IDs. MVP1 supports the full description flow across devices, restart and recoverable failures.
 
 **Verification:** Transition matrix tests for every actor/state/action; backend race tests assert one consistent committed outcome and one corresponding event. Two-account journey covers manual area, discovery, message, review, acceptance, revision acceptance/rejection, cancellation and history. Verify no automatic played-game count or rating update for past meetings. Run baseline and full MVP1 UI suites.
+
+Subsequent migration numbers account for additive `007_inbox_pagination.sql` and `008_meeting_changes.sql`; future migrations begin at 009.
 
 ## Phase 7 — Optional ratings and comparable search
 
@@ -351,7 +349,7 @@ owned draft/ViewModels and meeting screens/navigation are pending. See
 
 **Dependencies / entrance decisions:** Phase 6; Q5 canonical sources/formats, validation limits and Figma additions if needed.
 
-**Scope and main files:** `Features/Profile/Models/RatingEntry.swift`; profile editor/service/model extensions; `Features/Discovery/Models/RatingCriteria.swift`; filter ViewModel/view and search service/query extensions; rated player rows/profile block; `supabase/migrations/007_ratings.sql`; rating/filter tests.
+**Scope and main files:** `Features/Profile/Models/RatingEntry.swift`; profile editor/service/model extensions; `Features/Discovery/Models/RatingCriteria.swift`; filter ViewModel/view and search service/query extensions; rated player rows/profile block; `supabase/migrations/009_ratings.sql`; rating/filter tests.
 
 **Figma references:** F15 optional-rating controls/removal, F06 source/range/clear, F03 applied chips and rated/unrated rows, F05 rating detail, self-report notices.
 
@@ -372,7 +370,7 @@ owned draft/ViewModels and meeting screens/navigation are pending. See
 
 **Dependencies / entrance decisions:** Phase 7; retain the description's mutual-request model unless explicitly changed; obtain Figma coverage for removal and missing request/empty states under Q2.
 
-**Scope and main files:** `Features/Friends/{Views/FriendsView,Views/FriendRequestCard,ViewModels/FriendsViewModel,Models/Friendship,Services/FriendshipService}.swift`; Player Profile friendship action and shared navigation; `supabase/migrations/008_friendships.sql`; friends tests. Use the existing message/proposal services.
+**Scope and main files:** `Features/Friends/{Views/FriendsView,Views/FriendRequestCard,ViewModels/FriendsViewModel,Models/Friendship,Services/FriendshipService}.swift`; Player Profile friendship action and shared navigation; `supabase/migrations/010_friendships.sql`; friends tests. Use the existing message/proposal services.
 
 **Figma references:** F13 Friends with embedded request cards; F05 Add Friend/Request Sent/Friends states; F08/F09/F10 existing repeat-game path. The description's conversation entry point is optional wording; the already designed Profile action supplies the required request entry.
 
@@ -393,7 +391,7 @@ owned draft/ViewModels and meeting screens/navigation are pending. See
 
 **Dependencies / entrance decisions:** Phase 8; Q6 listing owner/maintenance/contact/introduction model and conditional introduction layout. A designated contact must correspond to an actual account.
 
-**Scope and main files:** `Features/Groups/{Views/NearbyGroupsView,Views/GroupDetailView,ViewModels/GroupsViewModel,Models/GroupListing,Services/GroupService}.swift`; Discover segment routing and shared area/distance query; `supabase/migrations/009_groups.sql`; private operator listing-import procedure and group tests. Do not add in-app group administration, membership, group chat or events.
+**Scope and main files:** `Features/Groups/{Views/NearbyGroupsView,Views/GroupDetailView,ViewModels/GroupsViewModel,Models/GroupListing,Services/GroupService}.swift`; Discover segment routing and shared area/distance query; `supabase/migrations/011_groups.sql`; private operator listing-import procedure and group tests. Do not add in-app group administration, membership, group chat or events.
 
 **Figma references:** F04 group segment/results/loading/empty, F16 contact and introduction cards, F05/F08 reuse; `.group-glyph`, `.contact-card`, `.introduction-card`.
 

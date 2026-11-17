@@ -39,6 +39,12 @@ import Foundation
             draft = try drafts.load(peerID: peerID)
         } catch { errorMessage = error.localizedDescription }
     }
+    func deactivate() {
+        generation += 1
+        messages = []; outgoing = []; draft = ""; conversationID = nil
+        nextCursor = nil; synchronizedSequence = nil
+        errorMessage = nil; isLoading = false; isLoadingMore = false
+    }
     func refresh() async {
         guard cache.isActive else { return }
         generation += 1
