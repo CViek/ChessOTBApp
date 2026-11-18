@@ -2,9 +2,6 @@ import SwiftUI
 
 struct NearbyGroupsView: View {
     @ObservedObject var model: GroupsViewModel
-    let canWiden: Bool
-    let widen: () -> Void
-    let changeArea: () -> Void
     let retry: () -> Void
     @State private var more = 0
     var body: some View {
@@ -18,8 +15,6 @@ struct NearbyGroupsView: View {
             else if model.groups.isEmpty, model.errorMessage == nil {
                 Text("No groups in this area").font(DesignTokens.Typography.statusTitle).accessibilityIdentifier("groups.empty")
                 Text("Try increasing your distance or changing the search area.").font(DesignTokens.Typography.notice)
-                if canWiden { PrimaryButton(title: "Widen search distance", action: widen) }
-                PrimaryButton(title: "Change search area", kind: .secondary, action: changeArea)
             } else {
                 ForEach(model.groups) { group in
                     NavigationLink(value: GroupRoute(id: group.id)) {

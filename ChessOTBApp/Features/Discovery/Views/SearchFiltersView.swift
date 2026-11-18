@@ -2,6 +2,9 @@ import SwiftUI
 
 struct SearchFiltersView: View {
     @ObservedObject var model: DiscoveryViewModel
+    let profiles: any ProfileServiceProtocol
+    let areas: any AreaServiceProtocol
+    let onAreaSaved: (DiscoverySettings) -> Void
     @StateObject private var radiusInput: RadiusInputViewModel
     @State private var applyRequest = 0
     @State private var ratingKind: RatingKind?
@@ -10,8 +13,12 @@ struct SearchFiltersView: View {
     private enum Bound: Hashable { case minimum, maximum }
     @FocusState private var editingBound: Bound?
     @Environment(\.dismiss) private var dismiss
-    init(model: DiscoveryViewModel) {
+    init(model: DiscoveryViewModel, profiles: any ProfileServiceProtocol, areas: any AreaServiceProtocol,
+         onAreaSaved: @escaping (DiscoverySettings) -> Void) {
         self.model = model
+        self.profiles = profiles
+        self.areas = areas
+        self.onAreaSaved = onAreaSaved
         _radiusInput = StateObject(wrappedValue: RadiusInputViewModel(radius: model.settings?.radius ?? .five))
         _ratingKind = State(initialValue: model.settings?.rating?.kind)
         _minimum = State(initialValue: model.settings?.rating?.minimum.map(String.init) ?? "")
@@ -25,6 +32,19 @@ struct SearchFiltersView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
+                    NavigationLink {
+                        SearchAreaView(purpose: .search, areas: areas, profiles: profiles,
+                                       discovery: model.service, settings: model.settings) { _, settings in
+                            if let settings {
+                                onAreaSaved(settings)
+                                dismiss()
+                            }
+                        }
+                    } label: {
+                        Label("Search area", systemImage: "mappin.and.ellipse")
+                            .font(DesignTokens.Typography.control)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    }.accessibilityIdentifier("discovery.area")
                     RadiusPicker(input: radiusInput)
                     Text("Distances are approximate and measured between named area centers.")
                         .font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted)
@@ -75,6 +95,6 @@ struct SearchFiltersView: View {
 #if DEBUG
 #Preview("Search filters") {
     @Previewable @StateObject var model = DiscoveryViewModel(service: PreviewDiscoveryService(state: .empty))
-    SearchFiltersView(model: model).task { await model.refresh() }
+    SearchFiltersView(model: model, profiles: PreviewPlayerService(state: .populated), areas: PreviewAccountService()) { _ in }.task { await model.refresh() }
 }
 #endif

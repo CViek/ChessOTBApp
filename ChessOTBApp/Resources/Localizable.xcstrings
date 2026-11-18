@@ -427,6 +427,7 @@
       }
     },
     "Change search area" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -620,6 +621,7 @@
       }
     },
     "Choose search area" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1283,6 +1285,7 @@
       }
     },
     "Group search area and distance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2478,6 +2481,7 @@
       }
     },
     "Remove rating filter" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2488,6 +2492,7 @@
       }
     },
     "Remove rating filter: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3449,6 +3454,7 @@
       }
     },
     "Widen search distance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
