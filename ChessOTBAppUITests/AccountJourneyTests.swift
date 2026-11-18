@@ -149,8 +149,9 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.buttons["discovery.filters"], in: app)
         selectDistance(10, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
-        XCTAssertTrue(app.buttons["discovery.distanceChip"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.buttons["discovery.distanceChip"].label.contains("10"))
+        XCTAssertTrue(app.staticTexts["discovery.distanceChip"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["discovery.distanceChip"].label.contains("10"))
+        tap(app.buttons["discovery.filters"], in: app)
         tap(app.buttons["discovery.area"], in: app)
         fill(app.textFields["area.query"], with: "Juneau, AK", in: app)
         tap(app.buttons["area.search"], in: app)
@@ -162,15 +163,21 @@ final class AccountJourneyTests: XCTestCase {
         tap(app.buttons["discovery.filters"], in: app)
         selectDistance(3, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
-        tap(app.buttons["discovery.widen"], in: app)
-        let sixMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "6")).firstMatch
+        XCTAssertFalse(app.buttons["discovery.widen"].exists)
+        XCTAssertFalse(app.buttons["discovery.distanceChip"].exists)
+        XCTAssertFalse(app.buttons["Change search area"].exists)
+        tap(app.buttons["discovery.filters"], in: app)
+        selectDistance(6, in: app)
+        tap(app.buttons["discovery.applyRadius"], in: app)
+        let sixMiles = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "6")).firstMatch
         XCTAssertTrue(sixMiles.waitForExistence(timeout: 15))
         XCTAssertTrue(app.staticTexts["No players in this area yet"].exists)
         app.tabBars.buttons["Profile"].tap(); app.tabBars.buttons["Discover"].tap()
-        let tenMiles = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
-        let replayedWidening = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "12")).firstMatch
+        let tenMiles = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
+        let replayedWidening = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "12")).firstMatch
         XCTAssertFalse(replayedWidening.waitForExistence(timeout: 2), "Returning to Discover must not replay widening")
         XCTAssertTrue(sixMiles.exists, "The selected 6-mile radius must remain unchanged")
+        tap(app.buttons["discovery.filters"], in: app)
         tap(app.buttons["discovery.area"], in: app)
         selectDistance(10, in: app)
         tap(app.buttons["area.save"], in: app)
@@ -178,8 +185,8 @@ final class AccountJourneyTests: XCTestCase {
         assertProfile("Area explorer", in: app)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "New York")).firstMatch.exists)
         app.terminate(); app.launch()
-        XCTAssertTrue(app.buttons["discovery.area"].waitForExistence(timeout: 15))
-        XCTAssertTrue(app.buttons["discovery.area"].label.contains("Juneau"))
+        XCTAssertTrue(app.staticTexts["discovery.areaSummary"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["discovery.areaSummary"].label.contains("Juneau"))
         assertProfile("Area explorer", in: app)
         tap(app.buttons["profile.edit"], in: app)
         fill(app.textFields["profile.name"], with: "Area explorer revised", in: app)
@@ -194,11 +201,11 @@ final class AccountJourneyTests: XCTestCase {
         assertProfile("Area explorer revised", in: app)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "Boston")).firstMatch.exists)
         app.tabBars.buttons["Discover"].tap()
-        XCTAssertTrue(app.buttons["discovery.area"].label.contains("Juneau"))
+        XCTAssertTrue(app.staticTexts["discovery.areaSummary"].label.contains("Juneau"))
         app.terminate()
         app.launchArguments = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
         app.launch()
-        XCTAssertTrue(app.buttons["discovery.area"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["discovery.areaSummary"].waitForExistence(timeout: 15))
         capture("Discovery accessibility text", app: app)
         assertProfile("Area explorer revised", in: app)
         signOut(app)
@@ -219,17 +226,19 @@ final class AccountJourneyTests: XCTestCase {
         if app.tabBars.buttons["Profile"].waitForExistence(timeout: 2) { app.tabBars.buttons["Profile"].tap() }
         if app.buttons["account.signOut"].waitForExistence(timeout: 2) { signOut(app) }
         signIn(app, email: email, password: password)
+        tap(app.buttons["discovery.filters"], in: app)
         tap(app.buttons["discovery.area"], in: app)
         tap(app.buttons["area.save"], in: app)
         tap(app.buttons["discovery.filters"], in: app)
         selectDistance(5, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
-        let five = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "5")).firstMatch
+        let five = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "5")).firstMatch
         XCTAssertTrue(five.waitForExistence(timeout: 15))
+        tap(app.buttons["discovery.filters"], in: app)
         tap(app.buttons["discovery.area"], in: app)
         selectDistance(10, in: app)
         tap(app.buttons["area.save"], in: app)
-        let ten = app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
+        let ten = app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "10")).firstMatch
         XCTAssertTrue(ten.waitForExistence(timeout: 15), "Resaving earlier settings must refresh the visible search")
         app.tabBars.buttons["Profile"].tap(); signOut(app)
     }
@@ -252,9 +261,9 @@ final class AccountJourneyTests: XCTestCase {
         selectDistance(37, in: app)
         capture("Dynamic distance controls", app: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "37")).firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "37")).firstMatch.waitForExistence(timeout: 15))
         app.terminate(); app.launch()
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "37")).firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "37")).firstMatch.waitForExistence(timeout: 15))
         tap(app.buttons["discovery.filters"], in: app)
         selectDistance(101, in: app)
         XCTAssertFalse(app.buttons["discovery.applyRadius"].isEnabled)
@@ -267,7 +276,7 @@ final class AccountJourneyTests: XCTestCase {
         XCTAssertTrue((99...100).contains(upperValue))
         selectDistance(100, in: app)
         tap(app.buttons["discovery.applyRadius"], in: app)
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "100")).firstMatch.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "identifier == %@ AND label CONTAINS %@", "discovery.distanceChip", "100")).firstMatch.waitForExistence(timeout: 15))
         let saved = try await post("/rest/v1/rpc/get_discovery_settings", body: [:], token: token)
         XCTAssertEqual((try JSONSerialization.jsonObject(with: saved) as? [String: Any])?["radius"] as? Int, 100)
         app.terminate()

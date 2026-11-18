@@ -18,8 +18,6 @@ struct NearbyPlayersView: View {
     private enum PendingAction: Equatable {
         case search(UUID, DiscoverySettings)
         case more(UUID)
-        case clearRating(UUID)
-        case radius(UUID, SearchRadius)
     }
     @State private var retryRequest = 0
     let workspace: MessagingWorkspace?
@@ -42,25 +40,13 @@ struct NearbyPlayersView: View {
                     Text("Groups").tag(Mode.groups)
                 }.pickerStyle(.segmented).accessibilityIdentifier("discovery.segment")
                 controls
-                if let settings = model.settings {
-                    Button { if mode == .groups { showArea = true } else { showFilters = true } } label: {
-                        Text("Within \(settings.radius.rawValue) miles")
-                            .font(DesignTokens.Typography.caption).padding(.horizontal, 14).padding(.vertical, 10)
-                            .background(DesignTokens.Colors.sage, in: .capsule)
-                    }.frame(minHeight: 44).accessibilityIdentifier("discovery.distanceChip")
-                }
                 if mode == .players, let rating = model.settings?.rating {
-                    Button { pendingAction = .clearRating(UUID()) } label: {
-                        HStack { Text(rating.summary); Image(systemName: "xmark").accessibilityHidden(true) }
-                            .font(DesignTokens.Typography.caption).padding(12)
-                            .background(DesignTokens.Colors.sage, in: .capsule)
-                    }.accessibilityLabel("Remove rating filter: \(rating.summary)").disabled(model.isSaving)
-                        .accessibilityIdentifier("discovery.ratingChip")
+                    Text(rating.summary)
+                        .font(DesignTokens.Typography.caption)
+                        .foregroundStyle(DesignTokens.Colors.muted)
                 }
                 if mode == .groups, model.settings != nil {
-                    NearbyGroupsView(model: groups, canWiden: model.settings?.radius.widened != nil,
-                                     widen: { if let radius = model.settings?.radius.widened { pendingAction = .radius(UUID(), radius) } },
-                                     changeArea: { showArea = true }, retry: { retryRequest += 1 })
+                    NearbyGroupsView(model: groups, retry: { retryRequest += 1 })
                 }
                 if let error = model.errorMessage {
                     AccountFeedback(message: error, isError: true)
@@ -68,7 +54,6 @@ struct NearbyPlayersView: View {
                 }
                 if mode == .groups, model.settings == nil, model.errorMessage == nil {
                     if model.isLoading { ProgressView("Loading search area…") }
-                    else { PrimaryButton(title: "Change search area", kind: .secondary) { showArea = true } }
                 }
                 if mode == .players {
                     if model.isLoading { skeleton }
@@ -92,7 +77,11 @@ struct NearbyPlayersView: View {
                 }
             }
         }
-        .sheet(isPresented: $showFilters) { SearchFiltersView(model: model) }
+        .sheet(isPresented: $showFilters) {
+            SearchFiltersView(model: model, profiles: profiles, areas: areas) { settings in
+                pendingAction = .search(UUID(), settings)
+            }
+        }
         .refreshable {
             await model.refresh(searchPlayers: mode == .players)
             if mode == .groups, let settings = model.settings { await groups.search(settings: settings) }
@@ -107,43 +96,30 @@ struct NearbyPlayersView: View {
             switch action {
             case .search(_, let settings): await model.search(settings: settings, searchPlayers: mode == .players)
             case .more: await model.loadMore()
-            case .clearRating: if let radius = model.settings?.radius { _ = await model.setFilters(radius: radius, rating: nil) }
-            case .radius(_, let radius): _ = await model.setRadius(radius, searchPlayers: mode == .players)
             }
             // Consume completed/cancelled work so a later appearance cannot replay it.
             if pendingAction == action { pendingAction = nil }
         }
         .task(id: model.needsSignIn) { if model.needsSignIn { await session.signOut() } }
     }
-    private var visibleFilterCount: Int {
-        mode == .groups ? (model.settings == nil || model.settings?.radius == .five ? 0 : 1) : model.filterCount
-    }
     private var controls: some View {
-        HStack(spacing: 10) {
-            Button { showArea = true } label: {
-                HStack(spacing: 10) {
-                    Image("IconPin").accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(model.settings?.area.name ?? String(localized: "Choose search area")).font(DesignTokens.Typography.eyebrow)
-                        if let radius = model.settings?.radius {
-                            Text("Within \(radius.rawValue) miles").font(DesignTokens.Typography.caption).foregroundStyle(DesignTokens.Colors.muted)
-                        }
-                    }.frame(maxWidth: .infinity, alignment: .leading)
-                    Image("IconChevron").accessibilityHidden(true)
-                }.padding(12).frame(minHeight: 56)
-                    .background(DesignTokens.Colors.surface, in: .rect(cornerRadius: 11))
-                    .overlay(RoundedRectangle(cornerRadius: 11).strokeBorder(DesignTokens.Colors.line))
-            }.accessibilityIdentifier("discovery.area")
-            Button { if mode == .groups { showArea = true } else { showFilters = true } } label: {
-                VStack(spacing: 2) {
-                    Image("IconTune").accessibilityHidden(true)
-                    if visibleFilterCount > 0 { Text("\(visibleFilterCount)").font(DesignTokens.Typography.caption) }
-                }.padding(12).frame(minWidth: 56, minHeight: 56)
-                    .foregroundStyle(DesignTokens.Colors.paper).background(DesignTokens.Colors.forest, in: .rect(cornerRadius: 11))
-            }.accessibilityLabel(mode == .groups ? "Group search area and distance" : "Search filters").accessibilityIdentifier("discovery.filters")
-                .disabled(model.settings == nil)
+        VStack(alignment: .leading, spacing: 10) {
+            if let settings = model.settings {
+                Text(settings.area.name)
+                    .font(DesignTokens.Typography.eyebrow)
+                    .accessibilityIdentifier("discovery.areaSummary")
+                Text("Within \(settings.radius.rawValue) miles")
+                    .font(DesignTokens.Typography.caption)
+                    .foregroundStyle(DesignTokens.Colors.muted)
+                    .accessibilityIdentifier("discovery.distanceChip")
+            }
+            PrimaryButton(title: "Search filters", kind: .secondary) {
+                if mode == .groups || model.settings == nil { showArea = true }
+                else { showFilters = true }
+            }
+            .accessibilityIdentifier("discovery.filters")
+            .disabled(model.isSaving)
         }
-        .disabled(model.isSaving)
     }
     private var playerRows: some View {
         LazyVStack(spacing: 0) {
@@ -174,16 +150,6 @@ struct NearbyPlayersView: View {
             Text("No players in this area yet").accessibilityIdentifier("discovery.empty").font(DesignTokens.Typography.statusTitle).multilineTextAlignment(.center)
             Text("Try a wider distance or choose another area. New players will appear here when they save a nearby profile area.")
                 .font(DesignTokens.Typography.notice).foregroundStyle(DesignTokens.Colors.muted).multilineTextAlignment(.center)
-            if let radius = model.settings?.radius.widened {
-                PrimaryButton(title: "Widen search distance") {
-                    pendingAction = .radius(UUID(), radius)
-                }.disabled(model.isSaving)
-                    .accessibilityIdentifier("discovery.widen")
-            }
-            if model.settings?.rating != nil {
-                PrimaryButton(title: "Remove rating filter", kind: .secondary) { pendingAction = .clearRating(UUID()) }.disabled(model.isSaving)
-            }
-            PrimaryButton(title: "Change search area", kind: .secondary) { showArea = true }.disabled(model.isSaving)
         }.padding(.vertical, 25).frame(maxWidth: .infinity)
     }
     private var skeleton: some View {
